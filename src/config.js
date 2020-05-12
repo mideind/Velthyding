@@ -51,4 +51,4 @@ export const PROD_BACKEND_URL = `https://velthyding.mideind.is:8000/`;
 export const DEV_BACKEND_URL = `http://localhost:8000/`;
 export const BASE_BACKEND_URL = process.env.NODE_ENV === 'development' ? DEV_BACKEND_URL : PROD_BACKEND_URL;
 export const SHOW_BRANDING = true;
-export const SHOW_LOGIN = true;
+export const SHOW_LOGIN = false;

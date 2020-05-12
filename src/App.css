@@ -105,7 +105,13 @@ body {
   border-radius: 6px;
   border: 1px solid transparent;
   cursor: pointer;
-  height: 50px;
+  position: absolute;
+  right: 0;
+  height: 30px;
+  padding: 4px;
+  font-size: 14px;
+  min-width: 83px;
+  z-index: 100;
 }
 
 .Checkbox{

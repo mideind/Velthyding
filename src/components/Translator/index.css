@@ -50,6 +50,7 @@
     transition: border 75ms ease-out;
     position: relative;
     font-size: 16px;
+    height: calc(100% - 40px);
 }
 
 .TranslatorSide-text{

@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import './App.css';
-import logo from './velthyding.svg';
+import logo from './velthyding_hor.png';
 import mideindLogo from './mideind.svg';
 
 import { useSelector } from 'react-redux';
@@ -33,13 +33,14 @@ function App() {
           <div className="App-header-content">
             <div>
               <Link to="/">
-                { SHOW_BRANDING && <img alt="logo" src={logo} height="50" width="50" /> }
+                { SHOW_BRANDING && <img alt="logo" src={logo} height="40" width="140" /> }
                 { !SHOW_BRANDING && <span>Icelandic - English Translation</span> }
               </Link>
             </div>
             <div className="App-header-menu">
               {(SHOW_LOGIN && !loggedin) && <Link to="/login">Login</Link>}
               {(SHOW_LOGIN && loggedin) && <div><Link to="/home">{email}</Link> / <span onClick={logoutUser}>Logout</span> </div>}
+              { !SHOW_LOGIN && <span>Beta</span> } 
             </div>
           </div>
         </header>

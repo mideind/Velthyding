@@ -9,7 +9,7 @@ import { translateMany } from 'actions/translations';
 
 import { storeTranslation } from 'api';
 
-import {setTranslation, setToggle, clearAll} from './translateSlice';
+import {setTranslation, setToggle, clearAll, translateReducer} from './translateSlice';
 
 
 function Translate() {
@@ -50,9 +50,34 @@ function Translate() {
     }
   }, [text, dispatch]);
 
+  const translateButton = <button
+      className="Button TranslateBox-submit"
+      onClick={async () => {
+        if (!text) {
+          return;
+        }
+        setLoading(true);
+        const trans = await translateMany(
+          engines.filter(engine => engine.selected),
+          text,
+          source,
+          target,
+        );
+        trans.map((t) => { 
+          return dispatch(setTranslation({name: t.engine.name, text: t.text}));
+        })
+        setTrans(trans);
+        trans.map((t) => {
+          return storeTranslation(`${source}-${target}`, t.engine.name, text, t.text.join("\n\n"))
+        });
+        setLoading(trans === [])
+      }}>
+      {loading ? <ClipLoader size={10} color={"#FFF"} /> : <span> Translate </span> }
+    </button>;
+
   return (
     <div>
-      {loading && <div className="Translate-loader"> <ClipLoader size={10} /></div>}
+      {translateButton}
       <Translator
         sourceText={text}
         targetText={trans}
@@ -78,27 +103,7 @@ function Translate() {
               </div>
             ))}
           </div>
-          <button
-            className="Button TranslateBox-submit"
-            onClick={async () => {
-              setLoading(true);
-              const trans = await translateMany(
-                engines.filter(engine => engine.selected),
-                text,
-                source,
-                target,
-              );
-              trans.map((t) => { 
-                return dispatch(setTranslation({name: t.engine.name, text: t.text}));
-              })
-              setTrans(trans);
-              trans.map((t) => {
-                return storeTranslation(`${source}-${target}`, t.engine.name, text, t.text.join("\n\n"))
-              });
-              setLoading(trans === [])
-            }}>
-            Translate
-            </button>
+          {translateButton}
         </div>
       </div>
     </div>
