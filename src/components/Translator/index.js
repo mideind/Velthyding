@@ -100,6 +100,7 @@ function Translator(props) {
             <div className="TranslatorSide-text">
               {engines.filter(e => e.selected).map((engine) => {
                 return (<TranslateTarget
+                  key={engine.name}
                   engineName={engine.name}
                   language={props.target}
                   text={engine.txt}

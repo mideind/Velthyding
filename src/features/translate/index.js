@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import {useDropzone} from 'react-dropzone'
 import { useSelector, useDispatch } from 'react-redux';
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -9,7 +10,7 @@ import { translateMany } from 'actions/translations';
 
 import { storeTranslation } from 'api';
 
-import {setTranslation, setToggle, clearAll, translateReducer} from './translateSlice';
+import {setTranslation, setToggle, clearAll} from './translateSlice';
 
 
 function Translate() {
@@ -22,6 +23,24 @@ function Translate() {
 
   const engines = useSelector(state => state.engines);
   const dispatch = useDispatch();
+
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader()
+
+      reader.onabort = () => console.log('file reading was aborted')
+      reader.onerror = () => console.log('file reading has failed')
+      reader.onload = () => {
+      // Do whatever you want with the file contents
+        const binaryStr = reader.result
+        setText(binaryStr);
+      }
+      //reader.readAsArrayBuffer(file)
+      reader.readAsText(file)
+    })
+    
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   // Refactor when more languages on offer
   useEffect(() => {
@@ -75,6 +94,13 @@ function Translate() {
       {loading ? <ClipLoader size={10} color={"#FFF"} /> : <span> Translate </span> }
     </button>;
 
+  const uploadButton =  <button className="Button TranslateBox-submit TranslateBox-upload" {...getRootProps()}>
+      <input {...getInputProps()} />
+    {
+      isDragActive ? <span>Drop here</span> : <span>Upload</span>
+    }
+    </button>;
+
   return (
     <div>
       {translateButton}
@@ -103,6 +129,7 @@ function Translate() {
               </div>
             ))}
           </div>
+          {uploadButton}
           {translateButton}
         </div>
       </div>
