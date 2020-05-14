@@ -72,9 +72,9 @@ function Translate() {
   }, [source, target]);
 
   useEffect(() => {
-    // if (text.trim() === '') {
-    //  dispatch(clearAll());
-    // }
+    if (text.trim() === '') {
+      dispatch(clearAll());
+    }
   }, [text, dispatch]);
 
   const translateButton = <button
