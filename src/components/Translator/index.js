@@ -11,6 +11,7 @@ import { switchLanguage } from 'features/login/loginSlice';
 function LanguagePicker(props) {
   const { source, target } = useSelector((state) => state.login);
   const dispatch = useDispatch();
+
   const options = [
     {
       key: 'is', text: 'Icelandic', value: 'is', flag: 'is',
@@ -47,7 +48,7 @@ function TranslateSource(props) {
   return (
     <div className="TranslatorSide">
       <div className="TranslatorSide-lang">
-        <LanguagePicker isSource text="Source language"/>
+        <LanguagePicker isSource text="Source language" />
       </div>
       <div className="TranslatorSide-container">
         <div className="TranslatorSide-text">
@@ -98,22 +99,21 @@ function Translator(props) {
           setSelected={props.setSource} />
         <div className="TranslatorSide">
           <div className="TranslatorSide-lang">
-            <LanguagePicker text="Target language"/>
+            <LanguagePicker text="Target language" />
           </div>
           <div className="TranslatorSide-container">
             <div className="TranslatorSide-text">
-              {engines.filter((e) => e.selected).map((engine) => (<TranslateTarget
-                  key={engine.name}
-                  engineName={engine.name}
-                  language={props.target}
-                  text={engine.txt}
-                />))}
-              {engines.filter((e) => e.txt !== '').length === 0 && <TranslateTarget
+              {engines.filter((e) => e.txt.length !== 0).filter((e) => e.selected).map((engine) => (<TranslateTarget
+                key={engine.name}
+                engineName={engine.name}
+                language={props.target}
+                text={engine.txt}
+              />))}
+              {engines.filter((e) => e.txt.length !== 0).length === 0 && <TranslateTarget
                 force={true}
                 engineName=""
                 language={props.target}
-                text={props.transformerT}
-                setText={props.setTransformer}
+                text={[]}
               />}
             </div>
           </div>
