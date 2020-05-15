@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import mammoth from 'mammoth';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { Button } from 'semantic-ui-react';
 
 import 'App.css';
 import Translator from 'components/Translator';
@@ -23,12 +24,7 @@ function Translate() {
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
-
       const isDocx = file.path.split('.')[1] === 'docx';
-
-      reader.onabort = () => console.log('file reading was aborted');
-      reader.onerror = () => console.log('file reading has failed');
-
       reader.onload = () => {
         if (isDocx) {
           mammoth.extractRawText({ arrayBuffer: reader.result }).then((result) => {
@@ -54,8 +50,9 @@ function Translate() {
     }
   }, [text, dispatch]);
 
-  const translateButton = <button
-    className="Button TranslateBox-submit"
+  const translateButton = <Button
+    primary
+    className="TranslateBox-submit"
     onClick={async () => {
       if (!text) {
         return;
@@ -73,14 +70,14 @@ function Translate() {
       setLoading(trans === []);
     }}>
     {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> Translate </span>}
-  </button>;
+  </Button>;
 
-  const uploadButton = <button className="Button TranslateBox-submit TranslateBox-upload" {...getRootProps()}>
+  const uploadButton = <Button className="TranslateBox-submit TranslateBox-upload" {...getRootProps()}>
     <input {...getInputProps()} />
     {
       isDragActive ? <span>Drop here</span> : <span>Upload</span>
     }
-  </button>;
+  </Button>;
 
   return (
     <div>

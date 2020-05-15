@@ -107,15 +107,13 @@ body {
   cursor: pointer;
   position: absolute;
   right: 0;
-  height: 30px;
-  padding: 4px;
   font-size: 14px;
   min-width: 83px;
   z-index: 100;
 }
 
 .TranslateBox-upload{
-  right: 100px;
+  right: 120px;
 }
 
 
