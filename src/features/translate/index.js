@@ -16,10 +16,8 @@ function Translate() {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [trans, setTrans] = useState([]);
-  const [source, setSource] = useState('en');
-  const [target, setTarget] = useState('is');
-
   const engines = useSelector((state) => state.engines);
+  const { source, target } = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -49,27 +47,6 @@ function Translate() {
     });
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-  // Refactor when more languages on offer
-  useEffect(() => {
-    if (target === source) {
-      if (source === 'is') {
-        setSource('en');
-      } else {
-        setSource('is');
-      }
-    }
-  }, [target, source]);
-
-  useEffect(() => {
-    if (target === source) {
-      if (target === 'is') {
-        setTarget('en');
-      } else {
-        setTarget('is');
-      }
-    }
-  }, [source, target]);
 
   useEffect(() => {
     if (text.trim() === '') {
@@ -113,10 +90,6 @@ function Translate() {
         targetText={trans}
         setText={setText}
         setTargetText={setTrans}
-        setSource={setSource}
-        setTarget={setTarget}
-        source={source}
-        target={target}
       />
       <div className="Translate">
         <div className="Translate-footer">

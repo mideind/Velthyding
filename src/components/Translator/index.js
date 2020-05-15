@@ -1,34 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
 import TextareaAutosize from 'react-autosize-textarea';
+import { Dropdown } from 'semantic-ui-react';
 
 import './index.css';
 
+import { switchLanguage } from 'features/login/loginSlice';
+
 
 function LanguagePicker(props) {
-  const [profileState, setProfileState] = useState({ setSelected: props.setSelected, selected: props.selected });
-
-  const [open, setOpen] = useState(false);
-  const options = [{ key: 'is', name: 'Icelandic' }, { key: 'en', name: 'English' }];
-  const langs = { is: 'Icelandic', en: 'English' };
-
-  useEffect(() => {
-    setProfileState(props);
-  }, [props]);
+  const { source, target } = useSelector((state) => state.login);
+  const dispatch = useDispatch();
+  const options = [
+    {
+      key: 'is', text: 'Icelandic', value: 'is', flag: 'is',
+    },
+    {
+      key: 'en', text: 'English', value: 'en', flag: 'uk',
+    },
+  ];
 
   return (
-    <div onClick={() => setOpen(!open)} className="LanguagePicker">
-      <div className="LanguagePicker-container">{langs[profileState.selected]} ⋁</div>
-      {open
-        && <div className="LanguagePicker-menu">
-          {options.map((o) => (
-            <div onClick={() => props.setSelected(o.key)}
-              className="LanguagePicker-menu-item">
-              {o.name}
-            </div>))}
-        </div>}
-    </div>
+    <Dropdown
+      button
+      className='icon'
+      floating
+      labeled
+      icon='world'
+      options={options}
+      selection
+      value={!props.isSource ? target : source}
+      onChange={() => dispatch(switchLanguage())}
+      placeholder={props.text}
+    />
   );
 }
 
@@ -43,7 +47,7 @@ function TranslateSource(props) {
   return (
     <div className="TranslatorSide">
       <div className="TranslatorSide-lang">
-        Translate from  <LanguagePicker selected={profileState.language} setSelected={props.setSelected} />
+        <LanguagePicker isSource text="Source language"/>
       </div>
       <div className="TranslatorSide-container">
         <div className="TranslatorSide-text">
@@ -94,7 +98,7 @@ function Translator(props) {
           setSelected={props.setSource} />
         <div className="TranslatorSide">
           <div className="TranslatorSide-lang">
-            Translate to <LanguagePicker selected={props.target} setSelected={props.setTarget} />
+            <LanguagePicker text="Target language"/>
           </div>
           <div className="TranslatorSide-container">
             <div className="TranslatorSide-text">

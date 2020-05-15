@@ -4,12 +4,11 @@ import {
   Switch,
   Route,
   Link,
-  Redirect
-} from "react-router-dom";
+  Redirect,
+} from 'react-router-dom';
 
 import './App.css';
-import logo from './velthyding_hor.png';
-import mideindLogo from './mideind.svg';
+import 'semantic-ui-css/semantic.min.css';
 
 import { useSelector } from 'react-redux';
 
@@ -20,11 +19,12 @@ import Home from 'features/home';
 import { logoutUser } from 'api';
 
 import { SHOW_BRANDING, SHOW_LOGIN } from 'config';
+import mideindLogo from './mideind.svg';
+import logo from './velthyding_hor.png';
 
 
 function App() {
-
-  const { loggedin, email } = useSelector(state => state.login);
+  const { loggedin, email } = useSelector((state) => state.login);
 
   return (
     <Router>
@@ -40,7 +40,7 @@ function App() {
             <div className="App-header-menu">
               {(SHOW_LOGIN && !loggedin) && <Link to="/login">Login</Link>}
               {(SHOW_LOGIN && loggedin) && <div><Link to="/home">{email}</Link> / <span onClick={logoutUser}>Logout</span> </div>}
-              { !SHOW_LOGIN && <span>Beta</span> } 
+              { !SHOW_LOGIN && <span>Beta</span> }
             </div>
           </div>
         </header>
@@ -57,8 +57,8 @@ function App() {
             </Route>
           </Switch>
         </div>
-        { SHOW_BRANDING && 
-        <div className="Footer">
+        { SHOW_BRANDING
+        && <div className="Footer">
           <div className="Footer-logo">
             <a href="https://mideind.is"><img alt="logo" src={mideindLogo} width="67" height="76" /></a>
             <p>Miðeind ehf., kt. 591213-1480</p>
