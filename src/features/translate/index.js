@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import mammoth from 'mammoth';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { Button } from 'semantic-ui-react';
+import { Button, Checkbox } from 'semantic-ui-react';
 
 import 'App.css';
 import Translator from 'components/Translator';
@@ -94,11 +94,12 @@ function Translate() {
             {engines.map((engine, idx) => (
               <div className="Checkbox" key={`cb-${idx}`}>
                 <label>
-                  <input
+                  <Checkbox
                     type="checkbox"
                     checked={engine.selected}
-                    onChange={() => dispatch(setToggle(engine.name))} />
-                  {engine.name} - {engine.url}
+                    onChange={() => dispatch(setToggle(engine.name))}
+                    label= {`${engine.name} - ${engine.url}`}
+                  />
                 </label>
               </div>
             ))}
