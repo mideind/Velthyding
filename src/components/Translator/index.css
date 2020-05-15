@@ -101,7 +101,8 @@
 .TranslatorSide-text-wrapper span{
     font-size: 12px;
     width: 160px;
-    padding-top: 4px;
+    padding-top: 10px !important;
+    text-align: right;
 }
 
 .TranslatorSide-clear{
