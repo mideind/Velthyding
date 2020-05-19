@@ -32,6 +32,12 @@ body {
   align-items: center;
 }
 
+@media(max-width: 800px) {
+  .App-header-content{
+    width: calc(100% - 80px);
+  }
+}
+
 .App-header a{
   text-decoration: none;
   color: #006eff;
@@ -48,6 +54,15 @@ body {
   margin-top: 50px;
   position: relative;
 }
+@media(max-width: 800px) {
+  .App-body{
+    max-width: calc(100% - 60px);
+    margin-top: 30px;
+  }
+  .ui.selection.dropdown{
+    min-width: 13em !important;
+  }
+}
 
 .Translate-main{
   display: flex;
@@ -58,6 +73,11 @@ body {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
+}
+@media(max-width: 800px) {
+  .Translate-engines{
+    margin-top: 70px;
+  }
 }
 
 .TranslateBox{
@@ -110,6 +130,12 @@ body {
   font-size: 14px;
   min-width: 101px;
   z-index: 100;
+}
+
+@media(max-width: 800px) {
+  .TranslateBox-upload{
+    left: 0;
+  }
 }
 
 .TranslateBox-upload{

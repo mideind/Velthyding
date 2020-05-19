@@ -74,7 +74,7 @@ function TranslateSource(props) {
 
 function TranslateTarget(props) {
   return (
-    <div className={props.text || props.force ? 'TranslatorSide-text-wrapper' : 'hidden'} key={`transKey-${props.engineName}`}>
+    <div className={props.text || props.force ? 'TranslatorSide-text-wrapper' : 'hidden'}>
       < button className="TranslatorSide-clear"><span>{props.engineName}</span></button>
       <TextareaAutosize
         lang={props.language}

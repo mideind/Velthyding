@@ -6,14 +6,15 @@
     display: flex;
     justify-content: space-between;
 }
-@media (max-width: 450px){
+@media (max-width: 650px){
     .Translator-container{
         flex-direction: column;
         align-items: center;
     }
 
     .TranslatorSide{
-        margin-bottom: 20px;;
+        margin-bottom: 20px;
+        width: 100% !important;
     }
 
     .Translate-footer{
@@ -21,7 +22,7 @@
         display: flex;
         justify-content: space-between;
         flex-direction: column;
-        width: 76%;
+        width: 100%;
         margin: 0 auto;
     }
 }
@@ -50,7 +51,7 @@
     transition: border 75ms ease-out;
     position: relative;
     font-size: 16px;
-    height: calc(100% - 40px);
+    height: calc(100% - 60px);
 }
 
 .TranslatorSide-text{
