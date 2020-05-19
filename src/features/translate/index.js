@@ -97,7 +97,7 @@ function Translate() {
                   <Checkbox
                     type="checkbox"
                     checked={engine.selected}
-                    onChange={() => dispatch(setToggle(engine.name))}
+                    onChange={(e) => dispatch(setToggle(engine.name)) && e.preventDefault()}
                     label= {`${engine.name} - ${engine.url}`}
                   />
                 </label>

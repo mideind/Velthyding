@@ -51,7 +51,7 @@ body {
 .App-body{
   max-width: 800px;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 25px;
   position: relative;
 }
 @media(max-width: 800px) {

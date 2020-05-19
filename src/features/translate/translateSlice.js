@@ -14,7 +14,10 @@ function updateTranslation(translateState, action) {
 
 function toggle(translateState, action) {
   return translateState.map((engine) => {
+    console.log({ ...engine });
     if (engine.name === action.payload) {
+      console.log('HIT', engine.selected);
+      console.log(!engine.selected);
       return { ...engine, selected: !engine.selected, txt: [] };
     }
     return engine;
