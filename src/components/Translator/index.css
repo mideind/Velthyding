@@ -58,6 +58,43 @@
     position: relative;
     -webkit-text-size-adjust: none;
     min-width: 300px;
+    height: 100%;
+}
+
+.Translator-text-editor{
+    padding: 22px 32px 16px 24px;
+    padding-bottom: 30px;
+    color: #333;
+    line-height: 1.5;
+    height: 100%;
+    min-height: 300px;
+    font-weight: 400;
+    font-size: 26px;
+    transition: height 100ms linear, min-height 100ms linear;
+    font-family: "Open Sans", sans-serif;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    font-variant-ligatures: none;
+    display: inline-block;
+    -webkit-appearance: none;
+    appearance: none;
+    box-shadow: none;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: none;
+    background-color: transparent;
+    background: transparent;
+    vertical-align: top;
+    text-align: left;
+    font-size: 100%;
+    position: relative;
+    resize: none;
+    margin: 0;
+    -webkit-text-size-adjust: none;
 }
 
 .TranslatorSide-text textarea {

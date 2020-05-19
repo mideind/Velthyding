@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import TextareaAutosize from 'react-autosize-textarea';
 import { Dropdown } from 'semantic-ui-react';
+import ContentEditable from 'react-contenteditable';
 
 import './index.css';
 
 import { switchLanguage } from 'features/login/loginSlice';
-
 
 function LanguagePicker(props) {
   const { source, target } = useSelector((state) => state.login);
@@ -38,7 +38,7 @@ function LanguagePicker(props) {
 }
 
 
-function TranslateSource(props) {
+function TranslateSourceTextArea(props) {
   const [profileState, setProfileState] = useState(props);
 
   useEffect(() => {
@@ -71,17 +71,43 @@ function TranslateSource(props) {
   );
 }
 
+function TranslateSource(props) {
+  const [profileState, setProfileState] = useState(props);
+
+  useEffect(() => {
+    setProfileState(props);
+  }, [props]);
+
+  return (
+    <div className="TranslatorSide">
+      <div className="TranslatorSide-lang">
+        <LanguagePicker isSource text="Source language" />
+      </div>
+      <div className="TranslatorSide-container">
+        <div className="TranslatorSide-text">
+
+          <ContentEditable className="Translator-text-editor" onChange={(e) => {
+            profileState.setText(e.currentTarget.innerText);
+          }}
+            html={props.text} />
+          <button className="TranslatorSide-clear" onClick={() => profileState.setText('')}>
+            <span>×</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 function TranslateTarget(props) {
   return (
     <div className={props.text || props.force ? 'TranslatorSide-text-wrapper' : 'hidden'}>
-      < button className="TranslatorSide-clear"><span>{props.engineName}</span></button>
-      <TextareaAutosize
-        lang={props.language}
-        tabIndex="110"
-        value={props.text.join('\n\n')}
-        acceptCharset="utf-8">
-      </TextareaAutosize>
+      <button className="TranslatorSide-clear"><span>{props.engineName}</span></button>
+      <ContentEditable
+        disabled
+        className="Translator-text-editor"
+        html={props.text.join('<br /><br />')} />
     </div >
   );
 }
