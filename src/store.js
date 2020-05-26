@@ -7,7 +7,7 @@ import { translateReducer } from 'features/translate/translateSlice';
 
 const reducer = {
   login: loginReducer,
-  engines: translateReducer
+  engines: translateReducer,
 };
 
 const middleware = [...getDefaultMiddleware(), logger];

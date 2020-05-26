@@ -15,8 +15,8 @@ import { setTranslation, setToggle, clearAll } from './translateSlice';
 
 function Translate() {
   const [text, setText] = useState('');
+  const [editable, setEditable] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [trans, setTrans] = useState([]);
   const engines = useSelector((state) => state.engines);
   const { source, target } = useSelector((state) => state.login);
   const dispatch = useDispatch();
@@ -34,6 +34,7 @@ function Translate() {
         } else {
           setText(reader.result);
         }
+        setEditable(false);
       };
       if (isDocx) {
         reader.readAsArrayBuffer(file);
@@ -64,10 +65,10 @@ function Translate() {
         source,
         target,
       );
-      trans.map((t) => dispatch(setTranslation({ name: t.engine.name, text: t.text })));
-      setTrans(trans);
+      trans.map((t) => dispatch(setTranslation({ name: t.engine.name, text: t.text, structuredText: t.structuredText })));
       trans.map((t) => storeTranslation(`${source}-${target}`, t.engine.name, text, t.text.join('\n\n')));
       setLoading(trans === []);
+      setEditable(false);
     }}>
     {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> Translate </span>}
   </Button>;
@@ -84,9 +85,9 @@ function Translate() {
       {translateButton}
       <Translator
         sourceText={text}
-        targetText={trans}
         setText={setText}
-        setTargetText={setTrans}
+        editable={editable}
+        setEditable={setEditable}
       />
       <div className="Translate">
         <div className="Translate-footer">

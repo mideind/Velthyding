@@ -136,14 +136,38 @@
     position: relative;
 }
 
-.TranslatorSide-text-wrapper span{
+.Translator-text-editor p, .TranslatorSide-text-wrapper p{
+    line-height: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.Translator-text-editor span, .TranslatorSide-text-wrapper span{
+    margin-right: 4px;
+}
+
+.Translator-text-editor span:hover, .TranslatorSide-text-wrapper span:hover{
+    background-color: #cce2ff;
+}
+
+.Translator-text-editor span.active{
+    background-color: #cce2ff;
+}
+
+.TranslatorSide-clear span{
+    font-size: 18px;
+    width: 160px;
+    padding-top: 10px !important;
+    text-align: right;
+}
+
+.TranslatorSide-label span{
     font-size: 12px;
     width: 160px;
     padding-top: 10px !important;
     text-align: right;
 }
 
-.TranslatorSide-clear{
+.TranslatorSide-label, .TranslatorSide-clear{
     top: 4px;
     right: 6px;
     font-weight: 400;
@@ -163,7 +187,7 @@
     cursor: pointer;
 }
 
-.TranslatorSide-clear span{
+.TranslatorSide-label span, .TranslatorSide-clear span{
     display: inline-block;
     position: absolute;
     top: -3px;

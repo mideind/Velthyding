@@ -9,10 +9,6 @@ async function translate(engine, text, source, target, transfTransl) {
     sourceLanguageCode: source,
     targetLanguageCode: target,
   };
-  // TODO DO SMTH HERE
-  if (false && engine.name !== 'Moses') {
-    data.contents_tgt = Array.isArray(transfTransl) ? transfTransl : transfTransl.split('\n\n');
-  }
 
   const { url } = engine;
   const param = {
@@ -36,12 +32,9 @@ async function translate(engine, text, source, target, transfTransl) {
   if (response !== undefined) {
     try {
       transl = await response.json();
-      return transl.translations.map((trans) => {
-        if (engine.name !== 'Bubu Transformer') {
-          return decodeHTML(trans.translatedText);
-        }
-        return `${transfTransl} ${decodeHTML(trans.translatedText)}`;
-      });
+      const returnTrans = transl.translations.map((trans) => decodeHTML(trans.translatedText));
+      const structuredTrans = transl.translations.filter((trans) => trans.translatedTextStructured).map((trans) => trans.translatedTextStructured);
+      return { ...transl, translations: returnTrans, structuredTrans };
     } catch (err) {
       return ['Error'];
     }
@@ -52,5 +45,7 @@ async function translate(engine, text, source, target, transfTransl) {
 
 export async function translateMany(engines, text, source, target, transl) {
   const translations = await engines.map((engine) => translate(engine, text, source, target, transl));
-  return Promise.all(translations).then((ts) => ts.map((p, i) => ({ text: p, engine: engines[i] })));
+  return Promise.all(translations).then((ts) => ts.map((p, i) => ({
+    text: p.translations, structuredText: p.structuredTrans, engine: engines[i],
+  })));
 }
