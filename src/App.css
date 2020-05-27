@@ -1,0 +1,175 @@
+body {
+  margin: 0;
+    background-color: #f1f1f1 !important;
+}
+
+.App {
+  font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 18px;
+}
+
+.App-header {
+  background-color: #fff;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  font-size: calc(2px + 2vmin);
+  color: white;
+}
+
+.App-header-menu{
+  font-size: 16px;
+}
+
+.App-header-content{
+  width: 800px;
+  margin: auto;
+  color:#8b8b93;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media(max-width: 800px) {
+  .App-header-content{
+    width: calc(100% - 80px);
+  }
+}
+
+.App-header a{
+  text-decoration: none;
+  color: #006eff;
+}
+
+.App-content{
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.App-body{
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 25px;
+  position: relative;
+}
+@media(max-width: 800px) {
+  .App-body{
+    max-width: calc(100% - 60px);
+    margin-top: 30px;
+  }
+  .ui.selection.dropdown{
+    min-width: 13em !important;
+  }
+}
+
+.Translate-main{
+  display: flex;
+  justify-content: space-between;
+}
+
+.Translate-footer{
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+@media(max-width: 800px) {
+  .Translate-engines{
+    margin-top: 70px;
+  }
+}
+
+.TranslateBox{
+  width: 350px;
+}
+
+.TranslateBox-header{
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.TranslateBox-area{
+  width: 350px;
+  height: 300px;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.TranslateBox-area-trans{
+  width: 350px;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 0.5em;
+}
+
+.TranslateBox-area-trans-sent{
+  margin-bottom: 10px;
+}
+
+.TranslateBox-area-blurb-header{
+  font-size: 0.5em;
+}
+
+.TranslateBox-submit{
+  background: #006eff;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  text-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  font-size: 14px;
+  min-width: 101px;
+  z-index: 100;
+}
+
+@media(max-width: 800px) {
+  .TranslateBox-upload{
+    left: 0;
+  }
+}
+
+.TranslateBox-upload{
+  right: 120px;
+}
+
+
+.Checkbox{
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.PairPicker{
+  font-size: 14px;
+  display: flex;
+  width: 120px;
+  justify-content: space-between;
+}
+
+.Footer{
+  margin-top: 100px;
+  font-size: 0.6em;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+  text-align: center;
+  
+}
+
+.Footer a{
+  color: #333333;
+}
+
+.Translate-loader{
+  position: absolute;
+  right: 0;
+}
