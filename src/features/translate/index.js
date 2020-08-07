@@ -60,31 +60,10 @@ function Translate() {
       children: [
         {
           id: 0,
-          text: "Okay, so you've got Slate installed and rendered on the page, and when you type in it, you can see the changes reflected.",
+          text: "",
           translation: ""
-        },
-        {
-          id: 1,
-          text: 'But you want to do more than just type a plaintext string.',
-          translation: ""
-        },
-      ],
-    }, {
-      type: 'paragraph',
-      children: [
-        {
-          id: 2,
-          text: 'What makes Slate great is how easy it is to customize.',
-          active: true,
-          translation: ""
-        },
-        {
-          id: 3,
-          text: "Just like other React components you're used to, Slate allows you to pass in handlers that are triggered on certain events.",
-          translation: ""
-        },
-      ],
-    },
+        },]
+    }
   ]);
 
   const [loading, setLoading] = useState(false);
