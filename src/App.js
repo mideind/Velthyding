@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,15 +8,20 @@ import {
 } from 'react-router-dom';
 
 import './App.css';
+import { Button, Checkbox, Icon, Dropdown } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { setToggle } from './features/translate/translateSlice';
 
 import Translate from 'features/translate';
 import Login from 'features/login';
 import Home from 'features/home';
+import Register from 'features/register';
 
-import { logoutUser } from 'api';
+import { logoutUser, checkUser } from 'api';
+import { toggleGoogle } from 'features/login/loginSlice';
 
 import { SHOW_BRANDING, SHOW_LOGIN } from 'config';
 import mideindLogo from './mideind.svg';
@@ -25,6 +30,12 @@ import logo from './velthyding_hor.png';
 
 function App() {
   const { loggedin, email } = useSelector((state) => state.login);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    checkUser()
+  }, []);
 
   return (
     <Router>
@@ -38,8 +49,18 @@ function App() {
               </Link>
             </div>
             <div className="App-header-menu">
+               {loggedin && <Dropdown item icon='cog' floating direction="left">
+                <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Checkbox label="Show Google Translation" onClick={() => {dispatch(setToggle('Google')) && dispatch(toggleGoogle());}}/>
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={logoutUser}>
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>}
               {(SHOW_LOGIN && !loggedin) && <Link to="/login">Login</Link>}
-              {(SHOW_LOGIN && loggedin) && <div><Link to="/home">{email}</Link> / <span onClick={logoutUser}>Logout</span> </div>}
+              {(SHOW_LOGIN && loggedin) && <div><Link to="/home">{email}</Link></div> }
               { !SHOW_LOGIN && <span>Beta</span> }
             </div>
           </div>
@@ -51,6 +72,9 @@ function App() {
             </Route>
             <Route path="/home">
               {!loggedin ? <Redirect to="/login" /> : <Home />}
+            </Route>
+            <Route path="/register">
+              {loggedin ? <Redirect to="/home" /> : <Register />}
             </Route>
             <Route path="/">
               <Translate />

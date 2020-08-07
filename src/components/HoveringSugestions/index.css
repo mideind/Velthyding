@@ -1,0 +1,14 @@
+.HoveringList{
+
+}
+
+.HoveringList-item{
+    border-top: 1px solid;
+    padding: 5px;
+    width: 100%;
+}
+
+.HoveringList-item:hover{
+    background: azure;
+    cursor: pointer;
+}

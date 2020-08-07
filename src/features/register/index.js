@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from 'features/login/loginSlice';
-import { loginUser } from 'api/index';
+import { registerUser } from 'api/index';
 import './index.css';
 import 'App.css';
-import { Button, Divider, Form, Label, Icon, Header } from 'semantic-ui-react'
-import {
-  Link,
-} from 'react-router-dom';
+import { Header, Button, Divider, Form, Label, Icon } from 'semantic-ui-react'
 
-function Login() {
+
+function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [email2, setEmail2] = useState("");
+  const [password2, setPassword2] = useState("");
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
-  const apiLogin = (email, password) => {
-    loginUser(email, password).then(
+  const apiRegister = (email, password) => {
+    registerUser(email, password).then(
       () => (
         dispatch(login(email))
       )
@@ -27,7 +27,18 @@ function Login() {
 
   const submit = (e) => {
     e.preventDefault();
-    apiLogin(email, password);
+
+    if (email !== email2) {
+      setError("Email adddresses don't match")
+      return;
+    }
+
+    if (password !== password2) {
+      setError("Passwords don't match")
+      return;
+    }
+
+    apiRegister(email, password);
   }
 
   return (
@@ -37,9 +48,11 @@ function Login() {
           <Header as='h2'>
             <Icon name='address book' />
             <Header.Content>
-              Login
+              New account
+              <Header.Subheader>Get full access</Header.Subheader>
             </Header.Content>
           </Header>
+          
           <Form onSubmit={submit}>
           {error && <div className="Message-error">{error}</div>}
             <Form.Field>
@@ -47,16 +60,23 @@ function Login() {
             </Form.Field>
 
             <Form.Field>
+              <input type='text' placeholder='Repeat email' value={email2} onChange={(e) => setEmail2(e.target.value)} />
+            </Form.Field>
+
+            <Form.Field>
               <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
             </Form.Field>
-            <Button primary content='Login' type="submit" fluid />
+
+            <Form.Field>
+              <input type="password" placeholder="Repeat password" value={password2} onChange={(e) => setPassword2(e.target.value)}></input>
+            </Form.Field>
+            <Button primary content='Register' type="submit" fluid />
           </Form>
           <Divider />
-          <Link to="/register"><Button fluid>New account</Button></Link>
         </div>
       </div>
     </div>
   )
 }
 
-export default Login;
+export default Register;

@@ -5,7 +5,7 @@ async function translate(engine, text, source, target, transfTransl) {
   const data = {
     ...engine.extraData,
     model: engine.extraData !== undefined && engine.extraData.model !== undefined ? engine.extraData.model : `${source}-${target}`,
-    contents: text.split('\n\n'),
+    contents: text.map((pg) => pg.children.map((ch) => ch.text).join('')),
     sourceLanguageCode: source,
     targetLanguageCode: target,
   };

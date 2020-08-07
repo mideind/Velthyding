@@ -83,6 +83,21 @@ export function loginUser(username, password) {
   }));
 }
 
+export function registerUser(email, password) {
+  return new Promise(((resolve, reject) => {
+    const ac = apiClient();
+
+    return ac.post('register/', {
+      email,
+      password,
+    }).then((response) => {
+      resolve(response);
+    }).catch((error) => {
+      reject(error);
+    });
+  }));
+}
+
 
 export function logoutUser() {
   return new Promise(((resolve, reject) => {
@@ -98,12 +113,18 @@ export function logoutUser() {
 }
 
 
-export async function storeTranslation(language_pair, model, source_text, target_text) {
+export async function storeTranslation(translationId, language_pair, model, source_text, target_text) {
+  const translationURI = translationId === null ? 'usertranslations' : 'corrections';
+  const data = {
+    language_pair, model, source_text, target_text,
+  };
+  if (translationId !== null) {
+    data.original = translationId;
+  }
+
   return new Promise(((resolve, reject) => {
     const ac = apiClient();
-    return ac.post('api/translations/usertranslations/', {
-      language_pair, model, source_text, target_text,
-    }).then((response) => {
+    return ac.post(`api/translations/${translationURI}/`, data).then((response) => {
       resolve(response);
     }).catch((error) => {
       reject(error);

@@ -1,0 +1,9 @@
+.LanguageDirectionPicker{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.LanguageDirection{
+    width: 50%;
+}
