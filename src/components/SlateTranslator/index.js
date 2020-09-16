@@ -116,7 +116,7 @@ const SlateTranslator = (props) => {
             value={content}
             onChange={(newValue) => updateText(newValue)}>
             {!props.translation && <HoveringTooltip /> }
-            {false && props.translation && <HoveringSuggestion />}
+            {props.translation && <HoveringSuggestion />}
             <Editable
                 spellCheck="false"
                 renderElement={renderElement}

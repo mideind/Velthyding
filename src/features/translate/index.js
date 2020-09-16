@@ -4,13 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import mammoth from 'mammoth';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { Button, Checkbox, Icon, Dropdown } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 import 'App.css';
 import Translator from 'components/Translator';
 import { translateMany } from 'actions/translations';
 import { storeTranslation } from 'api';
-import { setTranslation, setToggle, clearAll } from './translateSlice';
+import { setTranslation } from './translateSlice';
 
 
 function useOnDrop(setText) {
@@ -93,11 +93,13 @@ function Translate() {
         source,
         target,
       );
-  
+      console.log(trans)
+
       const newText = updateText(trans);
       setText(newText);
       trans.forEach((t) => dispatch(setTranslation({ name: t.engine.name, text: t.text, structuredText: t.structuredText })));
       
+
       trans.filter(t => t.engine.selected && t.engine.textOnly).map((t) => setGoogleTranslation(t.text));
 
       trans.forEach((t) => storeTranslation(
@@ -142,8 +144,6 @@ function Translate() {
     <input {...getInputProps()} />
     { isDragActive ? <span>Drop here</span> : <span>Upload</span> }
   </Button>;
-
-  console.log(googleTranslation)
 
   return (
     <div className="Translate">

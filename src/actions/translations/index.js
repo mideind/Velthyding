@@ -1,7 +1,6 @@
 import { decodeHTML } from '../../utils/text.js';
 
-
-async function translate(engine, text, source, target, transfTransl) {
+export async function translate(engine, text, source, target, prefix) {
   const data = {
     ...engine.extraData,
     model: engine.extraData !== undefined && engine.extraData.model !== undefined ? engine.extraData.model : `${source}-${target}`,
@@ -9,6 +8,10 @@ async function translate(engine, text, source, target, transfTransl) {
     sourceLanguageCode: source,
     targetLanguageCode: target,
   };
+
+  if (prefix) {
+    data.prefixes = prefix.map((pg) => pg.children.map((ch) => ch.text).join(''));
+  }
 
   const { url } = engine;
   const param = {

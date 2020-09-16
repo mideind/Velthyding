@@ -14,10 +14,13 @@ axios.defaults.withCredentials = true;
 
 const cookies = new Cookies();
 
-export const apiClient = (APIEndpoint = '') => {
+export const apiClient = (BASE_URL = '') => {
   const csrfCookie = cookies.get(axios.defaults.xsrfCookieName, { path: '/' });
+
+  const url2use = BASE_URL !== '' ? BASE_URL : BASE_BACKEND_URL;
+
   const params = {
-    baseURL: `${BASE_BACKEND_URL}/${APIEndpoint}`,
+    baseURL: `${url2use}`,
     headers: {
       Authorization: 'no',
       'Content-Type': 'application/json',
