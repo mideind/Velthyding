@@ -32,6 +32,10 @@ export const ENGINES = [
   },
 ];
 
+// Prefix translation
+export const PREFIX_TRANSLATION_URL = ENGINES[1].url;
+
+
 //
 // Configuration parameters for branded setup or usage of backend for logging.
 //

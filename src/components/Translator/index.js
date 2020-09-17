@@ -19,6 +19,7 @@ function TranslateBox(props) {
             setText={props.setText}
             hoverId={props.hoverId}
             setHoverId={props.setHoverId}
+            setPrefix={props.setPrefix}
             />
           {props.clearText && <button className="TranslatorSide-clear" onClick={props.clearText}>
             <span>×</span>
@@ -61,6 +62,7 @@ function Translator(props) {
           translation={true}
           setHoverId={props.setHoverId}
           hoverId={props.hoverId}
+          setPrefix={props.setPrefix}
           />
         </div>
     </div>

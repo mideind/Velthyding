@@ -28,10 +28,8 @@ export const HoveringTooltip = () => {
     }
 
     if (
-      !selection
-        || !ReactEditor.isFocused(editor)
-        || Range.isCollapsed(selection)
-        || Editor.string(editor, selection) === ''
+      !selection || !ReactEditor.isFocused(editor) ||
+        (selection && selection.anchor.offset == 0)
     ) {
       el.removeAttribute('style');
       return;
@@ -55,7 +53,7 @@ export const HoveringTooltip = () => {
         + window.pageXOffset
         - el.offsetWidth / 2
         + rect.width / 2}px`;
-  });
+  }, [editor.selection]);
 
   return (
       <Portal>

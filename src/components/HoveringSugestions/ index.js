@@ -14,25 +14,29 @@ import {Portal, Menu} from 'components/common';
 
 import './index.css';
 import getSuggestions from 'actions/suggestions';
-import { translate } from 'actions/translations';
-import { ENGINES } from 'config';
 
-const insertSuggestion = (editor, sug, location) => {
-  console.log(sug)
+
+const insertSuggestion = (editor, sug) => {
+  Transforms.delete(editor, {unit: "word", reverse: true});
   Transforms.delete(editor, {unit: "word"});
+
   Transforms.insertText(
     editor,
-    sug,
+    sug.trim(),
     { match: Text.isText, split: false }
   );
+  Transforms.move(editor)
   Transforms.deselect(editor);
 };
 
 
-const SuggestionButton = ( { suggestion, prefix } ) => {
-  const editor = useSlate();
+const insertTranslationFromSuggestion = (editor, sug, prefix, setPrefix) => {
+  setPrefix([(prefix + sug).trim(), editor.selection.anchor.path])
+};
 
-  translate(ENGINES[1], prefix + suggestion, "")
+
+const SuggestionButton = ( { suggestion, prefix, setPrefix, setSuggestions } ) => {
+  const editor = useSlate();
 
   return (
     <div 
@@ -49,15 +53,19 @@ const SuggestionButton = ( { suggestion, prefix } ) => {
         `}
       className="HoveringList-item"
       onMouseDown={ event => {
+        setSuggestions([]);
         event.preventDefault()
-        insertSuggestion(editor, suggestion)
+        //insertSuggestion(editor, suggestion, prefix, setPrefix)
+        insertTranslationFromSuggestion(editor, suggestion, prefix, setPrefix)
+        Transforms.move(editor)
+        Transforms.deselect(editor);
       }}>{suggestion} ...</div> 
   )
 };
 
 
 
-export const HoveringSuggestion = () => {
+export const HoveringSuggestion = (props) => {
   const ref = useRef();
   const editor = useSlate();
   const [curPrefix, setCurPrefix] = useState("");
@@ -74,12 +82,12 @@ export const HoveringSuggestion = () => {
     const { selection } = editor;
     
     if (!el ) {
-      setSuggestions([]);
       return;
     }
 
     if (
-      !selection || !ReactEditor.isFocused(editor) ||
+      !selection ||
+      !ReactEditor.isFocused(editor) ||
       (selection && selection.anchor.offset == 0)
     ) {
       el.removeAttribute('style');
@@ -97,8 +105,8 @@ export const HoveringSuggestion = () => {
       curSubPost.shift();
       curSub.pop();
       
-      const prefix = curSub.join(" ") + " "
-      const mskSnt = prefix + "<mask> " + curSubPost.join(" ");
+      const prefix = curSub.join(" ")
+      const mskSnt = prefix + " <mask> " + curSubPost.join(" ");
       setCurPrefix(prefix);
 
       getSuggestions(
@@ -142,7 +150,8 @@ export const HoveringSuggestion = () => {
         `}
       >
           <div className="HoveringList">
-            {suggestions.map((sug, idx) => <SuggestionButton key={"sug-" + idx} suggestion={sug} prefix={curPrefix}/> )}
+            {suggestions.map((sug, idx) => 
+              <SuggestionButton setSuggestions={setSuggestions} setPrefix={props.setPrefix} key={"sug-" + idx} suggestion={sug} prefix={curPrefix}/> )}
           </div>
       </div>
     </Portal>

@@ -1,18 +1,9 @@
 import React, {
-  useMemo, useCallback, useEffect, useState, useRef
+  useMemo, useCallback,
 } from 'react';
 
-import {
-    useSlate,
-} from 'slate-react';
 
-import {
-  Editor
-} from 'slate';
-
-
-
-import { createEditor, Node, Transforms } from 'slate';
+import { createEditor, Transforms } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 import { HoveringTooltip } from 'components/HoveringTooltip';
 import { HoveringSuggestion } from 'components/HoveringSugestions/ index';
@@ -28,16 +19,16 @@ const deserialize = (string) =>
 
 
 const SentenceElement = (props) => (
-    <span
-        style={{ backgroundColor: 'yellow', marginRight: '20px' }} {...props.attributes}>
-        {props.children}
-    </span>
+  <span
+      style={{ backgroundColor: 'yellow', marginRight: '20px' }} {...props.attributes}>
+      {props.children}
+  </span>
 );
 
 const DefaultElement = (props) => (
-    <p {...props.attributes}>
-    {props.children}
-    </p>
+  <p {...props.attributes}>
+  {props.children}
+  </p>
 );
 
 const Leaf = (props) => {
@@ -55,14 +46,13 @@ const Leaf = (props) => {
 )};
 
 const flipTextAndTranslation = (text) => ( text.map(pg => (
-        {...pg, children: pg.children.map(c => ({...c, text: c.translation, translation: c.text}))})
+  {...pg, children: pg.children.map(c => ({...c, text: c.translation, translation: c.text}))})
 ));
 
 
 const withBreak = editor => {
   // Note: this breaks lists etc.
   // CHECK FOR PARAGRAPH if introducing more complex formating.
-  const { insertBreak } = editor
   editor.insertBreak = () => {
     const newLine = {
         type: "paragraph",
@@ -102,12 +92,14 @@ const SlateTranslator = (props) => {
   }
 
   const updateText = (newValue) => {
+
       if (props.translation) {
           props.setText(flipTextAndTranslation(newValue));
       } else {
           props.setText(newValue);
       }
   }
+
 
   return (
       <div>
@@ -116,7 +108,7 @@ const SlateTranslator = (props) => {
             value={content}
             onChange={(newValue) => updateText(newValue)}>
             {!props.translation && <HoveringTooltip /> }
-            {props.translation && <HoveringSuggestion />}
+            {props.translation && <HoveringSuggestion setPrefix={props.setPrefix} />}
             <Editable
                 spellCheck="false"
                 renderElement={renderElement}

@@ -8,7 +8,7 @@ import { Button } from 'semantic-ui-react';
 
 import 'App.css';
 import Translator from 'components/Translator';
-import { translateMany } from 'actions/translations';
+import { translateMany, updateSentenceTranslation } from 'actions/translations';
 import { storeTranslation } from 'api';
 import { setTranslation } from './translateSlice';
 
@@ -53,6 +53,7 @@ const updateText = (translationObject) => {
 
 function Translate() {
   const [hoverId, setHoverId] = useState(-1);
+  const [prefix, setPrefix] = useState("");
   const [translationId, setTranslationId] = useState(null);
   const [text, setText] = useState([
     {
@@ -61,7 +62,7 @@ function Translate() {
         {
           id: 0,
           text: "",
-          translation: ""
+          translation: "",
         },]
     }
   ]);
@@ -93,7 +94,6 @@ function Translate() {
         source,
         target,
       );
-      console.log(trans)
 
       const newText = updateText(trans);
       setText(newText);
@@ -126,6 +126,36 @@ function Translate() {
     }
   }
 
+  const translatePrefix = async () => {
+    setLoading(true);
+    const pgIdx = prefix[1][0];
+    const sntIdx = prefix[1][1];
+    const srcText = text[pgIdx].children[sntIdx].text;
+
+    const translation = await updateSentenceTranslation(srcText, prefix[0]);
+
+    const newText = text.map((pg, i) => {
+      if(i === pgIdx){
+        const children = pg.children.map((snt, j) => {
+          if (j === sntIdx) {
+            return {...snt, translation: translation}
+          } else { return snt}
+        })
+        return {...pg, children: children}
+      } else {return pg}
+    })
+    setLoading(false);
+    setText(newText)
+  }
+
+  useEffect(() => {
+    if (prefix.length < 2) {
+      return;
+    }
+   translatePrefix()
+
+  }, [prefix]);
+
   useEffect(() => {
     if (text.length === 1 && text[0].children.length === 1 && text[0].children[0].text === '' && text[0].children[0].translation === '') {
       setHoverId('');
@@ -151,6 +181,8 @@ function Translate() {
       <Translator
         sourceText={text}
         setText={setText}
+        prefix={prefix}
+        setPrefix={setPrefix}
         hoverId={hoverId}
         setHoverId={setHoverId}
         googleTranslation={showGoogle ? googleTranslation : ""}
