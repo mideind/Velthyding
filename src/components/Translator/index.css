@@ -31,11 +31,19 @@
     .Translate-footer{
         margin-top: 20px;
         display: flex;
-        justify-content: space-between;
         flex-direction: column;
         width: 100%;
         margin: 0 auto;
     }
+}
+
+.Translate-footer{
+  justify-content: flex-end;
+}
+
+.Translate-footer .TranslateBox-submit{
+    position: relative !important;
+    margin-left: 10px;
 }
 
 .TranslatorSide{

@@ -1,6 +1,7 @@
-async function getSuggestions(sentence, maskedSentence) {
+async function getSuggestions(sentence, maskedSentence, language) {
   const data = {
     text: `${sentence} ${maskedSentence}`,
+    language,
   };
 
   const url = 'https://velthyding.mideind.is:8001/fill_mask';

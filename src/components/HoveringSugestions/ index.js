@@ -15,6 +15,8 @@ import {Portal, Menu} from 'components/common';
 import './index.css';
 import getSuggestions from 'actions/suggestions';
 
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const insertSuggestion = (editor, sug) => {
   Transforms.delete(editor, {unit: "word", reverse: true});
@@ -70,6 +72,8 @@ export const HoveringSuggestion = (props) => {
   const editor = useSlate();
   const [curPrefix, setCurPrefix] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const { target } = useSelector((state) => state.login);
+  const dispatch = useDispatch();
 
   const updateSuggestions = (newSuggestions) => {
     if ( JSON.stringify(newSuggestions) != JSON.stringify(suggestions) ) {
@@ -111,7 +115,8 @@ export const HoveringSuggestion = (props) => {
 
       getSuggestions(
         curSnt.text,
-        mskSnt
+        mskSnt,
+        target
       ).then((resp) => updateSuggestions(resp.suggestions))
     }
 

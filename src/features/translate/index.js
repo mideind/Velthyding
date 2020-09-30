@@ -13,6 +13,16 @@ import { storeTranslation } from 'api';
 import { setTranslation } from './translateSlice';
 
 
+const parseForSlate = (text) => {
+    return text.split('\n').filter(pg => pg != '').map(pg => ({
+      type: 'paragraph',
+      children: pg.split('.').filter(sentence => sentence != '').map(sentence => ({
+          text: sentence.trim(),
+          translation: ""
+        }))
+    }))
+}
+
 function useOnDrop(setText) {
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -22,10 +32,10 @@ function useOnDrop(setText) {
         if (isDocx) {
           mammoth.extractRawText({ arrayBuffer: reader.result }).then((result) => {
             const extractedText = result.value;
-            setText(extractedText);
+            setText(parseForSlate(extractedText));
           }).done();
         } else {
-          setText(reader.result);
+          setText(parseForSlate(reader.result));
         }
       };
       if (isDocx) {
@@ -87,43 +97,49 @@ function Translate() {
 
     // TODO reconsider use of translateMany
 
-    if (!translationId) {
-      const trans = await translateMany(
-        activeEngines,
-        text,
-        source,
-        target,
-      );
+    const trans = await translateMany(
+      activeEngines,
+      text,
+      source,
+      target,
+    );
 
-      const newText = updateText(trans);
-      setText(newText);
-      trans.forEach((t) => dispatch(setTranslation({ name: t.engine.name, text: t.text, structuredText: t.structuredText })));
-      
+    const newText = updateText(trans);
+    setText(newText);
+    trans.forEach((t) => dispatch(setTranslation({ name: t.engine.name, text: t.text, structuredText: t.structuredText })));
 
-      trans.filter(t => t.engine.selected && t.engine.textOnly).map((t) => setGoogleTranslation(t.text));
+    trans.filter(t => t.engine.selected && t.engine.textOnly).map((t) => setGoogleTranslation(t.text));
 
-      trans.forEach((t) => storeTranslation(
-        translationId,
-        `${source}-${target}`,
-        t.engine.name,
-        text.map((pg) => pg.children.map((ch) => ch.text).join('')).join('\n\n'),
-        t.text.join('\n\n')).then((resp) => {if(resp.data.id){setTranslationId(resp.data.id)}}));  
-        setLoading(trans === []);
-    } else {
-      storeTranslation(
-        translationId,
-        `${source}-${target}`,
-        activeEngines[0].name,
-        text.map((pg) => pg.children.map((ch) => ch.text).join('')).join('\n\n'),
-        text.map((pg) => pg.children.map((ch) => ch.translation).join('')).join('\n\n')).then(
-          (resp) => {
-            if(resp.data.id){
-              setTranslationId(resp.data.id);
-            };
-            setLoading(false);
-          }
-        )
+    trans.forEach((t) => storeTranslation(
+      translationId,
+      `${source}-${target}`,
+      t.engine.name,
+      text.map((pg) => pg.children.map((ch) => ch.text).join('')).join('\n\n'),
+      t.text.join('\n\n')).then((resp) => {if(resp.data.id){setTranslationId(resp.data.id)}}));  
+      setLoading(trans === []);
+  }
+
+  const revise = async () => {
+    if (text.length === 1 && text[0].children.length === 1 && text[0].children[0].text === '') {
+      return;
     }
+    setLoading(true);
+
+    const activeEngines = engines.filter((engine) => engine.selected);
+
+    storeTranslation(
+      translationId,
+      `${source}-${target}`,
+      activeEngines[0].name,
+      text.map((pg) => pg.children.map((ch) => ch.text).join('')).join('\n\n'),
+      text.map((pg) => pg.children.map((ch) => ch.translation).join('')).join('\n\n')).then(
+        (resp) => {
+          if(resp.data.id){
+            setTranslationId(resp.data.id);
+          };
+          setLoading(false);
+        }
+      )
   }
 
   const translatePrefix = async () => {
@@ -132,7 +148,7 @@ function Translate() {
     const sntIdx = prefix[1][1];
     const srcText = text[pgIdx].children[sntIdx].text;
 
-    const translation = await updateSentenceTranslation(srcText, prefix[0]);
+    const translation = await updateSentenceTranslation(srcText, prefix[0], source, target);
 
     const newText = text.map((pg, i) => {
       if(i === pgIdx){
@@ -167,8 +183,15 @@ function Translate() {
     primary
     className="TranslateBox-submit"
     onClick={translate}>
-    {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> { translationId ? "Revise" : "Translate" } </span>}
+    {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> Translate </span>}
   </Button>;
+
+  const reviseButton = <Button
+    color="teal"
+    className="TranslateBox-submit"
+    onClick={revise}>
+    {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> Revise </span>}
+    </Button>;
 
   const uploadButton = <Button className="TranslateBox-submit TranslateBox-upload" {...getRootProps()}>
     <input {...getInputProps()} />
@@ -196,6 +219,7 @@ function Translate() {
         <span style={{fontSize: "12px", fontWeight: "bold"}}>{showGoogle && googleTranslation === "" ? "Miðeind and Google translation active" : ""}</span>
           {uploadButton}
           {translateButton}
+          {translationId && reviseButton}
         </div>
       </div>
     </div>
