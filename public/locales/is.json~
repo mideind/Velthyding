@@ -1,7 +1,7 @@
 {
   "fallback_header": "Íslenska -- Enska",
   "show_google_trans": "Sýna Google þýðingu",
-  "logout": "Skrá út",
+  "Logout": "Logout",
   "login_header": "Innskrá",
   "fallback_login": "Beta",
   "press": "Fjölmiðlapakki",
@@ -28,5 +28,6 @@
   "translate_button": "Þýða",
   "revise_button": "Leiðrétta",
   "drop_button": "Dragðu hingað",
-  "upload_button": "Hlaða upp"
+  "upload_button": "Hlaða upp",
+  "Miðeind and Google translation active": "Miðeind and Google translation active"
 }

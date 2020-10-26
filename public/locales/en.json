@@ -1,7 +1,7 @@
 {
   "fallback_header": "Icelandic -- English translation",
   "show_google_trans": "Show Google translation",
-  "logout": "Logout",
+  "Logout": "Logout",
   "login_header": "Login",
   "fallback_login": "Beta",
   "press": "Presskit",
@@ -25,8 +25,9 @@
   "Repeat email": "Repeat email",
   "Repeat password": "Repeat password",
   "Register": "Register",
-  "translate_button": "translate_button",
-  "revise_button": "revise_button",
-  "drop_button": "drop_button",
-  "upload_button": "upload_button"
+  "translate_button": "Translate",
+  "revise_button": "Revise",
+  "drop_button": "Drop here",
+  "upload_button": "Upload",
+  "Miðeind and Google translation active": "Miðeind and Google translation active"
 }

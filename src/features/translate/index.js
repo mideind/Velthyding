@@ -219,7 +219,7 @@ function Translate() {
             <div className="Translator-subtext">{googleTranslation.map( pg => <p>{pg}</p>)}</div>
           </div>} 
         <div className="Translate-footer">
-        <span style={{fontSize: "12px", fontWeight: "bold"}}>{showGoogle && googleTranslation === "" ? "Miðeind and Google translation active" : ""}</span>
+          <span style={{fontSize: "12px", fontWeight: "bold"}}>{showGoogle && googleTranslation === "" ? t("Miðeind and Google translation active") : ""}</span>
           {uploadButton}
           {translateButton}
           {translationId && reviseButton}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   BrowserRouter as Router,
@@ -32,8 +32,18 @@ import { useTranslation } from 'react-i18next';
 
 function App() {
   const { loggedin, email } = useSelector((state) => state.login);
+  const [ lng, setLng ] = useState(window.navigator.language);
 
   const { t, i18n } = useTranslation();
+  const toggleLanguage = () => {
+    if (lng === 'is') {
+      i18n.changeLanguage('en');
+      setLng('en');
+    } else {
+      i18n.changeLanguage('is');
+      setLng('is');
+    }
+  };
 
   const dispatch = useDispatch();
 
@@ -53,20 +63,26 @@ function App() {
               </Link>
             </div>
             <div className="App-header-menu">
-               {loggedin && <Dropdown item icon='cog' floating direction="left">
+               {<Dropdown item icon='cog' floating direction="left">
                 <Dropdown.Menu>
                   <Dropdown.Item>
                     <Checkbox label={t('show_google_trans', 'Show Google Translation')} onClick={() => {dispatch(setToggle('Google')) && dispatch(toggleGoogle());}}/>
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={logoutUser}>
-                    {t('logout', 'Logout')}
+                  <Dropdown.Item onClick={toggleLanguage}>
+                    {lng === 'is' && 'English interface'}
+                    {lng !== 'is' && 'Íslenskt viðmót'}
                   </Dropdown.Item>
+                  {loggedin &&
+                  <Dropdown.Item onClick={logoutUser}>
+                    {t('Logout')}
+                  </Dropdown.Item>}
+                  {!loggedin &&
+                   <Dropdown.Item>
+                    <Link to="/login"> {t('login_header')}</Link>
+                  </Dropdown.Item>}
+                 
                 </Dropdown.Menu>
               </Dropdown>}
-              {(SHOW_LOGIN && !loggedin) && <Link to="/login">
-                                              {t('login_header', 'Login')}
-                                            </Link>}
-              {(SHOW_LOGIN && loggedin) && <div><Link to="/home">{email}</Link></div> }
               { !SHOW_LOGIN && <span>{t('fallback_login', 'Beta')}</span> }
             </div>
           </div>
@@ -89,7 +105,7 @@ function App() {
         </div>
         { SHOW_BRANDING
         && <div className="Footer">
-             <div className="Footer-logo" onClick={() => i18n.changeLanguage('is')}>
+             <div className="Footer-logo">
              <a href="https://mideind.is"><img alt="logo" src={mideindLogo} width="50" height="76" /></a>
              <p>Miðeind ehf., kt. 591213-1480<br />
               Fiskislóð 31, rými B/304, 101 Reykjavík, <a href="mailto:mideind@mideind.is">mideind@mideind.is</a><br />
