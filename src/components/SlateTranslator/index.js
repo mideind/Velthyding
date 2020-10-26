@@ -8,6 +8,8 @@ import { Slate, Editable, withReact } from 'slate-react';
 import { HoveringTooltip } from 'components/HoveringTooltip';
 import { HoveringSuggestion } from 'components/HoveringSugestions/ index';
 
+import { useTranslation } from 'react-i18next';
+
 
 // Define a deserializing function that takes a string and returns a value.
 const deserialize = (string) =>
@@ -69,6 +71,8 @@ const withBreak = editor => {
 };
 
 const SlateTranslator = (props) => {
+  const { t } = useTranslation();
+
   const editor = useMemo(() => withBreak(withReact(createEditor())), []);
 
   const renderElement = useCallback((props) => {
@@ -102,20 +106,20 @@ const SlateTranslator = (props) => {
 
 
   return (
-      <div>
+    <div style={{height: "100%"}}>
         <Slate
             editor={editor}
             value={content}
-            onChange={(newValue) => updateText(newValue)}>
-            {!props.translation && <HoveringTooltip /> }
+          onChange={(newValue) => updateText(newValue)}>
             {props.translation && <HoveringSuggestion setPrefix={props.setPrefix} />}
             <Editable
                 spellCheck="false"
                 renderElement={renderElement}
                 renderLeaf={renderLeaf}
-                placeholder="Enter text.."
+              placeholder={t("slate_placeholder", "Enter text..")}
                 autoFocus={props.translation ? false : true}
-              />
+              style={{height: "100%"}}
+            />
         </Slate>
       </div>
   );

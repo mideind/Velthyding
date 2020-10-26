@@ -12,6 +12,8 @@ import { translateMany, updateSentenceTranslation } from 'actions/translations';
 import { storeTranslation } from 'api';
 import { setTranslation } from './translateSlice';
 
+import { useTranslation } from 'react-i18next';
+
 
 const parseForSlate = (text) => {
     return text.split('\n').filter(pg => pg != '').map(pg => ({
@@ -62,6 +64,7 @@ const updateText = (translationObject) => {
 
 
 function Translate() {
+  const { t } = useTranslation();
   const [hoverId, setHoverId] = useState(-1);
   const [prefix, setPrefix] = useState("");
   const [translationId, setTranslationId] = useState(null);
@@ -183,19 +186,19 @@ function Translate() {
     primary
     className="TranslateBox-submit"
     onClick={translate}>
-    {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> Translate </span>}
+                            {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> {t('translate_button', 'Translate')} </span>}
   </Button>;
 
   const reviseButton = <Button
-    color="teal"
+    color="green"
     className="TranslateBox-submit"
     onClick={revise}>
-    {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> Revise </span>}
+   {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> {t('revise_button', 'Revise')} </span>}
     </Button>;
 
   const uploadButton = <Button className="TranslateBox-submit TranslateBox-upload" {...getRootProps()}>
     <input {...getInputProps()} />
-    { isDragActive ? <span>Drop here</span> : <span>Upload</span> }
+                         { isDragActive ? <span>{t('drop_button', 'Drop here')}</span> : <span>{t('upload_button', 'Upload')}</span> }
   </Button>;
 
   return (

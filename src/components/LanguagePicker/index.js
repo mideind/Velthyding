@@ -3,19 +3,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Button } from 'semantic-ui-react';
 import { switchLanguage } from 'features/login/loginSlice';
 
-import './index.css';
+import { useTranslation } from 'react-i18next';
 
-const LANGUAGE_OPTIONS = [
-  {
-    key: 'is', text: 'Icelandic', value: 'is', flag: 'is',
-  },
-  {
-    key: 'en', text: 'English', value: 'en', flag: 'uk',
-  },
-];
+import './index.css';
 
 
 function LanguagePicker(props) {
+
+  const { t } = useTranslation();
+  const LANGUAGE_OPTIONS = [
+    {
+      key: 'is', text: t('Icelandic'), value: 'is', flag: 'is',
+    },
+    {
+      key: 'en', text: t('English'), value: 'en', flag: 'uk',
+    },
+  ];
+
   const { source, target } = useSelector((state) => state.login);
   const dispatch = useDispatch();
   return (
@@ -52,3 +56,4 @@ const LanguageDirectionPicker = (props) => {
 };
 
 export default LanguageDirectionPicker;
+;
