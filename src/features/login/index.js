@@ -9,7 +9,12 @@ import {
   Link,
 } from 'react-router-dom';
 
+import { useTranslation } from 'react-i18next';
+
+
 function Login() {
+  const { t } = useTranslation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,7 +26,7 @@ function Login() {
         dispatch(login(email))
       )
     ).catch((error) => {
-      setError("Incorrect email or password.");
+      setError(t("Incorrect email or password."));
     });
   }
 
@@ -43,16 +48,16 @@ function Login() {
           <Form onSubmit={submit}>
           {error && <div className="Message-error">{error}</div>}
             <Form.Field>
-              <input type='text' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input type='text' placeholder={t('Email')} value={email} onChange={(e) => setEmail(e.target.value)} />
             </Form.Field>
 
             <Form.Field>
-              <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
+              <input type="password" placeholder={t("Password")} value={password} onChange={(e) => setPassword(e.target.value)}></input>
             </Form.Field>
-            <Button primary content='Login' type="submit" fluid />
+            <Button primary content={t('Login')} type="submit" fluid />
           </Form>
           <Divider />
-          <Link to="/register"><Button fluid>New account</Button></Link>
+          <Link to="/register"><Button fluid>{t("New account")}</Button></Link>
         </div>
       </div>
     </div>

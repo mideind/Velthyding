@@ -1,21 +1,14 @@
 import React, {
-  useMemo, useCallback, useEffect, useState, useRef
+  useMemo, useCallback,
 } from 'react';
 
-import {
-    useSlate,
-} from 'slate-react';
 
-import {
-  Editor
-} from 'slate';
-
-
-
-import { createEditor, Node, Transforms } from 'slate';
+import { createEditor, Transforms } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 import { HoveringTooltip } from 'components/HoveringTooltip';
 import { HoveringSuggestion } from 'components/HoveringSugestions/ index';
+
+import { useTranslation } from 'react-i18next';
 
 
 // Define a deserializing function that takes a string and returns a value.
@@ -28,16 +21,16 @@ const deserialize = (string) =>
 
 
 const SentenceElement = (props) => (
-    <span
-        style={{ backgroundColor: 'yellow', marginRight: '20px' }} {...props.attributes}>
-        {props.children}
-    </span>
+  <span
+      style={{ backgroundColor: 'yellow', marginRight: '20px' }} {...props.attributes}>
+      {props.children}
+  </span>
 );
 
 const DefaultElement = (props) => (
-    <p {...props.attributes}>
-    {props.children}
-    </p>
+  <p {...props.attributes}>
+  {props.children}
+  </p>
 );
 
 const Leaf = (props) => {
@@ -55,14 +48,13 @@ const Leaf = (props) => {
 )};
 
 const flipTextAndTranslation = (text) => ( text.map(pg => (
-        {...pg, children: pg.children.map(c => ({...c, text: c.translation, translation: c.text}))})
+  {...pg, children: pg.children.map(c => ({...c, text: c.translation, translation: c.text}))})
 ));
 
 
 const withBreak = editor => {
   // Note: this breaks lists etc.
   // CHECK FOR PARAGRAPH if introducing more complex formating.
-  const { insertBreak } = editor
   editor.insertBreak = () => {
     const newLine = {
         type: "paragraph",
@@ -79,6 +71,8 @@ const withBreak = editor => {
 };
 
 const SlateTranslator = (props) => {
+  const { t } = useTranslation();
+
   const editor = useMemo(() => withBreak(withReact(createEditor())), []);
 
   const renderElement = useCallback((props) => {
@@ -102,6 +96,7 @@ const SlateTranslator = (props) => {
   }
 
   const updateText = (newValue) => {
+
       if (props.translation) {
           props.setText(flipTextAndTranslation(newValue));
       } else {
@@ -109,21 +104,22 @@ const SlateTranslator = (props) => {
       }
   }
 
+
   return (
-      <div>
+    <div style={{height: "100%"}}>
         <Slate
             editor={editor}
             value={content}
-            onChange={(newValue) => updateText(newValue)}>
-            {!props.translation && <HoveringTooltip /> }
-            {false && props.translation && <HoveringSuggestion />}
+          onChange={(newValue) => updateText(newValue)}>
+            {props.translation && <HoveringSuggestion setPrefix={props.setPrefix} />}
             <Editable
                 spellCheck="false"
                 renderElement={renderElement}
                 renderLeaf={renderLeaf}
-                placeholder="Enter text.."
+              placeholder={t("slate_placeholder", "Enter text..")}
                 autoFocus={props.translation ? false : true}
-              />
+              style={{height: "100%"}}
+            />
         </Slate>
       </div>
   );

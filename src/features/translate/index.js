@@ -4,14 +4,26 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import mammoth from 'mammoth';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { Button, Checkbox, Icon, Dropdown } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 import 'App.css';
 import Translator from 'components/Translator';
-import { translateMany } from 'actions/translations';
+import { translateMany, updateSentenceTranslation } from 'actions/translations';
 import { storeTranslation } from 'api';
-import { setTranslation, setToggle, clearAll } from './translateSlice';
+import { setTranslation } from './translateSlice';
 
+import { useTranslation } from 'react-i18next';
+
+
+const parseForSlate = (text) => {
+    return text.split('\n').filter(pg => pg != '').map(pg => ({
+      type: 'paragraph',
+      children: pg.split('.').filter(sentence => sentence != '').map(sentence => ({
+          text: sentence.trim(),
+          translation: ""
+        }))
+    }))
+}
 
 function useOnDrop(setText) {
   const onDrop = useCallback((acceptedFiles) => {
@@ -22,10 +34,10 @@ function useOnDrop(setText) {
         if (isDocx) {
           mammoth.extractRawText({ arrayBuffer: reader.result }).then((result) => {
             const extractedText = result.value;
-            setText(extractedText);
+            setText(parseForSlate(extractedText));
           }).done();
         } else {
-          setText(reader.result);
+          setText(parseForSlate(reader.result));
         }
       };
       if (isDocx) {
@@ -52,7 +64,9 @@ const updateText = (translationObject) => {
 
 
 function Translate() {
+  const { t } = useTranslation();
   const [hoverId, setHoverId] = useState(-1);
+  const [prefix, setPrefix] = useState("");
   const [translationId, setTranslationId] = useState(null);
   const [text, setText] = useState([
     {
@@ -61,7 +75,7 @@ function Translate() {
         {
           id: 0,
           text: "",
-          translation: ""
+          translation: "",
         },]
     }
   ]);
@@ -86,43 +100,80 @@ function Translate() {
 
     // TODO reconsider use of translateMany
 
-    if (!translationId) {
-      const trans = await translateMany(
-        activeEngines,
-        text,
-        source,
-        target,
-      );
-  
-      const newText = updateText(trans);
-      setText(newText);
-      trans.forEach((t) => dispatch(setTranslation({ name: t.engine.name, text: t.text, structuredText: t.structuredText })));
-      
-      trans.filter(t => t.engine.selected && t.engine.textOnly).map((t) => setGoogleTranslation(t.text));
+    const trans = await translateMany(
+      activeEngines,
+      text,
+      source,
+      target,
+    );
 
-      trans.forEach((t) => storeTranslation(
-        translationId,
-        `${source}-${target}`,
-        t.engine.name,
-        text.map((pg) => pg.children.map((ch) => ch.text).join('')).join('\n\n'),
-        t.text.join('\n\n')).then((resp) => {if(resp.data.id){setTranslationId(resp.data.id)}}));  
-        setLoading(trans === []);
-    } else {
-      storeTranslation(
-        translationId,
-        `${source}-${target}`,
-        activeEngines[0].name,
-        text.map((pg) => pg.children.map((ch) => ch.text).join('')).join('\n\n'),
-        text.map((pg) => pg.children.map((ch) => ch.translation).join('')).join('\n\n')).then(
-          (resp) => {
-            if(resp.data.id){
-              setTranslationId(resp.data.id);
-            };
-            setLoading(false);
-          }
-        )
-    }
+    const newText = updateText(trans);
+    setText(newText);
+    trans.forEach((t) => dispatch(setTranslation({ name: t.engine.name, text: t.text, structuredText: t.structuredText })));
+
+    trans.filter(t => t.engine.selected && t.engine.textOnly).map((t) => setGoogleTranslation(t.text));
+
+    trans.forEach((t) => storeTranslation(
+      translationId,
+      `${source}-${target}`,
+      t.engine.name,
+      text.map((pg) => pg.children.map((ch) => ch.text).join('')).join('\n\n'),
+      t.text.join('\n\n')).then((resp) => {if(resp.data.id){setTranslationId(resp.data.id)}}));  
+      setLoading(trans === []);
   }
+
+  const revise = async () => {
+    if (text.length === 1 && text[0].children.length === 1 && text[0].children[0].text === '') {
+      return;
+    }
+    setLoading(true);
+
+    const activeEngines = engines.filter((engine) => engine.selected);
+
+    storeTranslation(
+      translationId,
+      `${source}-${target}`,
+      activeEngines[0].name,
+      text.map((pg) => pg.children.map((ch) => ch.text).join('')).join('\n\n'),
+      text.map((pg) => pg.children.map((ch) => ch.translation).join('')).join('\n\n')).then(
+        (resp) => {
+          if(resp.data.id){
+            setTranslationId(resp.data.id);
+          };
+          setLoading(false);
+        }
+      )
+  }
+
+  const translatePrefix = async () => {
+    setLoading(true);
+    const pgIdx = prefix[1][0];
+    const sntIdx = prefix[1][1];
+    const srcText = text[pgIdx].children[sntIdx].text;
+
+    const translation = await updateSentenceTranslation(srcText, prefix[0], source, target);
+
+    const newText = text.map((pg, i) => {
+      if(i === pgIdx){
+        const children = pg.children.map((snt, j) => {
+          if (j === sntIdx) {
+            return {...snt, translation: translation}
+          } else { return snt}
+        })
+        return {...pg, children: children}
+      } else {return pg}
+    })
+    setLoading(false);
+    setText(newText)
+  }
+
+  useEffect(() => {
+    if (prefix.length < 2) {
+      return;
+    }
+   translatePrefix()
+
+  }, [prefix]);
 
   useEffect(() => {
     if (text.length === 1 && text[0].children.length === 1 && text[0].children[0].text === '' && text[0].children[0].translation === '') {
@@ -135,15 +186,20 @@ function Translate() {
     primary
     className="TranslateBox-submit"
     onClick={translate}>
-    {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> { translationId ? "Revise" : "Translate" } </span>}
+                            {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> {t('translate_button', 'Translate')} </span>}
   </Button>;
+
+  const reviseButton = <Button
+    color="green"
+    className="TranslateBox-submit"
+    onClick={revise}>
+   {loading ? <ClipLoader size={10} color={'#FFF'} /> : <span> {t('revise_button', 'Revise')} </span>}
+    </Button>;
 
   const uploadButton = <Button className="TranslateBox-submit TranslateBox-upload" {...getRootProps()}>
     <input {...getInputProps()} />
-    { isDragActive ? <span>Drop here</span> : <span>Upload</span> }
+                         { isDragActive ? <span>{t('drop_button', 'Drop here')}</span> : <span>{t('upload_button', 'Upload')}</span> }
   </Button>;
-
-  console.log(googleTranslation)
 
   return (
     <div className="Translate">
@@ -151,6 +207,8 @@ function Translate() {
       <Translator
         sourceText={text}
         setText={setText}
+        prefix={prefix}
+        setPrefix={setPrefix}
         hoverId={hoverId}
         setHoverId={setHoverId}
         googleTranslation={showGoogle ? googleTranslation : ""}
@@ -161,9 +219,10 @@ function Translate() {
             <div className="Translator-subtext">{googleTranslation.map( pg => <p>{pg}</p>)}</div>
           </div>} 
         <div className="Translate-footer">
-        <span style={{fontSize: "12px", fontWeight: "bold"}}>{showGoogle && googleTranslation === "" ? "Miðeind and Google translation active" : ""}</span>
+          <span style={{fontSize: "12px", fontWeight: "bold"}}>{showGoogle && googleTranslation === "" ? t("Miðeind and Google translation active") : ""}</span>
           {uploadButton}
           {translateButton}
+          {translationId && reviseButton}
         </div>
       </div>
     </div>

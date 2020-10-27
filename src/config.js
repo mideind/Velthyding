@@ -1,6 +1,7 @@
 const baseURLProd = 'velthyding.mideind.is';
 const baseURLDev = 'velthyding.mideind.is'; // 'localhost:5050';
 
+
 const protocol = process.env.NODE_ENV === 'development' ? 'https' : 'https';
 const baseURL = process.env.NODE_ENV === 'development' ? baseURLDev : baseURLProd;
 
@@ -10,6 +11,15 @@ export const ENGINES = [
     name: 'Transformer BT',
     extraData: {
       model: 'transformer-bt',
+    },
+    selected: false,
+    textOnly: false,
+  },
+  {
+    url: `${protocol}://${baseURL}:8001/translate`,
+    name: 'Fairseq DEV',
+    extraData: {
+      model: 'fairseq-dev',
     },
     selected: true,
     textOnly: false,
@@ -21,6 +31,10 @@ export const ENGINES = [
     textOnly: true,
   },
 ];
+
+// Prefix translation
+export const PREFIX_TRANSLATION_URL = ENGINES[1].url;
+
 
 //
 // Configuration parameters for branded setup or usage of backend for logging.

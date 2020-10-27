@@ -14,10 +14,13 @@ axios.defaults.withCredentials = true;
 
 const cookies = new Cookies();
 
-export const apiClient = (APIEndpoint = '') => {
+export const apiClient = (BASE_URL = '') => {
   const csrfCookie = cookies.get(axios.defaults.xsrfCookieName, { path: '/' });
+
+  const url2use = BASE_URL !== '' ? BASE_URL : BASE_BACKEND_URL;
+
   const params = {
-    baseURL: `${BASE_BACKEND_URL}/${APIEndpoint}`,
+    baseURL: `${url2use}`,
     headers: {
       Authorization: 'no',
       'Content-Type': 'application/json',
@@ -41,18 +44,15 @@ export const apiClient = (APIEndpoint = '') => {
 };
 
 export function checkUser() {
-  return new Promise(((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const ac = apiClient();
     return ac.post('check/', {}).then((response) => {
       if (response.data.email !== null) {
         store.dispatch(login(response.data.email));
       }
       resolve(response);
-    })
-      .catch((error) => {
-        reject(error);
-      });
-  }));
+    }).catch(error => console.log(error));
+  });
 }
 
 export const checkCookie = () => {
@@ -64,7 +64,7 @@ export const checkCookie = () => {
         cookies.remove(axios.defaults.xsrfCookieName, { path: '/' });
         cookies.set(axios.defaults.xsrfCookieName, response.data, { path: '/' });
         checkUser();
-      });
+      }).catch(error => console.log(error));
   }
 };
 
@@ -127,7 +127,7 @@ export async function storeTranslation(translationId, language_pair, model, sour
     return ac.post(`api/translations/${translationURI}/`, data).then((response) => {
       resolve(response);
     }).catch((error) => {
-      reject(error);
+      console.log(error);
     });
   }));
 }
@@ -140,7 +140,7 @@ export async function getTranslations() {
       .then((response) => {
         resolve(response);
       }).catch((error) => {
-        reject(error);
+        console.log(error);
       });
   }));
 }
