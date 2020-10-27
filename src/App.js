@@ -30,25 +30,32 @@ import logo from './velthyding_hor.png';
 
 import { useTranslation } from 'react-i18next';
 
+import useCookie from 'react-use-cookie';
+
 function App() {
   const { loggedin, email } = useSelector((state) => state.login);
-  const [ lng, setLng ] = useState(window.navigator.language);
+  const [ lng, setLng ] = useCookie('lang', window.navigator.language.includes('is') ? 'is' : 'en');
 
   const { t, i18n } = useTranslation();
+  const setLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+  }
+  useEffect(() => {
+    setLanguage(lng)
+  }, lng);
+
   const toggleLanguage = () => {
     if (lng === 'is') {
-      i18n.changeLanguage('en');
       setLng('en');
     } else {
-      i18n.changeLanguage('is');
-      setLng('is');
+      setLng('is')
     }
   };
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    checkUser()
+    checkUser();
   }, []);
 
   return (
