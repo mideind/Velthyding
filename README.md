@@ -1,4 +1,4 @@
-# Greynir-MT-Web -- Machine Translation Interace
+# Velthyding -- Machine Translation Interface
 
 ## Introduction
 
@@ -10,7 +10,8 @@ You’ll need to have Node >= 8.10 and npm >= 5.6 on your machine, run `yarn run
 
 ## Configuration
 
-See `config.js` for setting endpoint domains and default selections. Endpoints need to follow the [Google translate REST specification][https://cloud.google.com/translate/docs/reference/rest] for compatibility with the interface.
+See `config.js` for setting endpoint domains, default selections and controling branding. Endpoints need to follow the [Google translate REST specification](https://cloud.google.com/translate/docs/reference/rest) for compatibility with the interface.
+
 
 ## About
 
