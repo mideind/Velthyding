@@ -219,6 +219,7 @@ function Translate() {
           <div className="Translator-subtext"><h4>Google Translate</h4>{googleTranslation.map( pg => <p>{pg}</p>)}</div>
           </div>} 
         <div className="Translate-footer">
+          {uploadButton}
           {translateButton}
           {translationId && reviseButton}
         </div>
