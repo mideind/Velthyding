@@ -73,7 +73,9 @@ function App() {
                {<Dropdown item icon='cog' floating direction="left">
                 <Dropdown.Menu>
                   <Dropdown.Item>
-                    <Checkbox label={t('show_google_trans', 'Show Google Translation')} onClick={() => {dispatch(setToggle('Google')) && dispatch(toggleGoogle());}}/>
+                    <Checkbox
+                      label={t('show_google_trans', 'Show Google Translation')}
+                      onClick={() => {dispatch(setToggle('Google')) && dispatch(toggleGoogle());}}/>
                   </Dropdown.Item>
                   <Dropdown.Item onClick={toggleLanguage}>
                     {lng === 'is' && 'English interface'}

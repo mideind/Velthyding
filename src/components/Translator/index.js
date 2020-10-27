@@ -44,9 +44,16 @@ function Translator(props) {
     }])
   }
 
+  const switchText = () => {
+    const switchedText = props.sourceText.map((pg) => {
+      return {...pg, children: pg.children.map(s => {return {...s, text: s.translation, translation: s.text}})}
+    })
+    props.setText(switchedText);
+  };
+
   return (
     <div className="Translator">
-      <LanguagePicker clearText={clearText} />
+      <LanguagePicker switchText={switchText} />
       <div className="Translator-containers">
         <TranslateBox
           setText={props.setText}

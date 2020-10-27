@@ -46,7 +46,7 @@ const LanguageDirectionPicker = (props) => {
     <div className="LanguageDirectionPicker">
       <div className="LanguageDirection">
         <LanguagePicker isSource />
-        <Button icon='exchange' onClick={() => dispatch(switchLanguage()) && props.clearText()} />
+        <Button icon='exchange' onClick={() => dispatch(switchLanguage()) && props.switchText()} />
       </div>
       <div className="LanguageDirection">
         <LanguagePicker />
