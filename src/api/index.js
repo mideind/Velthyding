@@ -26,11 +26,12 @@ export const apiClient = (BASE_URL = '') => {
       'Content-Type': 'application/json',
       accept: 'application/json',
     },
+    withCredentials: true // needed to store response csrf
   };
 
-  if (csrfCookie != null) {
-    params.headers['X-CSRFToken'] = csrfCookie;
-  }
+  //if (csrfCookie != null) {
+  //  params.headers['X-CSRFToken'] = csrfCookie;
+  //}
   const ac = axios.create(params);
 
   ac.interceptors.response.use((response) => response, (error) => {
@@ -51,18 +52,26 @@ export function checkUser() {
         store.dispatch(login(response.data.email));
       }
       resolve(response);
-    }).catch(error => console.log(error));
+    }).catch(error => {
+      console.log(error)
+      checkCookie(true);
+    });
   });
 }
 
-export const checkCookie = () => {
+
+export const setCsrf = (csrf) => {
+   cookies.remove(axios.defaults.xsrfCookieName, { path: '/' });
+   cookies.set(axios.defaults.xsrfCookieName, csrf, { path: '/' });
+}
+
+export const checkCookie = (force = false) => {
   const csrfCookie = cookies.get(axios.defaults.xsrfCookieName);
-  if (csrfCookie == null) {
+  if (force || csrfCookie == null) {
     const ac = apiClient();
-    ac.get(CSRF)
+      ac.get(CSRF)
       .then((response) => {
-        cookies.remove(axios.defaults.xsrfCookieName, { path: '/' });
-        cookies.set(axios.defaults.xsrfCookieName, response.data, { path: '/' });
+        setCsrf(response.data);
         checkUser();
       }).catch(error => console.log(error));
   }
@@ -105,6 +114,8 @@ export function logoutUser() {
     return ac.post('logout/')
       .then((response) => {
         store.dispatch(logout());
+        cookies.remove(axios.defaults.xsrfCookieName, { path: '/' });
+       
         resolve(response);
       }).catch((error) => {
         reject(error);

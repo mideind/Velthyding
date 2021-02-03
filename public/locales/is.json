@@ -30,4 +30,8 @@
   "drop_button": "Dragðu hingað",
   "upload_button": "Hlaða upp",
   "Miðeind and Google translation active": "Google Translate þýðing virk"
+  "disclaimer-header": "Um Vélþýðing.is",
+  "disclaimer-content": "Þessi vefsíða er enn í þróun, engin ábyrgð er tekin á gæðum þýðinga. Allar þýðingar eru gerðar með tauganeti sem getur verið óútreiknanlegt og verið með alskyns bjaga.",
+  "disclaimer-cookie": "Með því að nota þessa þjónustu samþykur þú notkun smygilda, þýðingar kunna að vera skráðar.",
+  "dislaimer-last-updated": "Síðast uppfært: "
 }

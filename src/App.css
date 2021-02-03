@@ -60,6 +60,12 @@ body {
   margin-top: 25px;
   position: relative;
 }
+
+.App-body.disclaimer{
+  font-size: 0.7em;
+}
+
+
 @media(max-width: 800px) {
   .App-body{
     max-width: calc(100% - 60px);

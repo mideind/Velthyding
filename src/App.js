@@ -8,7 +8,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import { Button, Checkbox, Icon, Dropdown } from 'semantic-ui-react';
+import { Button, Checkbox, Icon, Dropdown, Message } from 'semantic-ui-react';
 import 'semantic-ui-less/semantic.less';
 import './App.css';
 
@@ -112,13 +112,22 @@ function App() {
             </Route>
           </Switch>
         </div>
-        { SHOW_BRANDING
+
+        <div className="App-body disclaimer">
+          <Message info>
+            <Message.Header>{t('disclaimer-header', 'About Vélþýðing.is')}</Message.Header>
+            <p>{t('disclaimer-content', 'This website is under active development, no responsibility is taken for the quality of translations. All translations are made using a neural network and the output is at times unpredictable and biased in various dicrections.')}</p>
+            <p>{t('disclaimer-cookie', 'By using this service you agreee to our use of cookies, translations may be logged for quality assurance purposes.')}</p>
+            <p>{t('disclaimer-last-updated', 'Last updated: ')} 2020-02-02</p>
+          </Message>
+        </div>
+          { SHOW_BRANDING
         && <div className="Footer">
              <div className="Footer-logo">
              <a href="https://mideind.is"><img alt="logo" src={mideindLogo} width="50" height="76" /></a>
              <p>Miðeind ehf., kt. 591213-1480<br />
               Fiskislóð 31, rými B/304, 101 Reykjavík, <a href="mailto:mideind@mideind.is">mideind@mideind.is</a><br />
-               <a href="presskit.html">{t('press', 'Press material')}.</a>
+               <a href="https://mideind.is/presskit.html">{t('press', 'Press material')}.</a>
              </p>
           </div>
         </div>}
