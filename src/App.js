@@ -116,8 +116,8 @@ function App() {
         <div className="App-body disclaimer">
           <Message info>
             <Message.Header>{t('disclaimer-header', 'About Vélþýðing.is')}</Message.Header>
-            <p>{t('disclaimer-content', 'This website is under active development, no responsibility is taken for the quality of translations. All translations are made using a neural network and the output is at times unpredictable and biased in various dicrections.')}</p>
-            <p>{t('disclaimer-cookie', 'By using this service you agreee to our use of cookies, translations may be logged for quality assurance purposes.')}</p>
+            <p>{t('disclaimer-content', 'This website is under active development. No responsibility is taken for the quality of translations. All translations are made using a neural network and the output can be unpredictable and biased.')}</p>
+            <p>{t('disclaimer-cookie', 'By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes.')}</p>
             <p>{t('disclaimer-last-updated', 'Last updated: ')} 2020-02-02</p>
           </Message>
         </div>
@@ -126,7 +126,7 @@ function App() {
              <div className="Footer-logo">
              <a href="https://mideind.is"><img alt="logo" src={mideindLogo} width="50" height="76" /></a>
              <p>Miðeind ehf., kt. 591213-1480<br />
-              Fiskislóð 31, rými B/304, 101 Reykjavík, <a href="mailto:mideind@mideind.is">mideind@mideind.is</a><br />
+              Fiskislóð 31, rými B/303, 101 Reykjavík, <a href="mailto:mideind@mideind.is">mideind@mideind.is</a><br />
                <a href="https://mideind.is/presskit.html">{t('press', 'Press material')}.</a>
              </p>
           </div>
