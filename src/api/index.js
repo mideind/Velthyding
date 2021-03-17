@@ -14,20 +14,24 @@ axios.defaults.withCredentials = true;
 
 const cookies = new Cookies();
 
-export const apiClient = (APIEndpoint = '') => {
+export const apiClient = (BASE_URL = '') => {
   const csrfCookie = cookies.get(axios.defaults.xsrfCookieName, { path: '/' });
+
+  const url2use = BASE_URL !== '' ? BASE_URL : BASE_BACKEND_URL;
+
   const params = {
-    baseURL: `${BASE_BACKEND_URL}/${APIEndpoint}`,
+    baseURL: `${url2use}`,
     headers: {
       Authorization: 'no',
       'Content-Type': 'application/json',
       accept: 'application/json',
     },
+    withCredentials: true // needed to store response csrf
   };
 
-  if (csrfCookie != null) {
-    params.headers['X-CSRFToken'] = csrfCookie;
-  }
+  //if (csrfCookie != null) {
+  //  params.headers['X-CSRFToken'] = csrfCookie;
+  //}
   const ac = axios.create(params);
 
   ac.interceptors.response.use((response) => response, (error) => {
@@ -41,30 +45,35 @@ export const apiClient = (APIEndpoint = '') => {
 };
 
 export function checkUser() {
-  return new Promise(((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const ac = apiClient();
     return ac.post('check/', {}).then((response) => {
       if (response.data.email !== null) {
         store.dispatch(login(response.data.email));
       }
       resolve(response);
-    })
-      .catch((error) => {
-        reject(error);
-      });
-  }));
+    }).catch(error => {
+      console.log(error)
+      checkCookie(true);
+    });
+  });
 }
 
-export const checkCookie = () => {
+
+export const setCsrf = (csrf) => {
+   cookies.remove(axios.defaults.xsrfCookieName, { path: '/' });
+   cookies.set(axios.defaults.xsrfCookieName, csrf, { path: '/' });
+}
+
+export const checkCookie = (force = false) => {
   const csrfCookie = cookies.get(axios.defaults.xsrfCookieName);
-  if (csrfCookie == null) {
+  if (force || csrfCookie == null) {
     const ac = apiClient();
-    ac.get(CSRF)
+      ac.get(CSRF)
       .then((response) => {
-        cookies.remove(axios.defaults.xsrfCookieName, { path: '/' });
-        cookies.set(axios.defaults.xsrfCookieName, response.data, { path: '/' });
+        setCsrf(response.data);
         checkUser();
-      });
+      }).catch(error => console.log(error));
   }
 };
 
@@ -83,6 +92,21 @@ export function loginUser(username, password) {
   }));
 }
 
+export function registerUser(email, password) {
+  return new Promise(((resolve, reject) => {
+    const ac = apiClient();
+
+    return ac.post('register/', {
+      email,
+      password,
+    }).then((response) => {
+      resolve(response);
+    }).catch((error) => {
+      reject(error);
+    });
+  }));
+}
+
 
 export function logoutUser() {
   return new Promise(((resolve, reject) => {
@@ -90,6 +114,8 @@ export function logoutUser() {
     return ac.post('logout/')
       .then((response) => {
         store.dispatch(logout());
+        cookies.remove(axios.defaults.xsrfCookieName, { path: '/' });
+       
         resolve(response);
       }).catch((error) => {
         reject(error);
@@ -98,15 +124,21 @@ export function logoutUser() {
 }
 
 
-export async function storeTranslation(language_pair, model, source_text, target_text) {
+export async function storeTranslation(translationId, language_pair, model, source_text, target_text) {
+  const translationURI = translationId === null ? 'usertranslations' : 'corrections';
+  const data = {
+    language_pair, model, source_text, target_text,
+  };
+  if (translationId !== null) {
+    data.original = translationId;
+  }
+
   return new Promise(((resolve, reject) => {
     const ac = apiClient();
-    return ac.post('api/translations/usertranslations/', {
-      language_pair, model, source_text, target_text,
-    }).then((response) => {
+    return ac.post(`api/translations/${translationURI}/`, data).then((response) => {
       resolve(response);
     }).catch((error) => {
-      reject(error);
+      console.log(error);
     });
   }));
 }
@@ -119,7 +151,7 @@ export async function getTranslations() {
       .then((response) => {
         resolve(response);
       }).catch((error) => {
-        reject(error);
+        console.log(error);
       });
   }));
 }

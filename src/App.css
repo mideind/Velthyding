@@ -1,10 +1,10 @@
 body {
   margin: 0;
-    background-color: #f1f1f1 !important;
+  background-color: #f1f1f1 !important;
 }
 
 .App {
-  font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Lato", sans-serif;
   font-size: 18px;
 }
 
@@ -21,6 +21,12 @@ body {
 
 .App-header-menu{
   font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  width: 180px;
+  z-index: 1000;
+  text-align: right;
 }
 
 .App-header-content{
@@ -40,7 +46,7 @@ body {
 
 .App-header a{
   text-decoration: none;
-  color: #006eff;
+  color: #444;
 }
 
 .App-content{
@@ -54,6 +60,12 @@ body {
   margin-top: 25px;
   position: relative;
 }
+
+.App-body.disclaimer{
+  font-size: 0.7em;
+}
+
+
 @media(max-width: 800px) {
   .App-body{
     max-width: calc(100% - 60px);
@@ -138,10 +150,6 @@ body {
   }
 }
 
-.TranslateBox-upload{
-  right: 120px;
-}
-
 
 .Checkbox{
   font-size: 14px;
@@ -157,16 +165,25 @@ body {
 
 .Footer{
   margin-top: 100px;
-  font-size: 0.6em;
+  font-size: .8rem;
   display: flex;
   justify-content: center;
   margin-bottom: 50px;
   text-align: center;
-  
+  font-weight: 300;
+  line-height: 1.8rem;
+}
+
+.Footer p{
+   text-align: center;
+  font-weight: 300;
+  line-height: 1.4rem;
+
 }
 
 .Footer a{
   color: #333333;
+  text-decoration: underline;
 }
 
 .Translate-loader{

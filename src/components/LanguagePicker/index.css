@@ -1,0 +1,21 @@
+.LanguageDirectionPicker{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.LanguageDirection{
+    width: 50%;
+}
+
+@media (max-width: 650px){
+    .LanguageDirectionPicker{
+        flex-direction: column;
+    }
+    .LanguageDirection:first-child{
+        margin-bottom: 15px;
+    }
+    .LanguageToggle-button{
+        display: none;
+    }
+}

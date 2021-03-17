@@ -9,17 +9,18 @@ export const loginSlice = createSlice({
     source: 'en',
     target: 'is',
     hoverId: null,
+    showGoogle: false,
   },
   reducers: {
-    login: (state, action) => ({ email: action.payload, loggedin: true }),
-    logout: (state, action) => ({ email: action.payload, loggedin: false }),
+    login: (state, action) => ({ ...state, email: action.payload, loggedin: true }),
+    logout: (state, action) => ({ ...state, email: action.payload, loggedin: false }),
     switchLanguage: (state, action) => ({ source: state.target, target: state.source }),
-    setHover: (state, action) => ({ ...state, hoverId: action.payload }),
+    toggleGoogle: (state, action) => ({ ...state, showGoogle: !state.showGoogle }),
   },
 });
 
 
 export const loginReducer = loginSlice.reducer;
 export const {
-  login, logout, switchLanguage, setHover,
+  login, logout, switchLanguage, toggleGoogle,
 } = loginSlice.actions;

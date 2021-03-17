@@ -1,13 +1,29 @@
 .Translator{
     margin-bottom: 40px;
 }
+.Translator-subtext{
+    width: 50%;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    font-size: 12px;
+}
 
-.Translator-container{
+.Translator-containers{
     display: flex;
     justify-content: space-between;
 }
+
+.reverse{
+    flex-direction: row-reverse;
+}
+
 @media (max-width: 650px){
-    .Translator-container{
+
+    .Translator{
+        margin-bottom: 20px;
+    }
+
+    .Translator-containers{
         flex-direction: column;
         align-items: center;
     }
@@ -20,10 +36,27 @@
     .Translate-footer{
         margin-top: 20px;
         display: flex;
-        justify-content: space-between;
         flex-direction: column;
         width: 100%;
         margin: 0 auto;
+    }
+}
+
+.Translate-footer{
+  justify-content: flex-end;
+}
+
+.Translate-footer .TranslateBox-submit{
+    position: relative !important;
+    margin-left: 10px;
+}
+
+@media (max-width: 650px) {
+    .Translate-footer .TranslateBox-upload{
+        margin-bottom: 20px;
+    }
+    .Translate-footer .TranslateBox-submit{
+        margin-left: 0;
     }
 }
 
@@ -51,14 +84,15 @@
     transition: border 75ms ease-out;
     position: relative;
     font-size: 16px;
-    height: calc(100% - 60px);
-}
+    height: 100%;}
 
 .TranslatorSide-text{
     position: relative;
     -webkit-text-size-adjust: none;
     min-width: 300px;
     height: 100%;
+    min-height: 205px;
+    padding: 20px;
 }
 
 .Translator-text-editor{

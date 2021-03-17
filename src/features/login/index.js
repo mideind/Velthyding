@@ -4,9 +4,17 @@ import { login } from 'features/login/loginSlice';
 import { loginUser } from 'api/index';
 import './index.css';
 import 'App.css';
+import { Button, Divider, Form, Label, Icon, Header } from 'semantic-ui-react'
+import {
+  Link,
+} from 'react-router-dom';
+
+import { useTranslation } from 'react-i18next';
 
 
 function Login() {
+  const { t } = useTranslation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,7 +26,7 @@ function Login() {
         dispatch(login(email))
       )
     ).catch((error) => {
-      setError("Incorrect email or password.");
+      setError(t("Incorrect email or password."));
     });
   }
 
@@ -30,18 +38,27 @@ function Login() {
   return (
     <div className="App-content">
       <div className="Login">
-        <form className="Login-content" onSubmit={submit}>
+        <div className="Login-content">
+          <Header as='h2'>
+            <Icon name='address book' />
+            <Header.Content>
+              Login
+            </Header.Content>
+          </Header>
+          <Form onSubmit={submit}>
           {error && <div className="Message-error">{error}</div>}
-          <div className="InputRow">
-            <label for="email">Email</label>
-            <input name="email" type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
-          </div>
-          <div className="InputRow">
-            <label for="password">Password</label>
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-          </div>
-          <button type="submit">Login</button>
-        </form>
+            <Form.Field>
+              <input type='text' placeholder={t('Email')} value={email} onChange={(e) => setEmail(e.target.value)} />
+            </Form.Field>
+
+            <Form.Field>
+              <input type="password" placeholder={t("Password")} value={password} onChange={(e) => setPassword(e.target.value)}></input>
+            </Form.Field>
+            <Button primary content={t('Login')} type="submit" fluid />
+          </Form>
+          <Divider />
+          <Link to="/register"><Button fluid>{t("New account")}</Button></Link>
+        </div>
       </div>
     </div>
   )

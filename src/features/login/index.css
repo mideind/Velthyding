@@ -7,6 +7,11 @@
     width: 300px;
 }
 
+.Login-content{
+    margin-top: 30px;
+    width: 250px;
+}
+
 .InputRow{
     width: 300px;
     display: flex;

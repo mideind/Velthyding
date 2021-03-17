@@ -1,0 +1,22 @@
+@headerFont        : 'Lato', Arial, Helvetica, sans-serif;
+@pageFont          : 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@googleFontFamily  : 'Lato:300italic,300,400,500,700';
+
+
+@primaryColor   : @purple;
+@secondaryColor : @grey;
+@red            : #B03060;
+@orange         : #FE9A76;
+@yellow         : #ffb400;
+@olive          : #32CD32;
+@green          : #00b450;
+@teal           : #008080;
+@blue           : #006eff;
+@violet         : #EE82EE;
+@purple         : #4600C8;
+@pink           : #FF1493;
+@brown          : #A52A2A;
+@grey           : #A0A0A0;
+@black          : #000000;
+
+
