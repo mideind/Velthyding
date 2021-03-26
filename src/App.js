@@ -16,6 +16,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setToggle } from './features/translate/translateSlice';
 
+import CampaignTask from 'features/campaigntask';
+import Campaigns from 'features/campaigns';
 import Translate from 'features/translate';
 import Login from 'features/login';
 import Home from 'features/home';
@@ -107,6 +109,12 @@ function App() {
             <Route path="/register">
               {loggedin ? <Redirect to="/home" /> : <Register />}
             </Route>
+            <Route exact path="/campaigns">
+              <Campaigns />
+            </Route>
+            <Route path="/campaigns/tasks">
+              <CampaignTask />
+            </Route>
             <Route path="/">
               <Translate />
             </Route>
@@ -114,7 +122,7 @@ function App() {
         </div>
 
         <div className="App-body disclaimer">
-          <Message info>
+          <Message info size="big">
             <Message.Header>{t('disclaimer-header', 'About Vélþýðing.is')}</Message.Header>
             <p>{t('disclaimer-content', 'This website is under active development. No responsibility is taken for the quality of translations. All translations are made using a neural network and the output can be unpredictable and biased.')}</p>
             <p>{t('disclaimer-cookie', 'By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes.')}</p>
