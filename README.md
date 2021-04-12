@@ -23,7 +23,25 @@ See `config.js` for setting endpoint domains, default selections and customizing
 
 ## Development
 
-### Heap size issue
+### Setup and development
+
+To install dependancies run
+
+```bash
+npm run-script build
+```
+
+To start up the development server run
+
+```bash
+npm run-script start
+```
+
+To create a build run
+
+```bash
+npm run-script build
+```
 
 If you run into issues when building or running the development server, try increasing the available memory with 
 

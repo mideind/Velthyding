@@ -1,5 +1,5 @@
-import { PREFIX_TRANSLATION_URL } from "config.js";
-import { decodeHTML } from "../../utils/text.js";
+import { PREFIX_TRANSLATION_URL } from "config";
+import { decodeHTML } from "../../utils/text";
 
 // Simplified wrapper to ignore structure
 export async function updateSentenceTranslation(text, prefix, source, target) {

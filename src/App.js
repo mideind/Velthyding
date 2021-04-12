@@ -57,6 +57,11 @@ function App() {
 
   const dispatch = useDispatch();
 
+  const onGoogleClick = () => {
+    dispatch(setToggle("Google"));
+    dispatch(toggleGoogle());
+  };
+
   useEffect(() => {
     checkUser();
   }, []);
@@ -88,10 +93,7 @@ function App() {
                           "show_google_trans",
                           "Show Google Translation"
                         )}
-                        onClick={() => {
-                          dispatch(setToggle("Google")) &&
-                            dispatch(toggleGoogle());
-                        }}
+                        onClick={onGoogleClick}
                       />
                     </Dropdown.Item>
                     <Dropdown.Item onClick={toggleLanguage}>
