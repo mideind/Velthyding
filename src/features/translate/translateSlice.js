@@ -1,12 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-import { ENGINES } from 'config';
-
+import { ENGINES } from "config";
 
 function updateTranslation(translateState, action) {
   return translateState.map((engine) => {
     if (engine.name === action.payload.name) {
-      return { ...engine, text: action.payload.text, structuredText: action.payload.structuredText };
+      return {
+        ...engine,
+        text: action.payload.text,
+        structuredText: action.payload.structuredText,
+      };
     }
     return engine;
   });
@@ -27,7 +30,7 @@ function clear(translateState, action) {
 
 const storeEngines = ENGINES.map((e) => ({ ...e, text: [] }));
 export const translateSlice = createSlice({
-  name: 'engines',
+  name: "engines",
   initialState: storeEngines,
   reducers: {
     setTranslation: updateTranslation,
@@ -35,7 +38,6 @@ export const translateSlice = createSlice({
     clearAll: clear,
   },
 });
-
 
 export const translateReducer = translateSlice.reducer;
 export const { setTranslation, setToggle, clearAll } = translateSlice.actions;
