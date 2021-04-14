@@ -2,7 +2,7 @@
 
 # Velthyding.is — Icelandic Machine Translation Website
 
-### Introduction
+## Introduction
 
 *Velthyding.is* is a web front end for [Miðeind](https://miðeind.is)'s neural machine
 translation engine, implemented in Javascript and React.
@@ -12,23 +12,18 @@ Both the web and the engine are under rapid development.
 
 Try Velthyding at [https://velthyding.is](https://velthyding.is)!
 
-### Requirements and installation
-
-You’ll need to have Node >= 8.10 and npm >= 5.6 on your machine. Run `yarn run` for a local development server and `yarn build` to package the interface for public use.
+## Development
 
 ### Configuration
 
 See `config.js` for setting endpoint domains, default selections and customizing branding (logo, colors). Endpoints need to follow the [Google translate REST specification](https://cloud.google.com/translate/docs/reference/rest) for compatibility with the interface.
 
-
-## Development
-
 ### Setup and development
 
-To install dependancies run
+You’ll need to have Node >= 8.10 and npm >= 5.6 on your machine. You install dependancies run
 
 ```bash
-npm run-script build
+npm run-script install
 ```
 
 To start up the development server run
