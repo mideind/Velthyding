@@ -6,9 +6,10 @@ import {
   Progress,
   Message,
   Button,
-  Loader,
+  Divider,
   Grid,
   Segment,
+  List,
 } from "semantic-ui-react";
 import { useParams, Redirect } from "react-router-dom";
 import { answerTask, getTask } from "api/reviews";
@@ -23,11 +24,17 @@ const TASK_DESCRIPTIONS = {
   },
   fluidity: {
     header: "Fluidity Task",
-    items: ["Something in the way", "She translates"],
+    items: [
+      "Is the output good fluent English?",
+      "This involves both grammatical correctness and idiomatic word choices.",
+    ],
   },
   adequacy: {
     header: "Adequacy Task",
-    items: ["What should", "Go here"],
+    items: [
+      "Does the output convey the same meaning as the input sentence?",
+      "Is part of the message lost, added, or distorted?",
+    ],
   },
 };
 
@@ -122,13 +129,42 @@ function RatingTask(props) {
         <Message size="huge">{props.target}</Message>
 
         <Segment padded size="large">
-          <Rating
-            rating={rating}
-            onRate={(e, { rating, maxRating }) => setRating(rating)}
-            maxRating={maxStars}
-            icon="star"
-          />{" "}
-          {rating} / {maxStars}
+          <Grid verticalAlign="center" columns={2}>
+            <Grid.Row>
+              <Grid.Column>
+                {props.mode === "adequacy" && (
+                  <List>
+                    <List.Item>5. All meaning</List.Item>
+                    <List.Item>4. Most meaning</List.Item>
+                    <List.Item>3. Much meaning</List.Item>
+                    <List.Item>2. Little meaning</List.Item>
+                    <List.Item>1. No meaning</List.Item>
+                  </List>
+                )}
+                {props.mode === "fluency" && (
+                  <List>
+                    <List.Item>5. Flawless text</List.Item>
+                    <List.Item>4. Good text</List.Item>
+                    <List.Item>3. Non-native text</List.Item>
+                    <List.Item>2. Disfluent text</List.Item>
+                    <List.Item>1. Incomprehensible</List.Item>
+                  </List>
+                )}
+              </Grid.Column>
+              <Grid.Column>
+                <br />
+                <br />
+                <Rating
+                  rating={rating}
+                  onRate={(e, { rating, maxRating }) => setRating(rating)}
+                  maxRating={maxStars}
+                  icon="star"
+                  size="massive"
+                />{" "}
+                {rating} / {maxStars}
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Segment>
         {rating === 0 && (
           <Button disabled fluid color="blue">

@@ -55,7 +55,7 @@ function CampaignModal(props) {
                 <TaskCard
                   head="Fluency"
                   meta="Are translations well formed"
-                  description="Grade fluency on a scale"
+                  description="Is the output good and fluent"
                   mode="fluency"
                   id={props.id}
                   action={() => setOpen(false)}
@@ -65,8 +65,8 @@ function CampaignModal(props) {
                 <TaskCard
                   head="Adequacy"
                   mode="adequacy"
-                  meta="Do translations convay meaning"
-                  description="Grade addequacy on a scale"
+                  meta="Do translations convey meaning"
+                  description="Does the output convey the same meaning as the input sentence? Is part of the message lost, added, or distorted?"
                   id={props.id}
                   action={() => setOpen(false)}
                 />

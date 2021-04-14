@@ -32,6 +32,39 @@ import logo from "./velthyding_hor.png";
 
 import { setToggle } from "./features/translate/translateSlice";
 
+function VelthydingMenu(props) {
+  const { t } = useTranslation();
+  return (
+    <Dropdown item icon="cog" floating direction="left">
+      <Dropdown.Menu>
+        <Dropdown.Item>
+          <Checkbox
+            label={t("show_google_trans", "Show Google Translation")}
+            onClick={props.onGoogleClick}
+          />
+        </Dropdown.Item>
+        <Dropdown.Item onClick={props.toggleLanguage}>
+          {props.lng === "is" && "English interface"}
+          {props.lng !== "is" && "Íslenskt viðmót"}
+        </Dropdown.Item>
+        <Dropdown.Item>
+          <Link to="/campaigns">{t("Evaluation")}</Link>
+        </Dropdown.Item>
+        {props.loggedin && (
+          <Dropdown.Item onClick={props.logoutUser}>
+            {t("Logout")}
+          </Dropdown.Item>
+        )}
+        {!props.loggedin && (
+          <Dropdown.Item>
+            <Link to="/login"> {t("login_header")}</Link>
+          </Dropdown.Item>
+        )}
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+}
+
 function App() {
   const { loggedin } = useSelector((state) => state.login);
   const [lng, setLng] = useCookie(
@@ -84,35 +117,12 @@ function App() {
               </Link>
             </div>
             <div className="App-header-menu">
-              {
-                <Dropdown item icon="cog" floating direction="left">
-                  <Dropdown.Menu>
-                    <Dropdown.Item>
-                      <Checkbox
-                        label={t(
-                          "show_google_trans",
-                          "Show Google Translation"
-                        )}
-                        onClick={onGoogleClick}
-                      />
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={toggleLanguage}>
-                      {lng === "is" && "English interface"}
-                      {lng !== "is" && "Íslenskt viðmót"}
-                    </Dropdown.Item>
-                    {loggedin && (
-                      <Dropdown.Item onClick={logoutUser}>
-                        {t("Logout")}
-                      </Dropdown.Item>
-                    )}
-                    {!loggedin && (
-                      <Dropdown.Item>
-                        <Link to="/login"> {t("login_header")}</Link>
-                      </Dropdown.Item>
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
-              }
+              <VelthydingMenu
+                onGoogleClick={onGoogleClick}
+                logoutUser={logoutUser}
+                loggedin={loggedin}
+                lng={lng}
+              />
               {!SHOW_LOGIN && <span>{t("fallback_login", "Beta")}</span>}
             </div>
           </div>
