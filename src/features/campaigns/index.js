@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Divider,
@@ -9,6 +9,7 @@ import {
   Table,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import { getCampaigns } from "api/reviews";
 
 function TaskCard(props) {
   return (
@@ -19,7 +20,7 @@ function TaskCard(props) {
         <Card.Description>{props.description}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Link to="/campaigns/tasks">
+        <Link to={`/campaigns/${props.id}/${props.mode}`}>
           <Button basic fluid color="green" onClick={props.action}>
             Start
           </Button>
@@ -50,27 +51,33 @@ function CampaignModal(props) {
           </Grid.Column>
           <Grid.Column>
             <Card.Group>
-              {props.fluency && (
+              {props.is_fluency && (
                 <TaskCard
                   head="Fluency"
                   meta="Are translations well formed"
                   description="Grade fluency on a scale"
+                  mode="fluency"
+                  id={props.id}
                   action={() => setOpen(false)}
                 />
               )}
-              {props.adequacy && (
+              {props.is_adequacy && (
                 <TaskCard
                   head="Adequacy"
+                  mode="adequacy"
                   meta="Do translations convay meaning"
                   description="Grade addequacy on a scale"
+                  id={props.id}
                   action={() => setOpen(false)}
                 />
               )}
-              {props.comparison && (
+              {props.is_comparison && (
                 <TaskCard
                   head="Compare"
+                  mode="comparison"
                   meta="Select the better"
                   description="Select the better translation"
+                  id={props.id}
                   action={() => setOpen(false)}
                 />
               )}
@@ -93,7 +100,7 @@ function CampaignTableRow(props) {
       <Table.Cell>
         <CampaignModal {...props} />
       </Table.Cell>
-      <Table.Cell>{props.end_date}</Table.Cell>
+      <Table.Cell>{props.ends}</Table.Cell>
       <Table.Cell>
         <Progress progress percent={props.progress} success />
       </Table.Cell>
@@ -102,30 +109,11 @@ function CampaignTableRow(props) {
 }
 
 function CampaignTable() {
-  const [rows, setState] = useState([
-    {
-      fluency: true,
-      description: "News, that's what were look at",
-      name: "News",
-      end_date: "20/08/01",
-      progress: 99,
-    },
-    {
-      comparison: true,
-      description: "This is the description for EEA",
-      name: "Comparison I",
-      end_date: "21/05/01",
-      progress: 23,
-    },
-    {
-      fluency: true,
-      adequacy: true,
-      description: "This is the description for EEA",
-      name: "EEA",
-      end_date: "21/05/01",
-      progress: 67,
-    },
-  ]);
+  const [rows, setState] = useState([]);
+
+  useEffect(() => {
+    getCampaigns().then((camp) => setState(camp.data));
+  }, []);
 
   return (
     <Table celled>

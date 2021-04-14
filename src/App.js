@@ -131,7 +131,7 @@ function App() {
             <Route exact path="/campaigns">
               <Campaigns />
             </Route>
-            <Route path="/campaigns/tasks">
+            <Route path="/campaigns/:id/:mode">
               <CampaignTask />
             </Route>
             <Route path="/">

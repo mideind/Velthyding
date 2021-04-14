@@ -9,7 +9,7 @@ import { Button } from "semantic-ui-react";
 import "App.css";
 import Translator from "components/Translator";
 import { translateMany, updateSentenceTranslation } from "actions/translations";
-import { storeTranslation } from "api";
+import { storeTranslation } from "api/translations";
 import { useTranslation } from "react-i18next";
 import { setTranslation } from "./translateSlice";
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Icon, Label, Menu, Table } from "semantic-ui-react";
 import moment from "moment";
-import { getTranslations } from "api";
+import { getTranslations } from "api/translations";
 import { useTranslation } from "react-i18next";
 
 moment().format();

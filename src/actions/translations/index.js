@@ -28,10 +28,12 @@ export async function updateSentenceTranslation(text, prefix, source, target) {
     } catch (err) {
       return ["Error"];
     }
+  } else {
+    return ["Error"];
   }
 }
 
-export async function translate(engine, text, source, target, prefix) {
+export async function translate(engine, text, source, target, prefix) {  // eslint-disable-line
   const data = {
     ...engine.extraData,
     model:

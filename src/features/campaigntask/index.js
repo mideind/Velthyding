@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Rating,
   Header,
@@ -6,10 +6,12 @@ import {
   Progress,
   Message,
   Button,
-  Divider,
+  Loader,
   Grid,
   Segment,
 } from "semantic-ui-react";
+import { useParams, Redirect } from "react-router-dom";
+import { answerTask, getTask } from "api/reviews";
 
 const TASK_DESCRIPTIONS = {
   comparison: {
@@ -32,14 +34,16 @@ const TASK_DESCRIPTIONS = {
 function TaskWrapper(props) {
   return (
     <div>
-      <Message size="tiny" warning>
-        <Message.Header>{props.description.header}</Message.Header>
-        <Message.List>
-          {props.description.items.map((item) => (
-            <Message.Item>{item}</Message.Item>
-          ))}
-        </Message.List>
-      </Message>
+      {props.description && (
+        <Message size="tiny" warning>
+          <Message.Header>{props.description.header}</Message.Header>
+          <Message.List>
+            {props.description.items.map((item) => (
+              <Message.Item>{item}</Message.Item>
+            ))}
+          </Message.List>
+        </Message>
+      )}
       <Grid>
         <Grid.Column width={13}>
           <Progress percent={props.progress} color="olive" progress />
@@ -56,6 +60,16 @@ function TaskWrapper(props) {
 }
 
 function ComparisonTask(props) {
+  function sendAnswer(value) {
+    const answerData = {
+      option_1: props.targets[0][0],
+      option_2: props.targets[0][1],
+      preference_id: props.targets[value][0],
+      mode: props.mode,
+    };
+    props.onSubmit(answerData);
+  }
+
   return (
     <TaskWrapper {...props} description={TASK_DESCRIPTIONS.comparison}>
       <Segment>
@@ -67,7 +81,7 @@ function ComparisonTask(props) {
             <Segment padded size="large">
               {props.sentence_a}
             </Segment>
-            <Button onClick={props.onSubmit} fluid color="blue">
+            <Button onClick={sendAnswer(0)} fluid color="blue">
               Select
             </Button>
           </Grid.Column>
@@ -75,7 +89,7 @@ function ComparisonTask(props) {
             <Segment padded size="large">
               {props.sentence_b}
             </Segment>
-            <Button onClick={props.onSubmit} fluid color="blue">
+            <Button onClick={sendAnswer(1)} fluid color="blue">
               Select
             </Button>
           </Grid.Column>
@@ -87,6 +101,17 @@ function ComparisonTask(props) {
 
 function RatingTask(props) {
   const [rating, setRating] = useState(0);
+  const maxStars = 5;
+
+  function sendAnswer(value) {
+    const answerData = {
+      target_id: props.targets[0][0],
+      review_value: value,
+      mode: props.mode,
+    };
+    props.onSubmit(answerData);
+    setRating(0);
+  }
 
   return (
     <TaskWrapper {...props} description={props.description}>
@@ -100,18 +125,18 @@ function RatingTask(props) {
           <Rating
             rating={rating}
             onRate={(e, { rating, maxRating }) => setRating(rating)}
-            maxRating={10}
+            maxRating={maxStars}
             icon="star"
           />{" "}
-          {rating} / 10
+          {rating} / {maxStars}
         </Segment>
         {rating === 0 && (
-          <Button onClick={props.onSubmit} disabled fluid color="blue">
+          <Button disabled fluid color="blue">
             Submit
           </Button>
         )}
         {rating !== 0 && (
-          <Button onClick={props.onSubmit} fluid color="blue">
+          <Button onClick={() => sendAnswer(rating)} fluid color="blue">
             Submit
           </Button>
         )}
@@ -128,79 +153,55 @@ function AdequacyTask(props) {
   return <RatingTask description={TASK_DESCRIPTIONS.adequacy} {...props} />;
 }
 
-const TASK_POOL = [
-  {
-    type: "comparison",
-    source: "Who let the dogs out?",
-    target: "Hver lét hundana út?",
-    target2: "Hver hleypti hundunum út?",
-  },
-  {
-    type: "fluidity",
-    source: "Who let the dogs out?",
-    target: "Hver lét hundana út?",
-  },
-  {
-    type: "adequacy",
-    source: "Who let the dogs out?",
-    target: "Hver lét hundana út?",
-  },
-  {
-    type: "comparison",
-    source: "Who let the dogs out?",
-    target: "Hver lét hundana út?",
-    target2: "Hver hleypti hundunum út?",
-  },
-  {
-    type: "fluidity",
-    source: "Who let the dogs out?",
-    target: "Hver lét hundana út?",
-  },
-  {
-    type: "adequacy",
-    source: "Who let the dogs out?",
-    target: "Hver lét hundana út?",
-  },
-];
-
 function CampaignTask() {
-  const [poolIdx, setPoolIdx] = useState(0);
-  const curTask = TASK_POOL[poolIdx];
-  const tasksLeft = TASK_POOL.length - poolIdx;
-  const progress = Math.floor(
-    (100 * (TASK_POOL.length - tasksLeft)) / TASK_POOL.length
-  );
+  const [tasksLeft, setTasksLeft] = useState(30);
+  const { id, mode } = useParams();
+  const progress = Math.floor(100 * ((30 - tasksLeft) / 30));
+
+  const [task, setTask] = useState(null);
+
+  function updateTask() {
+    getTask(id, mode).then((response) => setTask(response.data));
+  }
+
+  useEffect(() => {
+    updateTask();
+  }, []);
+
+  if (task === null) {
+    return <></>;
+  }
+
+  if (tasksLeft < 1) {
+    return <Redirect to="/campaigns" />;
+  }
+
+  function answerAndGetNext(answerData) {
+    setTasksLeft(tasksLeft - 1);
+    answerTask(id, answerData).then(() => updateTask());
+  }
+
+  const taskData = {
+    source: task.source,
+    target: task.targets[0][1],
+    tasks_left: tasksLeft,
+    progress,
+    mode,
+    targets: task.targets,
+    onSubmit: answerAndGetNext,
+  };
 
   return (
     <>
-      {curTask.type === "comparison" && (
+      {task.mode === "comparison" && (
         <ComparisonTask
-          source={curTask.source}
-          sentence_a={curTask.target}
-          sentence_b={curTask.target2}
-          tasks_left={tasksLeft}
-          progress={progress}
-          onSubmit={() => setPoolIdx(poolIdx + 1)}
+          {...taskData}
+          sentence_a={task.targets[0][1]}
+          sentence_b={task.targets[1][1]}
         />
       )}
-      {curTask.type === "fluidity" && (
-        <FluidityTask
-          source={curTask.source}
-          target={curTask.target}
-          tasks_left={tasksLeft}
-          progress={progress}
-          onSubmit={() => setPoolIdx(poolIdx + 1)}
-        />
-      )}
-      {curTask.type === "adequacy" && (
-        <AdequacyTask
-          source={curTask.source}
-          target={curTask.target}
-          tasks_left={tasksLeft}
-          progress={progress}
-          onSubmit={() => setPoolIdx(poolIdx + 1)}
-        />
-      )}
+      {task.mode === "fluency" && <FluidityTask {...taskData} />}
+      {task.mode === "adequacy" && <AdequacyTask {...taskData} />}
     </>
   );
 }
