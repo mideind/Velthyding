@@ -22,8 +22,8 @@ const TASK_DESCRIPTIONS = {
       "Consider both if the meaning is preserved and if the sentence is well formed",
     ],
   },
-  fluidity: {
-    header: "Fluidity Task",
+  fluency: {
+    header: "Fluency Task",
     items: [
       "Is the output good fluent English?",
       "This involves both grammatical correctness and idiomatic word choices.",
@@ -70,7 +70,7 @@ function ComparisonTask(props) {
   function sendAnswer(value) {
     const answerData = {
       option_1: props.targets[0][0],
-      option_2: props.targets[0][1],
+      option_2: props.targets[1][0],
       preference_id: props.targets[value][0],
       mode: props.mode,
     };
@@ -84,22 +84,31 @@ function ComparisonTask(props) {
         <Message size="huge">{props.source}</Message>
         <Header as="h3">Target texts</Header>
         <Grid columns={2} stackable>
+          <Grid.Row stretched>
           <Grid.Column>
             <Segment padded size="large">
-              {props.sentence_a}
+              {props.targets[0][1]}
             </Segment>
-            <Button onClick={sendAnswer(0)} fluid color="blue">
+          </Grid.Column>
+          <Grid.Column verticalAlign="middle">
+            <Segment padded size="large">
+              {props.targets[1][1]}
+            </Segment>
+          </Grid.Column>
+          </Grid.Row>
+         <Grid.Row stretched>
+          <Grid.Column>
+            <Button size="normal" onClick={() => sendAnswer(0)} fluid color="blue">
               Select
             </Button>
           </Grid.Column>
           <Grid.Column verticalAlign="middle">
-            <Segment padded size="large">
-              {props.sentence_b}
-            </Segment>
-            <Button onClick={sendAnswer(1)} fluid color="blue">
+            <Button onClick={() => sendAnswer(1)} fluid color="blue">
               Select
             </Button>
           </Grid.Column>
+          </Grid.Row>
+
         </Grid>
       </Segment>
     </TaskWrapper>
@@ -181,8 +190,8 @@ function RatingTask(props) {
   );
 }
 
-function FluidityTask(props) {
-  return <RatingTask description={TASK_DESCRIPTIONS.fluidity} {...props} />;
+function FluencyTask(props) {
+  return <RatingTask description={TASK_DESCRIPTIONS.fluency} {...props} />;
 }
 
 function AdequacyTask(props) {
@@ -232,11 +241,9 @@ function CampaignTask() {
       {task.mode === "comparison" && (
         <ComparisonTask
           {...taskData}
-          sentence_a={task.targets[0][1]}
-          sentence_b={task.targets[1][1]}
         />
       )}
-      {task.mode === "fluency" && <FluidityTask {...taskData} />}
+      {task.mode === "fluency" && <FluencyTask {...taskData} />}
       {task.mode === "adequacy" && <AdequacyTask {...taskData} />}
     </>
   );

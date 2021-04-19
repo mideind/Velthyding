@@ -71,7 +71,7 @@ function CampaignModal(props) {
                   action={() => setOpen(false)}
                 />
               )}
-              {props.is_comparison && (
+              {props.is_comparative && (
                 <TaskCard
                   head="Compare"
                   mode="comparison"

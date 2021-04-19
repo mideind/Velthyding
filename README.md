@@ -20,7 +20,7 @@ See `config.js` for setting endpoint domains, default selections and customizing
 
 ### Setup and development
 
-You’ll need to have Node >= 8.10 and npm >= 5.6 on your machine. You install dependancies run
+You’ll need to have Node >= 8.10 and npm >= 5.6 on your machine. To install dependancies run
 
 ```bash
 npm run-script install
