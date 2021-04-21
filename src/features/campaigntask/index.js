@@ -13,6 +13,7 @@ import {
 } from "semantic-ui-react";
 import { useParams, Redirect } from "react-router-dom";
 import { answerTask, getTask } from "api/reviews";
+import Error from "components/Error";
 
 const TASK_DESCRIPTIONS = {
   comparison: {
@@ -67,11 +68,14 @@ function TaskWrapper(props) {
 }
 
 function ComparisonTask(props) {
+  const ID_IDX = 0;
+  const TEXT_IDX = 1;
+
   function sendAnswer(value) {
     const answerData = {
-      option_1: props.targets[0][0],
-      option_2: props.targets[1][0],
-      preference_id: props.targets[value][0],
+      option_1: props.targets[0][ID_IDX],
+      option_2: props.targets[1][ID_IDX],
+      preference_id: props.targets[value][ID_IDX],
       mode: props.mode,
     };
     props.onSubmit(answerData);
@@ -85,30 +89,34 @@ function ComparisonTask(props) {
         <Header as="h3">Target texts</Header>
         <Grid columns={2} stackable>
           <Grid.Row stretched>
-          <Grid.Column>
-            <Segment padded size="large">
-              {props.targets[0][1]}
-            </Segment>
-          </Grid.Column>
-          <Grid.Column verticalAlign="middle">
-            <Segment padded size="large">
-              {props.targets[1][1]}
-            </Segment>
-          </Grid.Column>
+            <Grid.Column>
+              <Segment padded size="large">
+                {props.targets[0][TEXT_IDX]}
+              </Segment>
+            </Grid.Column>
+            <Grid.Column verticalAlign="middle">
+              <Segment padded size="large">
+                {props.targets[1][TEXT_IDX]}
+              </Segment>
+            </Grid.Column>
           </Grid.Row>
-         <Grid.Row stretched>
-          <Grid.Column>
-            <Button size="normal" onClick={() => sendAnswer(0)} fluid color="blue">
-              Select
-            </Button>
-          </Grid.Column>
-          <Grid.Column verticalAlign="middle">
-            <Button onClick={() => sendAnswer(1)} fluid color="blue">
-              Select
-            </Button>
-          </Grid.Column>
+          <Grid.Row stretched>
+            <Grid.Column>
+              <Button
+                size="normal"
+                onClick={() => sendAnswer(0)}
+                fluid
+                color="blue"
+              >
+                Select
+              </Button>
+            </Grid.Column>
+            <Grid.Column verticalAlign="middle">
+              <Button onClick={() => sendAnswer(1)} fluid color="blue">
+                Select
+              </Button>
+            </Grid.Column>
           </Grid.Row>
-
         </Grid>
       </Segment>
     </TaskWrapper>
@@ -199,9 +207,13 @@ function AdequacyTask(props) {
 }
 
 function CampaignTask() {
-  const [tasksLeft, setTasksLeft] = useState(30);
+  const maxTasks = 30;
+
+  const [tasksLeft, setTasksLeft] = useState(maxTasks);
   const { id, mode } = useParams();
-  const progress = Math.floor(100 * ((30 - tasksLeft) / 30));
+  const progress = Math.floor(100 * ((maxTasks - tasksLeft) / maxTasks));
+
+  const [error, setError] = useState(false);
 
   const [task, setTask] = useState(null);
 
@@ -222,8 +234,15 @@ function CampaignTask() {
   }
 
   function answerAndGetNext(answerData) {
-    setTasksLeft(tasksLeft - 1);
-    answerTask(id, answerData).then(() => updateTask());
+    answerTask(id, answerData)
+      .then(() => {
+        setTasksLeft(tasksLeft - 1);
+        updateTask();
+      })
+      .catch((err) => {
+        setError(true);
+        console.log(err);
+      });
   }
 
   const taskData = {
@@ -236,13 +255,18 @@ function CampaignTask() {
     onSubmit: answerAndGetNext,
   };
 
+  if (error) {
+    return (
+      <Error
+        header="Something went wrong"
+        message="Please check your internet connection or be in touch if the problem persists."
+      />
+    );
+  }
+
   return (
     <>
-      {task.mode === "comparison" && (
-        <ComparisonTask
-          {...taskData}
-        />
-      )}
+      {task.mode === "comparison" && <ComparisonTask {...taskData} />}
       {task.mode === "fluency" && <FluencyTask {...taskData} />}
       {task.mode === "adequacy" && <AdequacyTask {...taskData} />}
     </>

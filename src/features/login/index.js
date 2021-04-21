@@ -36,7 +36,7 @@ function Login() {
         <div className="Login-content">
           <Header as="h2">
             <Icon name="address book" />
-            <Header.Content>Login</Header.Content>
+            <Header.Content>{t("Login")}</Header.Content>
           </Header>
           <Form onSubmit={submit}>
             {error && <div className="Message-error">{error}</div>}
