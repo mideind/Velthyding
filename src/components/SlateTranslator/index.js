@@ -1,69 +1,67 @@
-import React, {
-  useMemo, useCallback,
-} from 'react';
+import React, { useMemo, useCallback } from "react";
 
+import { createEditor, Transforms } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
+import { HoveringTooltip } from "components/HoveringTooltip";
+import { HoveringSuggestion } from "components/HoveringSugestions/ index";
 
-import { createEditor, Transforms } from 'slate';
-import { Slate, Editable, withReact } from 'slate-react';
-import { HoveringTooltip } from 'components/HoveringTooltip';
-import { HoveringSuggestion } from 'components/HoveringSugestions/ index';
-
-import { useTranslation } from 'react-i18next';
-
+import { useTranslation } from "react-i18next";
 
 // Define a deserializing function that takes a string and returns a value.
 const deserialize = (string) =>
   // Return a value array of children derived by splitting the string.
-  string.split('\n').map((line) => ({
-    children: [{ text: line, type: 'paragraph' }],
-    type: 'paragraph',
+  string.split("\n").map((line) => ({
+    children: [{ text: line, type: "paragraph" }],
+    type: "paragraph",
   }));
-
 
 const SentenceElement = (props) => (
   <span
-      style={{ backgroundColor: 'yellow', marginRight: '20px' }} {...props.attributes}>
-      {props.children}
+    style={{ backgroundColor: "yellow", marginRight: "20px" }}
+    {...props.attributes}
+  >
+    {props.children}
   </span>
 );
 
-const DefaultElement = (props) => (
-  <p {...props.attributes}>
-  {props.children}
-  </p>
+const DefaultElement = (props) => <p {...props.attributes}>{props.children}</p>;
+
+const Leaf = (props) => (
+  <span
+    onMouseOver={() => props.setHoverId(props.leaf.uId)}
+    {...props.attributes}
+    style={{
+      marginRight: "5px",
+      backgroundColor:
+        props.hoverId && props.leaf.uId === props.hoverId ? "azure" : "white",
+    }}
+  >
+    {props.children}
+  </span>
 );
 
-const Leaf = (props) => {
-       return (
-      <span
-        onMouseOver={() => props.setHoverId(props.leaf.uId)}
-        {...props.attributes}
-        style={{ 
-            marginRight: '5px',
-            backgroundColor: (props.hoverId && props.leaf.uId === props.hoverId) ? 'azure' : 'white' 
-        }}
-      >
-        {props.children}
-      </span>
-)};
+const flipTextAndTranslation = (text) =>
+  text.map((pg) => ({
+    ...pg,
+    children: pg.children.map((c) => ({
+      ...c,
+      text: c.translation,
+      translation: c.text,
+    })),
+  }));
 
-const flipTextAndTranslation = (text) => ( text.map(pg => (
-  {...pg, children: pg.children.map(c => ({...c, text: c.translation, translation: c.text}))})
-));
-
-
-const withBreak = editor => {
+const withBreak = (editor) => {
   // Note: this breaks lists etc.
   // CHECK FOR PARAGRAPH if introducing more complex formating.
   editor.insertBreak = () => {
     const newLine = {
-        type: "paragraph",
-        children: [
-            {
-                text: "",
-                translation: ""
-            }
-        ]
+      type: "paragraph",
+      children: [
+        {
+          text: "",
+          translation: "",
+        },
+      ],
     };
     Transforms.insertNodes(editor, newLine);
   };
@@ -77,7 +75,7 @@ const SlateTranslator = (props) => {
 
   const renderElement = useCallback((props) => {
     switch (props.element.type) {
-      case 'sentence': 
+      case "sentence":
         return <SentenceElement {...props} />;
       default:
         return <DefaultElement {...props} />;
@@ -85,10 +83,13 @@ const SlateTranslator = (props) => {
   }, []);
 
   const updateHover = (hId) => {
-      props.setHoverId(hId)
-    }; 
+    props.setHoverId(hId);
+  };
 
-  const renderLeaf = useCallback((lp) => <Leaf {...lp} hoverId={props.hoverId} setHoverId={updateHover} />, [props.hoverId]);
+  const renderLeaf = useCallback(
+    (lp) => <Leaf {...lp} hoverId={props.hoverId} setHoverId={updateHover} />,
+    [props.hoverId]
+  );
 
   let content = props.text;
   if (props.translation) {
@@ -96,34 +97,34 @@ const SlateTranslator = (props) => {
   }
 
   const updateText = (newValue) => {
-
-      if (props.translation) {
-          props.setText(flipTextAndTranslation(newValue));
-      } else {
-          props.setText(newValue);
-      }
-  }
-
+    if (props.translation) {
+      props.setText(flipTextAndTranslation(newValue));
+    } else {
+      props.setText(newValue);
+    }
+  };
 
   return (
-    <div style={{height: "100%"}}>
-        <Slate
-            editor={editor}
-            value={content}
-          onChange={(newValue) => updateText(newValue)}>
-            {props.translation && <HoveringSuggestion setPrefix={props.setPrefix} />}
-            <Editable
-                spellCheck="false"
-                renderElement={renderElement}
-                renderLeaf={renderLeaf}
-              placeholder={t("slate_placeholder", "Enter text..")}
-                autoFocus={props.translation ? false : true}
-              style={{height: "100%"}}
-            />
-        </Slate>
-      </div>
+    <div style={{ height: "100%" }}>
+      <Slate
+        editor={editor}
+        value={content}
+        onChange={(newValue) => updateText(newValue)}
+      >
+        {props.translation && (
+          <HoveringSuggestion setPrefix={props.setPrefix} />
+        )}
+        <Editable
+          spellCheck="false"
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          placeholder={t("slate_placeholder", "Enter text..")}
+          autoFocus={!props.translation}
+          style={{ height: "100%" }}
+        />
+      </Slate>
+    </div>
   );
 };
-
 
 export default SlateTranslator;

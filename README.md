@@ -2,7 +2,7 @@
 
 # Velthyding.is — Icelandic Machine Translation Website
 
-### Introduction
+## Introduction
 
 *Velthyding.is* is a web front end for [Miðeind](https://miðeind.is)'s neural machine
 translation engine, implemented in Javascript and React.
@@ -12,15 +12,47 @@ Both the web and the engine are under rapid development.
 
 Try Velthyding at [https://velthyding.is](https://velthyding.is)!
 
-### Requirements and installation
-
-You’ll need to have Node >= 8.10 and npm >= 5.6 on your machine. Run `yarn run` for a local development server and `yarn build` to package the interface for public use.
+## Development
 
 ### Configuration
 
 See `config.js` for setting endpoint domains, default selections and customizing branding (logo, colors). Endpoints need to follow the [Google translate REST specification](https://cloud.google.com/translate/docs/reference/rest) for compatibility with the interface.
 
-### About
+### Setup and development
+
+You’ll need to have Node >= 8.10 and npm >= 5.6 on your machine. To install dependancies run
+
+```bash
+npm run-script install
+```
+
+To start up the development server run
+
+```bash
+npm run-script start
+```
+
+To create a build run
+
+```bash
+npm run-script build
+```
+
+If you run into issues when building or running the development server, try increasing the available memory with 
+
+```bash
+export NODE_OPTIONS=--max_old_space_size=4096
+```
+
+### Linting
+
+The code should follow the [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react). Linting is configured in `.eslintrc.json` and the code can be fixed using prettier by running 
+
+```bash
+npx eslint 'src/**/*.{js,jsx}' --fix
+```
+
+## About
 
 This work is partially funded by the Language Technology Programme of the Icelandic Government.
 

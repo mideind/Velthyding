@@ -1,22 +1,26 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Dropdown, Button } from 'semantic-ui-react';
-import { switchLanguage } from 'features/login/loginSlice';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Dropdown, Button } from "semantic-ui-react";
+import { switchLanguage } from "features/login/loginSlice";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-import './index.css';
-
+import "./index.css";
 
 function LanguagePicker(props) {
-
   const { t } = useTranslation();
   const LANGUAGE_OPTIONS = [
     {
-      key: 'is', text: t('Icelandic'), value: 'is', flag: 'is',
+      key: "is",
+      text: t("Icelandic"),
+      value: "is",
+      flag: "is",
     },
     {
-      key: 'en', text: t('English'), value: 'en', flag: 'uk',
+      key: "en",
+      text: t("English"),
+      value: "en",
+      flag: "uk",
     },
   ];
 
@@ -25,10 +29,10 @@ function LanguagePicker(props) {
   return (
     <Dropdown
       button
-      className='icon'
+      className="icon"
       floating
       labeled
-      icon='world'
+      icon="world"
       options={LANGUAGE_OPTIONS}
       selection
       value={!props.isSource ? target : source}
@@ -46,7 +50,12 @@ const LanguageDirectionPicker = (props) => {
     <div className="LanguageDirectionPicker">
       <div className="LanguageDirection">
         <LanguagePicker isSource />
-        <span className="LanguageToggle-button"><Button icon='exchange' onClick={() => dispatch(switchLanguage()) && props.switchText()} /></span>
+        <span className="LanguageToggle-button">
+          <Button
+            icon="exchange"
+            onClick={() => dispatch(switchLanguage()) && props.switchText()}
+          />
+        </span>
       </div>
       <div className="LanguageDirection">
         <LanguagePicker />
@@ -56,4 +65,3 @@ const LanguageDirectionPicker = (props) => {
 };
 
 export default LanguageDirectionPicker;
-;

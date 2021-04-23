@@ -1,29 +1,23 @@
-import { useState, useCallback } from 'react';
-import qs from 'query-string';
+import { useState, useCallback } from "react";
+import qs from "query-string";
 
 const setQueryStringWithoutPageReload = (qsValue) => {
-  const newurl = `${window.location.protocol}//${
-    window.location.host
-  }${window.location.pathname
-  }${qsValue}`;
+  const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}${qsValue}`;
 
-  window.history.pushState({ path: newurl }, '', newurl);
+  window.history.pushState({ path: newurl }, "", newurl);
 };
 
 const setQueryStringValue = (
   key,
   value,
-  queryString = window.location.search,
+  queryString = window.location.search
 ) => {
   const values = qs.parse(queryString);
   const newQsValue = qs.stringify({ ...values, [key]: value });
   setQueryStringWithoutPageReload(`?${newQsValue}`);
 };
 
-const getQueryStringValue = (
-  key,
-  queryString = window.location.search,
-) => {
+const getQueryStringValue = (key, queryString = window.location.search) => {
   const values = qs.parse(queryString);
   return values[key];
 };
@@ -35,7 +29,7 @@ function useQueryString(key, initialValue) {
       setValue(newValue);
       setQueryStringValue(key, newValue);
     },
-    [key],
+    [key]
   );
 
   return [value, onSetValue];
