@@ -23,7 +23,7 @@ See `config.js` for setting endpoint domains, default selections and customizing
 You’ll need to have Node >= 8.10 and npm >= 5.6 on your machine. To install dependancies run
 
 ```bash
-npm run-script install
+npm install
 ```
 
 To start up the development server run
