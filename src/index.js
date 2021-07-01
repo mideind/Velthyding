@@ -1,13 +1,11 @@
+import { checkCookie } from "api";
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { store } from "store.js";
 import App from "./App";
-import * as serviceWorker from "./serviceWorker";
-
 import "./i18n";
-
-import { checkCookie } from "api";
+import * as serviceWorker from "./serviceWorker";
 
 checkCookie();
 
