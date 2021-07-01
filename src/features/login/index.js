@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { login } from "features/login/loginSlice";
 import { loginUser } from "api/index";
-import "./index.css";
 import "App.css";
-import { Button, Divider, Form, Label, Icon, Header } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-
+import { login } from "features/login/loginSlice";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { Button, Divider, Form, Header, Icon } from "semantic-ui-react";
+import "./index.css";
 
 function Login() {
   const { t } = useTranslation();
@@ -17,10 +16,11 @@ function Login() {
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
-  const apiLogin = (email, password) => {
-    loginUser(email, password)
-      .then(() => dispatch(login(email)))
+  const apiLogin = (pEmail, pPassword) => {
+    loginUser(pEmail, pPassword)
+      .then(() => dispatch(login(pEmail)))
       .catch((error) => {
+        console.error(error);
         setError(t("Incorrect email or password."));
       });
   };

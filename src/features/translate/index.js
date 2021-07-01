@@ -121,29 +121,29 @@ function Translate() {
 
     const newText = updateText(trans);
     setText(newText);
-    trans.forEach((t) =>
+    trans.forEach((tran) =>
       dispatch(
         setTranslation({
-          name: t.engine.name,
-          text: t.text,
-          structuredText: t.structuredText,
+          name: tran.engine.name,
+          text: tran.text,
+          structuredText: tran.structuredText,
         })
       )
     );
 
     trans
-      .filter((t) => t.engine.selected && t.engine.textOnly)
-      .map((t) => setGoogleTranslation(t.text));
+      .filter((tran) => tran.engine.selected && tran.engine.textOnly)
+      .map((tran) => setGoogleTranslation(tran.text));
 
-    trans.forEach((t) =>
+    trans.forEach((tran) =>
       storeTranslation(
         translationId,
         `${source}-${target}`,
-        t.engine.name,
+        tran.engine.name,
         text
           .map((pg) => pg.children.map((ch) => ch.text).join(""))
           .join("\n\n"),
-        t.text.join("\n\n")
+        tran.text.join("\n\n")
       ).then((resp) => {
         if (resp.data.id) {
           setTranslationId(resp.data.id);
@@ -181,41 +181,40 @@ function Translate() {
     });
   };
 
-  const translatePrefix = async () => {
-    setLoading(true);
-    const pgIdx = prefix[1][0];
-    const sntIdx = prefix[1][1];
-    const srcText = text[pgIdx].children[sntIdx].text;
-
-    const translation = await updateSentenceTranslation(
-      srcText,
-      prefix[0],
-      source,
-      target
-    );
-
-    const newText = text.map((pg, i) => {
-      if (i === pgIdx) {
-        const children = pg.children.map((snt, j) => {
-          if (j === sntIdx) {
-            return { ...snt, translation };
-          }
-          return snt;
-        });
-        return { ...pg, children };
-      }
-      return pg;
-    });
-    setLoading(false);
-    setText(newText);
-  };
-
   useEffect(() => {
     if (prefix.length < 2) {
       return;
     }
+    const translatePrefix = async () => {
+      setLoading(true);
+      const pgIdx = prefix[1][0];
+      const sntIdx = prefix[1][1];
+      const srcText = text[pgIdx].children[sntIdx].text;
+
+      const translation = await updateSentenceTranslation(
+        srcText,
+        prefix[0],
+        source,
+        target
+      );
+
+      const newText = text.map((pg, i) => {
+        if (i === pgIdx) {
+          const children = pg.children.map((snt, j) => {
+            if (j === sntIdx) {
+              return { ...snt, translation };
+            }
+            return snt;
+          });
+          return { ...pg, children };
+        }
+        return pg;
+      });
+      setLoading(false);
+      setText(newText);
+    };
     translatePrefix();
-  }, [prefix]);
+  }, [prefix, source, target, text]);
 
   useEffect(() => {
     if (

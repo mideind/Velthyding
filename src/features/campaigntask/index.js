@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
-import {
-  Rating,
-  Header,
-  Label,
-  Progress,
-  Message,
-  Button,
-  Divider,
-  Grid,
-  Segment,
-  List,
-} from "semantic-ui-react";
-import { useParams, Redirect } from "react-router-dom";
 import { answerTask, getTask } from "api/reviews";
 import Error from "components/Error";
+import React, { useCallback, useEffect, useState } from "react";
+import { Redirect, useParams } from "react-router-dom";
+import {
+  Button,
+  Grid,
+  Header,
+  Label,
+  List,
+  Message,
+  Progress,
+  Rating,
+  Segment,
+} from "semantic-ui-react";
 
 const TASK_DESCRIPTIONS = {
   comparison: {
@@ -217,13 +216,13 @@ function CampaignTask() {
 
   const [task, setTask] = useState(null);
 
-  function updateTask() {
+  const updateTask = useCallback(() => {
     getTask(id, mode).then((response) => setTask(response.data));
-  }
+  }, [id, mode]);
 
   useEffect(() => {
     updateTask();
-  }, []);
+  }, [updateTask]);
 
   if (task === null) {
     return <></>;

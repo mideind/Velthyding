@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { login } from "features/login/loginSlice";
 import { registerUser } from "api/index";
-import "./index.css";
 import "App.css";
-import { Header, Button, Divider, Form, Label, Icon } from "semantic-ui-react";
+import { login } from "features/login/loginSlice";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { Button, Divider, Form, Header, Icon } from "semantic-ui-react";
+import "./index.css";
 
 function Register() {
   const { t } = useTranslation();
@@ -16,10 +16,11 @@ function Register() {
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
-  const apiRegister = (email, password) => {
-    registerUser(email, password)
-      .then(() => dispatch(login(email)))
-      .catch((error) => {
+  const apiRegister = (pEmail, pPassword) => {
+    registerUser(pEmail, pPassword)
+      .then(() => dispatch(login(pEmail)))
+      .catch((errorMsg) => {
+        console.log.error(errorMsg);
         setError(t("Incorrect email or password"));
       });
   };

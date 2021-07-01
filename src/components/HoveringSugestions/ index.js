@@ -1,26 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
-import { ReactEditor, useSlate } from "slate-react";
-import { Editor, Range, Transforms, Text } from "slate";
-import { css } from "emotion";
-
-import { Portal, Menu } from "components/common";
-
-import "./index.css";
 import getSuggestions from "actions/suggestions";
+import { Portal } from "components/common";
+import { css } from "emotion";
+import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { Transforms } from "slate";
+import { ReactEditor, useSlate } from "slate-react";
+import "./index.css";
 
-import { useSelector, useDispatch } from "react-redux";
+// const insertSuggestion = (editor, sug) => {
+//   Transforms.delete(editor, { unit: "word", reverse: true });
+//   Transforms.delete(editor, { unit: "word" });
 
-const insertSuggestion = (editor, sug) => {
-  Transforms.delete(editor, { unit: "word", reverse: true });
-  Transforms.delete(editor, { unit: "word" });
-
-  Transforms.insertText(editor, sug.trim(), {
-    match: Text.isText,
-    split: false,
-  });
-  Transforms.move(editor);
-  Transforms.deselect(editor);
-};
+//   Transforms.insertText(editor, sug.trim(), {
+//     match: Text.isText,
+//     split: false,
+//   });
+//   Transforms.move(editor);
+//   Transforms.deselect(editor);
+// };
 
 const insertTranslationFromSuggestion = (editor, sug, prefix, setPrefix) => {
   setPrefix([(prefix + sug).trim(), editor.selection.anchor.path]);
@@ -35,18 +32,20 @@ const SuggestionButton = ({
   const editor = useSlate();
 
   return (
+    /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */
     <div
-      className={css`
-        color: #333;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        padding-bottom: 4px;
-        padding-top: 4px;
-        padding-left: 9px;
-        padding-right: 9px;
-        line-height: 1.2;
-        transition: background-color 100ms;
-        cursor: pointer;
-      `}
+      // This className is probably never used.
+      // className={css`
+      //   color: #333;
+      //   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      //   padding-bottom: 4px;
+      //   padding-top: 4px;
+      //   padding-left: 9px;
+      //   padding-right: 9px;
+      //   line-height: 1.2;
+      //   transition: background-color 100ms;
+      //   cursor: pointer;
+      // `}
       className="HoveringList-item"
       onMouseDown={(event) => {
         setSuggestions([]);
@@ -62,19 +61,13 @@ const SuggestionButton = ({
   );
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export const HoveringSuggestion = (props) => {
   const ref = useRef();
   const editor = useSlate();
   const [curPrefix, setCurPrefix] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const { target } = useSelector((state) => state.login);
-  const dispatch = useDispatch();
-
-  const updateSuggestions = (newSuggestions) => {
-    if (JSON.stringify(newSuggestions) != JSON.stringify(suggestions)) {
-      setSuggestions(newSuggestions);
-    }
-  };
 
   useEffect(() => {
     const el = ref.current;
@@ -87,7 +80,7 @@ export const HoveringSuggestion = (props) => {
     if (
       !selection ||
       !ReactEditor.isFocused(editor) ||
-      (selection && selection.anchor.offset == 0)
+      (selection && selection.anchor.offset === 0)
     ) {
       el.removeAttribute("style");
       return;
@@ -98,6 +91,12 @@ export const HoveringSuggestion = (props) => {
     const [curPgIdx, curSntIdx] = selection.anchor.path;
     const curPg = editor.children[curPgIdx];
     const curSnt = curPg.children[curSntIdx];
+
+    const updateSuggestions = (newSuggestions) => {
+      if (JSON.stringify(newSuggestions) !== JSON.stringify(suggestions)) {
+        setSuggestions(newSuggestions);
+      }
+    };
     if (curSnt !== undefined) {
       const curSub = curSnt.text.substr(0, selection.anchor.offset).split(" ");
       const curSubPost = curSnt.text
@@ -123,7 +122,7 @@ export const HoveringSuggestion = (props) => {
     el.style.left = `${
       rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
     }px`;
-  });
+  }, [editor, target, suggestions]);
 
   return (
     <Portal>
@@ -153,6 +152,7 @@ export const HoveringSuggestion = (props) => {
             <SuggestionButton
               setSuggestions={setSuggestions}
               setPrefix={props.setPrefix}
+              // eslint-disable-next-line react/no-array-index-key
               key={`sug-${idx}`}
               suggestion={sug}
               prefix={curPrefix}

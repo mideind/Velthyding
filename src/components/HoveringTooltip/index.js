@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { ReactEditor, useSlate } from "slate-react";
-import { Editor, Range } from "slate";
+import { Menu, Portal } from "components/common";
 import { css } from "emotion";
+import React, { useEffect, useRef, useState } from "react";
+import { Editor } from "slate";
+import { ReactEditor, useSlate } from "slate-react";
 
-import { Portal, Menu } from "components/common";
-
+// eslint-disable-next-line import/prefer-default-export
 export const HoveringTooltip = () => {
   const ref = useRef();
   const editor = useSlate();
@@ -22,7 +22,7 @@ export const HoveringTooltip = () => {
     if (
       !selection ||
       !ReactEditor.isFocused(editor) ||
-      (selection && selection.anchor.offset == 0)
+      (selection && selection.anchor.offset === 0)
     ) {
       el.removeAttribute("style");
       return;
@@ -49,7 +49,7 @@ export const HoveringTooltip = () => {
     el.style.left = `${
       rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
     }px`;
-  }, [editor.selection]);
+  }, [editor]);
 
   return (
     <Portal>
