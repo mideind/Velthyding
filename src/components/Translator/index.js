@@ -47,21 +47,21 @@ function Translator(props) {
     ]);
   };
 
-  const switchText = () => {
-    const switchedText = props.sourceText.map((pg) => ({
-      ...pg,
-      children: pg.children.map((s) => ({
-        ...s,
-        text: s.translation,
-        translation: s.text,
-      })),
-    }));
-    props.setText(switchedText);
-  };
+  // const switchText = () => {
+  //   const switchedText = props.sourceText.map((pg) => ({
+  //     ...pg,
+  //     children: pg.children.map((s) => ({
+  //       ...s,
+  //       text: s.translation,
+  //       translation: s.text,
+  //     })),
+  //   }));
+  //   props.setText(switchedText);
+  // };
 
   return (
     <div className="Translator">
-      <LanguagePicker switchText={switchText} />
+      <LanguagePicker />
       <div className="Translator-containers">
         <TranslateBox
           setText={props.setText}
