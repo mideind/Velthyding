@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-
-import "./index.css";
-
 import LanguagePicker from "components/LanguagePicker";
 import SlateTranslator from "components/SlateTranslator";
+import React from "react";
+import "./index.css";
 
 function TranslateBox(props) {
   return (
@@ -20,7 +17,11 @@ function TranslateBox(props) {
             setPrefix={props.setPrefix}
           />
           {props.clearText && (
-            <button className="TranslatorSide-clear" onClick={props.clearText}>
+            <button
+              type="submit"
+              className="TranslatorSide-clear"
+              onClick={props.clearText}
+            >
               <span>×</span>
             </button>
           )}
