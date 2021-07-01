@@ -15,7 +15,7 @@ import {
   Link,
   Redirect,
   Route,
-  Switch
+  Switch,
 } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import "semantic-ui-less/semantic.less";
@@ -62,12 +62,12 @@ function App() {
   );
 
   const { t, i18n } = useTranslation();
-  const setLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-  };
   useEffect(() => {
+    const setLanguage = (lang) => {
+      i18n.changeLanguage(lang);
+    };
     setLanguage(lng);
-  }, [lng]);
+  }, [lng, i18n]);
 
   const toggleLanguage = () => {
     if (lng === "is") {
@@ -107,6 +107,7 @@ function App() {
             </div>
             <div className="App-header-menu">
               <VelthydingMenu
+                toggleLanguage={toggleLanguage}
                 onGoogleClick={onGoogleClick}
                 logoutUser={logoutUser}
                 loggedin={loggedin}
