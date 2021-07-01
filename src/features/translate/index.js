@@ -1,27 +1,25 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useDropzone } from "react-dropzone";
-import { useSelector, useDispatch } from "react-redux";
-
-import mammoth from "mammoth";
-import ClipLoader from "react-spinners/ClipLoader";
-import { Button } from "semantic-ui-react";
-
-import "App.css";
-import Translator from "components/Translator";
 import { translateMany, updateSentenceTranslation } from "actions/translations";
 import { storeTranslation } from "api/translations";
+import "App.css";
+import Translator from "components/Translator";
+import mammoth from "mammoth";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import ClipLoader from "react-spinners/ClipLoader";
+import { Button } from "semantic-ui-react";
 import { setTranslation } from "./translateSlice";
 
 const parseForSlate = (text) =>
   text
     .split("\n")
-    .filter((pg) => pg != "")
+    .filter((pg) => pg !== "")
     .map((pg) => ({
       type: "paragraph",
       children: pg
         .split(".")
-        .filter((sentence) => sentence != "")
+        .filter((sentence) => sentence !== "")
         .map((sentence) => ({
           text: sentence.trim(),
           translation: "",
