@@ -38,8 +38,8 @@ export const PREFIX_TRANSLATION_URL = ENGINES[1].url;
 //
 // Configuration parameters for branded setup or usage of backend for logging.
 //
-export const PROD_BACKEND_URL = "/";
-export const DEV_BACKEND_URL = "http://localhost:8000/";
+export const PROD_BACKEND_URL = "/core/";
+export const DEV_BACKEND_URL = "http://localhost:8000/core/";
 export const BASE_BACKEND_URL =
   process.env.NODE_ENV === "development" ? DEV_BACKEND_URL : PROD_BACKEND_URL;
 export const SHOW_BRANDING = true;
