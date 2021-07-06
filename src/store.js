@@ -1,9 +1,7 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-
-import logger from "redux-logger";
-
 import { loginReducer } from "features/login/loginSlice";
 import { translateReducer } from "features/translate/translateSlice";
+import logger from "redux-logger";
 
 const reducer = {
   login: loginReducer,
@@ -12,6 +10,7 @@ const reducer = {
 
 const middleware = [...getDefaultMiddleware(), logger];
 
+// eslint-disable-next-line import/prefer-default-export
 export const store = configureStore({
   reducer,
   middleware,
