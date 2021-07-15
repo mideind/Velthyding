@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import { ENGINES } from "config";
+
 
 function updateTranslation(translateState, action) {
   return translateState.map((engine) => {
@@ -24,7 +24,7 @@ function toggle(translateState, action) {
   });
 }
 
-function clear(translateState, action) {
+function clear(translateState, _action) {
   return translateState.map((engine) => ({ ...engine, text: [] }));
 }
 
