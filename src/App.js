@@ -42,6 +42,9 @@ function VelthydingMenu(props) {
         </Dropdown.Item>
         <Dropdown.Item text={t("Evaluation")} as={Link} to="/campaigns" />
         {props.loggedin && (
+          <Dropdown.Item text={t("Home")} as={Link} to="/home" />
+        )}
+        {props.loggedin && (
           <Dropdown.Item onClick={props.logoutUser} as={Link} to="/">
             {t("Logout")}
           </Dropdown.Item>
