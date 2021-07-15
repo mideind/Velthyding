@@ -29,7 +29,8 @@ module.exports = {
     'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx'] }],
     'react/prop-types': [0],
     'react/destructuring-assignment': [0],
-    'no-console': [0]
+    'no-console': [0],
+    'no-unused-vars': {"argsIgnorePattern": "^_"}
   },
   settings: {
     'import/resolver': {
