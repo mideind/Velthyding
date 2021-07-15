@@ -42,7 +42,7 @@ function VelthydingMenu(props) {
         </Dropdown.Item>
         <Dropdown.Item text={t("Evaluation")} as={Link} to="/campaigns" />
         {props.loggedin && (
-          <Dropdown.Item onClick={props.logoutUser}>
+          <Dropdown.Item onClick={props.logoutUser} as={Link} to="/">
             {t("Logout")}
           </Dropdown.Item>
         )}
@@ -86,7 +86,7 @@ function App() {
 
   useEffect(() => {
     checkUser();
-  }, []);
+  }, [loggedin]);
 
   return (
     <Router>
@@ -129,10 +129,10 @@ function App() {
               {loggedin ? <Redirect to="/home" /> : <Register />}
             </Route>
             <Route exact path="/campaigns">
-              <Campaigns />
+              {!loggedin ? <Redirect to="/login" /> : <Campaigns />}
             </Route>
             <Route path="/campaigns/:id/:mode">
-              <CampaignTask />
+              {!loggedin ? <Redirect to="/login" /> : <CampaignTask />}
             </Route>
             <Route path="/">
               <Translate />

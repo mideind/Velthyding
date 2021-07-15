@@ -20,7 +20,7 @@ function Register() {
     registerUser(pEmail, pPassword)
       .then(() => dispatch(login(pEmail)))
       .catch((errorMsg) => {
-        console.log.error(errorMsg);
+        console.log(errorMsg);
         setError(t("Incorrect email or password"));
       });
   };
