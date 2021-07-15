@@ -1,9 +1,19 @@
 const baseURLProd = "velthyding.is";
-const baseURLDev = "velthyding.is"; // 'localhost:5050';
+const baseURLDev = "localhost:3000";
+const baseURLBackendProd = "velthyding.is";
+const baseURLBackendDev = "localhost:8000";
 
-const protocol = process.env.NODE_ENV === "development" ? "https" : "https";
+const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
 const baseURL =
-  process.env.NODE_ENV === "development" ? baseURLDev : baseURLProd;
+  process.env.NODE_ENV === "development"
+    ? `${protocol}://${baseURLDev}`
+    : `${protocol}://${baseURLProd}`;
+const baseURLBackend =
+  process.env.NODE_ENV === "development"
+    ? `${protocol}://${baseURLBackendDev}`
+    : `${protocol}://${baseURLBackendProd}`;
+
+export const BASE_BACKEND_URL = baseURLBackend;
 
 export const ENGINES = [
   {
@@ -16,7 +26,7 @@ export const ENGINES = [
     textOnly: false,
   },
   {
-    url: "/translate/",
+    url: `${BASE_BACKEND_URL}/translate/`,
     name: "Fairseq DEV",
     extraData: {
       model: "fairseq-dev",
@@ -38,9 +48,5 @@ export const PREFIX_TRANSLATION_URL = ENGINES[1].url;
 //
 // Configuration parameters for branded setup or usage of backend for logging.
 //
-export const PROD_BACKEND_URL = "/core/";
-export const DEV_BACKEND_URL = "http://localhost:8000/core/";
-export const BASE_BACKEND_URL =
-  process.env.NODE_ENV === "development" ? DEV_BACKEND_URL : PROD_BACKEND_URL;
 export const SHOW_BRANDING = true;
 export const SHOW_LOGIN = true;

@@ -12,14 +12,12 @@ axios.defaults.withCredentials = true;
 
 const cookies = new Cookies();
 
-export const apiClient = (BASE_URL = "") => {
+export const apiClient = (BASE_URL = BASE_BACKEND_URL) => {
   // Use this if not running on same domain.
   // const csrfCookie = cookies.get(axios.defaults.xsrfCookieName, { path: "/" });
 
-  const url2use = BASE_URL !== "" ? BASE_URL : BASE_BACKEND_URL;
-
   const params = {
-    baseURL: `${url2use}`,
+    baseURL: `${BASE_URL}`,
     headers: {
       Authorization: "no",
       "Content-Type": "application/json",
@@ -40,6 +38,8 @@ export const apiClient = (BASE_URL = "") => {
       if (error.response !== undefined && error.response.status === 401) {
         window.location.href = "/";
       }
+      // We log the error here.
+      console.log(error);
       return Promise.reject(error);
     }
   );
@@ -49,7 +49,7 @@ export const apiClient = (BASE_URL = "") => {
 
 export async function checkUser() {
   const ac = apiClient();
-  const response = await ac.post("check/", {});
+  const response = await ac.post("core/check/", {});
 
   if (response.data.email !== null) {
     store.dispatch(login(response.data.email));
@@ -82,43 +82,24 @@ export const checkUserAndCookie = () => {
 
 export async function loginUser(username, password) {
   const ac = apiClient();
-  return ac.post("login/", {
+  return ac.post("core/login/", {
     username,
     password,
   });
 }
 
-export function registerUser(email, password) {
-  return new Promise((resolve, reject) => {
-    const ac = apiClient();
-
-    return ac
-      .post("register/", {
-        email,
-        password,
-      })
-      .then((response) => {
-        resolve(response);
-      })
-      .catch((error) => {
-        reject(error);
-      });
+export async function registerUser(email, password) {
+  const ac = apiClient();
+  return ac.post("core/register/", {
+    email,
+    password,
   });
 }
 
-export function logoutUser() {
-  return new Promise((resolve, reject) => {
-    const ac = apiClient();
-    return ac
-      .post("logout/")
-      .then((response) => {
-        store.dispatch(logout());
-        cookies.remove(axios.defaults.xsrfCookieName, { path: "/" });
-
-        resolve(response);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+export async function logoutUser() {
+  const ac = apiClient();
+  const response = await ac.post("core/logout/");
+  store.dispatch(logout());
+  cookies.remove(axios.defaults.xsrfCookieName, { path: "/" });
+  return response;
 }
