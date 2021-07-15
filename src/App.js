@@ -1,4 +1,4 @@
-import { checkUser, logoutUser } from "api";
+import { checkUserAndCookie, logoutUser } from "api";
 import { SHOW_BRANDING, SHOW_LOGIN } from "config";
 import Campaigns from "features/campaigns";
 import CampaignTask from "features/campaigntask";
@@ -88,7 +88,7 @@ function App() {
   };
 
   useEffect(() => {
-    checkUser();
+    checkUserAndCookie();
   }, [loggedin]);
 
   return (

@@ -47,22 +47,13 @@ export const apiClient = (BASE_URL = "") => {
   return ac;
 };
 
-export function checkUser() {
-  return new Promise((resolve, reject) => {
-    const ac = apiClient();
-    return ac
-      .post("check/", {})
-      .then((response) => {
-        if (response.data.email !== null) {
-          store.dispatch(login(response.data.email));
-        }
-        resolve(response);
-      })
-      .catch((error) => {
-        console.log(error);
-        checkCookie(true);
-      });
-  });
+export async function checkUser() {
+  const ac = apiClient();
+  const response = await ac.post("check/", {});
+
+  if (response.data.email !== null) {
+    store.dispatch(login(response.data.email));
+  }
 }
 
 export const setCsrf = (csrf) => {
@@ -83,21 +74,17 @@ export const checkCookie = (force = false) => {
   }
 };
 
-export function loginUser(username, password) {
-  return new Promise((resolve, reject) => {
-    const ac = apiClient();
+export const checkUserAndCookie = () => {
+  checkUser().catch(() => {
+    checkCookie(true);
+  });
+};
 
-    return ac
-      .post("login/", {
-        username,
-        password,
-      })
-      .then((response) => {
-        resolve(response);
-      })
-      .catch((error) => {
-        reject(error);
-      });
+export async function loginUser(username, password) {
+  const ac = apiClient();
+  return ac.post("login/", {
+    username,
+    password,
   });
 }
 
