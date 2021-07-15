@@ -30,7 +30,7 @@ module.exports = {
     'react/prop-types': [0],
     'react/destructuring-assignment': [0],
     'no-console': [0],
-    'no-unused-vars': {"argsIgnorePattern": "^_"}
+    'no-unused-vars': ["error", {"argsIgnorePattern": "^_"}]
   },
   settings: {
     'import/resolver': {
