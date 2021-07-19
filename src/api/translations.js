@@ -7,8 +7,6 @@ export async function storeTranslation(
   sourceText,
   targetText
 ) {
-  const translationURI =
-    translationId === null ? "usertranslations" : "corrections";
   const data = {
     language_pair: languagePair,
     model,
@@ -20,10 +18,31 @@ export async function storeTranslation(
   }
   const ac = apiClient();
 
-  return ac.post(`api/translations/${translationURI}/`, data);
+  return ac.post(`core/api/translations/usertranslations/`, data);
+}
+
+export async function storeTranslationCorrection(
+  translationId,
+  languagePair,
+  model,
+  sourceText,
+  targetText
+) {
+  const data = {
+    languagePair,
+    model,
+    originalText: sourceText,
+    correctedText: targetText,
+  };
+  if (translationId !== null) {
+    data.original = translationId;
+  }
+  const ac = apiClient();
+
+  return ac.post("translate/corrected", data);
 }
 
 export async function getTranslations() {
   const ac = apiClient();
-  return ac.get("api/translations/usertranslations/", {});
+  return ac.get("core/api/translations/usertranslations/", {});
 }

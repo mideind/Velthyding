@@ -65,7 +65,7 @@ export const checkCookie = (force = false) => {
   const csrfCookie = cookies.get(axios.defaults.xsrfCookieName);
   if (force || csrfCookie == null) {
     const ac = apiClient();
-    ac.get(CSRF)
+    ac.get(`core/${CSRF}`)
       .then((response) => {
         setCsrf(response.data);
         checkUser();

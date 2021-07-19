@@ -1,5 +1,5 @@
 import { translateMany, updateSentenceTranslation } from "actions/translations";
-import { storeTranslation } from "api/translations";
+import { storeTranslation, storeTranslationCorrection } from "api/translations";
 import "App.css";
 import Translator from "components/Translator";
 import mammoth from "mammoth";
@@ -165,7 +165,7 @@ function Translate() {
 
     const activeEngines = engines.filter((engine) => engine.selected);
 
-    storeTranslation(
+    storeTranslationCorrection(
       translationId,
       `${source}-${target}`,
       activeEngines[0].name,
