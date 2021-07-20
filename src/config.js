@@ -17,7 +17,7 @@ export const BASE_BACKEND_URL = baseURLBackend;
 
 export const ENGINES = [
   {
-    url: `${protocol}://${baseURL}/nn/translate.api`,
+    url: `${baseURL}/nn/translate.api`,
     name: "Transformer BT",
     extraData: {
       model: "transformer-bt",
@@ -35,7 +35,7 @@ export const ENGINES = [
     textOnly: false,
   },
   {
-    url: `${protocol}://${baseURL}/nn/googletranslate.api`,
+    url: `${baseURL}/nn/googletranslate.api`,
     name: "Google",
     selected: false,
     textOnly: true,

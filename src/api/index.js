@@ -49,7 +49,7 @@ export const apiClient = (BASE_URL = BASE_BACKEND_URL) => {
 
 export async function checkUser() {
   const ac = apiClient();
-  const response = await ac.post("core/check/", {});
+  const response = await ac.post("check/", {});
 
   if (response.data.email !== null) {
     store.dispatch(login(response.data.email));
@@ -65,7 +65,7 @@ export const checkCookie = (force = false) => {
   const csrfCookie = cookies.get(axios.defaults.xsrfCookieName);
   if (force || csrfCookie == null) {
     const ac = apiClient();
-    ac.get(`core/${CSRF}`)
+    ac.get(`${CSRF}`)
       .then((response) => {
         setCsrf(response.data);
         checkUser();
@@ -82,7 +82,7 @@ export const checkUserAndCookie = () => {
 
 export async function loginUser(username, password) {
   const ac = apiClient();
-  return ac.post("core/login/", {
+  return ac.post("login/", {
     username,
     password,
   });
@@ -90,7 +90,7 @@ export async function loginUser(username, password) {
 
 export async function registerUser(email, password) {
   const ac = apiClient();
-  return ac.post("core/register/", {
+  return ac.post("register/", {
     email,
     password,
   });
@@ -98,7 +98,7 @@ export async function registerUser(email, password) {
 
 export async function logoutUser() {
   const ac = apiClient();
-  const response = await ac.post("core/logout/");
+  const response = await ac.post("logout/");
   store.dispatch(logout());
   cookies.remove(axios.defaults.xsrfCookieName, { path: "/" });
   return response;

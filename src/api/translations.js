@@ -18,7 +18,7 @@ export async function storeTranslation(
   }
   const ac = apiClient();
 
-  return ac.post(`core/api/translations/usertranslations/`, data);
+  return ac.post(`api/translations/usertranslations/`, data);
 }
 
 export async function storeTranslationCorrection(
@@ -44,5 +44,5 @@ export async function storeTranslationCorrection(
 
 export async function getTranslations() {
   const ac = apiClient();
-  return ac.get("core/api/translations/usertranslations/", {});
+  return ac.get("api/translations/usertranslations/", {});
 }
