@@ -1,6 +1,6 @@
 import { answerTask, getTask } from "api/reviews";
 import Error from "components/Error";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import {
   Button,
@@ -172,7 +172,8 @@ function RatingTask(props) {
                 <br />
                 <Rating
                   rating={rating}
-                  onRate={(e, { rating, maxRating }) => setRating(rating)}
+                  // eslint-disable-next-line no-shadow
+                  onRate={(_e, { rating }) => setRating(rating)}
                   maxRating={maxStars}
                   icon="star"
                   size="massive"
@@ -207,22 +208,28 @@ function AdequacyTask(props) {
 
 function CampaignTask() {
   const maxTasks = 30;
-
+  const [tasksDone, setTasksDone] = useState(0);
   const [tasksLeft, setTasksLeft] = useState(maxTasks);
   const { id, mode } = useParams();
-  const progress = Math.floor(100 * ((maxTasks - tasksLeft) / maxTasks));
+  const progress = Math.floor(100 * (tasksDone / (tasksLeft + tasksDone)));
 
   const [error, setError] = useState(false);
 
   const [task, setTask] = useState(null);
 
-  const updateTask = useCallback(() => {
-    getTask(id, mode).then((response) => setTask(response.data));
-  }, [id, mode]);
-
   useEffect(() => {
-    updateTask();
-  }, [updateTask]);
+    getTask(id, mode).then((response) => {
+      if (response.data.error) {
+        return <Redirect from="/campaigns/:id/:mode" to="/campaigns" />;
+      }
+      setTask({
+        mode: response.data.mode,
+        source: response.data.source,
+        targets: response.data.targets,
+      });
+      setTasksLeft(response.data.remaining);
+    });
+  }, [id, mode]);
 
   if (task === null) {
     return <></>;
@@ -235,8 +242,18 @@ function CampaignTask() {
   function answerAndGetNext(answerData) {
     answerTask(id, answerData)
       .then(() => {
-        setTasksLeft(tasksLeft - 1);
-        updateTask();
+        setTasksDone(tasksDone + 1);
+        getTask(id, mode).then((response) => {
+          if (response.data.error) {
+            return <Redirect from="/campaigns/:id/:mode" to="/campaigns" />;
+          }
+          setTask({
+            mode: response.data.mode,
+            source: response.data.source,
+            targets: response.data.targets, // List[Tuple[id,target]]
+          });
+          setTasksLeft(response.data.remaining);
+        });
       })
       .catch((err) => {
         setError(true);
