@@ -2,7 +2,7 @@ import { apiClient } from "api";
 
 export async function getCampaigns() {
   const ac = apiClient();
-  return ac.get("api/reviews/campaigns");
+  return ac.get("api/reviews/campaigns/");
 }
 
 export async function getTask(id, mode) {
