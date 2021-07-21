@@ -2,46 +2,47 @@ import { apiClient } from "api";
 
 export async function storeTranslation(
   translationId,
-  language_pair,
+  languagePair,
   model,
-  source_text,
-  target_text
+  sourceText,
+  targetText
 ) {
-  const translationURI =
-    translationId === null ? "usertranslations" : "corrections";
   const data = {
-    language_pair,
+    language_pair: languagePair,
     model,
-    source_text,
-    target_text,
+    source_text: sourceText,
+    target_text: targetText,
   };
   if (translationId !== null) {
     data.original = translationId;
   }
+  const ac = apiClient();
 
-  return new Promise((resolve, reject) => {
-    const ac = apiClient();
-    return ac
-      .post(`api/translations/${translationURI}/`, data)
-      .then((response) => {
-        resolve(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
+  return ac.post(`api/translations/usertranslations/`, data);
+}
+
+export async function storeTranslationCorrection(
+  translationId,
+  languagePair,
+  model,
+  sourceText,
+  targetText
+) {
+  const data = {
+    languagePair,
+    model,
+    originalText: sourceText,
+    correctedText: targetText,
+  };
+  if (translationId !== null) {
+    data.original = translationId;
+  }
+  const ac = apiClient();
+
+  return ac.post("translate/corrected", data);
 }
 
 export async function getTranslations() {
-  return new Promise((resolve, reject) => {
-    const ac = apiClient();
-    return ac
-      .get("api/translations/usertranslations/", {})
-      .then((response) => {
-        resolve(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
+  const ac = apiClient();
+  return ac.get("api/translations/usertranslations/", {});
 }

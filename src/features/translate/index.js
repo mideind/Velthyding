@@ -1,27 +1,25 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useDropzone } from "react-dropzone";
-import { useSelector, useDispatch } from "react-redux";
-
-import mammoth from "mammoth";
-import ClipLoader from "react-spinners/ClipLoader";
-import { Button } from "semantic-ui-react";
-
+import { translateMany, updateSentenceTranslation } from "actions/translations";
+import { storeTranslation, storeTranslationCorrection } from "api/translations";
 import "App.css";
 import Translator from "components/Translator";
-import { translateMany, updateSentenceTranslation } from "actions/translations";
-import { storeTranslation } from "api/translations";
+import mammoth from "mammoth";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import ClipLoader from "react-spinners/ClipLoader";
+import { Button } from "semantic-ui-react";
 import { setTranslation } from "./translateSlice";
 
 const parseForSlate = (text) =>
   text
     .split("\n")
-    .filter((pg) => pg != "")
+    .filter((pg) => pg !== "")
     .map((pg) => ({
       type: "paragraph",
       children: pg
         .split(".")
-        .filter((sentence) => sentence != "")
+        .filter((sentence) => sentence !== "")
         .map((sentence) => ({
           text: sentence.trim(),
           translation: "",
@@ -123,29 +121,29 @@ function Translate() {
 
     const newText = updateText(trans);
     setText(newText);
-    trans.forEach((t) =>
+    trans.forEach((tran) =>
       dispatch(
         setTranslation({
-          name: t.engine.name,
-          text: t.text,
-          structuredText: t.structuredText,
+          name: tran.engine.name,
+          text: tran.text,
+          structuredText: tran.structuredText,
         })
       )
     );
 
     trans
-      .filter((t) => t.engine.selected && t.engine.textOnly)
-      .map((t) => setGoogleTranslation(t.text));
+      .filter((tran) => tran.engine.selected && tran.engine.textOnly)
+      .map((tran) => setGoogleTranslation(tran.text));
 
-    trans.forEach((t) =>
+    trans.forEach((tran) =>
       storeTranslation(
         translationId,
         `${source}-${target}`,
-        t.engine.name,
+        tran.engine.name,
         text
           .map((pg) => pg.children.map((ch) => ch.text).join(""))
           .join("\n\n"),
-        t.text.join("\n\n")
+        tran.text.join("\n\n")
       ).then((resp) => {
         if (resp.data.id) {
           setTranslationId(resp.data.id);
@@ -167,7 +165,7 @@ function Translate() {
 
     const activeEngines = engines.filter((engine) => engine.selected);
 
-    storeTranslation(
+    storeTranslationCorrection(
       translationId,
       `${source}-${target}`,
       activeEngines[0].name,
@@ -183,41 +181,40 @@ function Translate() {
     });
   };
 
-  const translatePrefix = async () => {
-    setLoading(true);
-    const pgIdx = prefix[1][0];
-    const sntIdx = prefix[1][1];
-    const srcText = text[pgIdx].children[sntIdx].text;
-
-    const translation = await updateSentenceTranslation(
-      srcText,
-      prefix[0],
-      source,
-      target
-    );
-
-    const newText = text.map((pg, i) => {
-      if (i === pgIdx) {
-        const children = pg.children.map((snt, j) => {
-          if (j === sntIdx) {
-            return { ...snt, translation };
-          }
-          return snt;
-        });
-        return { ...pg, children };
-      }
-      return pg;
-    });
-    setLoading(false);
-    setText(newText);
-  };
-
   useEffect(() => {
     if (prefix.length < 2) {
       return;
     }
+    const translatePrefix = async () => {
+      setLoading(true);
+      const pgIdx = prefix[1][0];
+      const sntIdx = prefix[1][1];
+      const srcText = text[pgIdx].children[sntIdx].text;
+
+      const translation = await updateSentenceTranslation(
+        srcText,
+        prefix[0],
+        source,
+        target
+      );
+
+      const newText = text.map((pg, i) => {
+        if (i === pgIdx) {
+          const children = pg.children.map((snt, j) => {
+            if (j === sntIdx) {
+              return { ...snt, translation };
+            }
+            return snt;
+          });
+          return { ...pg, children };
+        }
+        return pg;
+      });
+      setLoading(false);
+      setText(newText);
+    };
     translatePrefix();
-  }, [prefix]);
+  }, [prefix, source, target, text]);
 
   useEffect(() => {
     if (

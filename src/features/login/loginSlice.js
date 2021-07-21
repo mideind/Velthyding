@@ -21,11 +21,11 @@ export const loginSlice = createSlice({
       email: action.payload,
       loggedin: false,
     }),
-    switchLanguage: (state, action) => ({
+    switchLanguage: (state, _action) => ({
       source: state.target,
       target: state.source,
     }),
-    toggleGoogle: (state, action) => ({
+    toggleGoogle: (state, _action) => ({
       ...state,
       showGoogle: !state.showGoogle,
     }),

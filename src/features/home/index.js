@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Icon, Label, Menu, Table } from "semantic-ui-react";
-import moment from "moment";
 import { getTranslations } from "api/translations";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Table } from "semantic-ui-react";
 
 moment().format();
 
@@ -42,18 +42,18 @@ function Home() {
         </Table.Header>
 
         <Table.Body>
-          {transl.map((t) => (
+          {transl.map((trans) => (
             <Table.Row style={{ fontSize: "14px" }}>
               <Table.Cell>
-                {moment(t.timestamp).format("YYYY-MM-DD HH:mm")}
+                {moment(trans.timestamp).format("YYYY-MM-DD HH:mm")}
               </Table.Cell>
-              <Table.Cell>{t.model}</Table.Cell>
-              <Table.Cell>{t.source_text}</Table.Cell>
-              <Table.Cell>{t.target_text}</Table.Cell>
+              <Table.Cell>{trans.model}</Table.Cell>
+              <Table.Cell>{trans.source_text}</Table.Cell>
+              <Table.Cell>{trans.target_text}</Table.Cell>
               <Table.Cell>
-                {t.translationcorrection_set.length !== 0
-                  ? t.translationcorrection_set[
-                      t.translationcorrection_set.length - 1
+                {trans.translationcorrection_set.length !== 0
+                  ? trans.translationcorrection_set[
+                      trans.translationcorrection_set.length - 1
                     ].target_text
                   : ""}
               </Table.Cell>

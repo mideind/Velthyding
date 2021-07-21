@@ -1,10 +1,8 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Dropdown, Button } from "semantic-ui-react";
 import { switchLanguage } from "features/login/loginSlice";
-
+import React from "react";
 import { useTranslation } from "react-i18next";
-
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Dropdown } from "semantic-ui-react";
 import "./index.css";
 
 function LanguagePicker(props) {
@@ -38,12 +36,11 @@ function LanguagePicker(props) {
       value={!props.isSource ? target : source}
       onChange={() => dispatch(switchLanguage())}
       placeholder={props.text}
-      clearText={props.clearText}
     />
   );
 }
 
-const LanguageDirectionPicker = (props) => {
+const LanguageDirectionPicker = () => {
   const dispatch = useDispatch();
 
   return (
@@ -53,7 +50,8 @@ const LanguageDirectionPicker = (props) => {
         <span className="LanguageToggle-button">
           <Button
             icon="exchange"
-            onClick={() => dispatch(switchLanguage()) && props.switchText()}
+            // We no longer switch the text
+            onClick={() => dispatch(switchLanguage())}
           />
         </span>
       </div>

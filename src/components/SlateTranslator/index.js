@@ -1,19 +1,17 @@
-import React, { useMemo, useCallback } from "react";
-
-import { createEditor, Transforms } from "slate";
-import { Slate, Editable, withReact } from "slate-react";
-import { HoveringTooltip } from "components/HoveringTooltip";
 import { HoveringSuggestion } from "components/HoveringSugestions/ index";
-
+import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { createEditor, Transforms } from "slate";
+import { Editable, Slate, withReact } from "slate-react";
 
 // Define a deserializing function that takes a string and returns a value.
-const deserialize = (string) =>
-  // Return a value array of children derived by splitting the string.
-  string.split("\n").map((line) => ({
-    children: [{ text: line, type: "paragraph" }],
-    type: "paragraph",
-  }));
+// Do we still need this?
+// const deserialize = (string) =>
+//   // Return a value array of children derived by splitting the string.
+//   string.split("\n").map((line) => ({
+//     children: [{ text: line, type: "paragraph" }],
+//     type: "paragraph",
+//   }));
 
 const SentenceElement = (props) => (
   <span
@@ -82,13 +80,14 @@ const SlateTranslator = (props) => {
     }
   }, []);
 
-  const updateHover = (hId) => {
-    props.setHoverId(hId);
-  };
-
   const renderLeaf = useCallback(
-    (lp) => <Leaf {...lp} hoverId={props.hoverId} setHoverId={updateHover} />,
-    [props.hoverId]
+    (lp) => {
+      const updateHover = (hId) => {
+        props.setHoverId(hId);
+      };
+      return <Leaf {...lp} hoverId={props.hoverId} setHoverId={updateHover} />;
+    },
+    [props]
   );
 
   let content = props.text;

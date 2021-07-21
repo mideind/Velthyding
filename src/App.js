@@ -1,36 +1,29 @@
+import { checkUserAndCookie, logoutUser } from "api";
+import { SHOW_BRANDING, SHOW_LOGIN } from "config";
+import Campaigns from "features/campaigns";
+import CampaignTask from "features/campaigntask";
+import Home from "features/home";
+import Login from "features/login";
+import { toggleGoogle } from "features/login/loginSlice";
+import Register from "features/register";
+import Translate from "features/translate";
 import React, { useEffect } from "react";
-
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
   Redirect,
+  Route,
+  Switch,
 } from "react-router-dom";
-
-import { Checkbox, Dropdown, Message } from "semantic-ui-react";
-import "semantic-ui-less/semantic.less";
-import "./App.css";
-
-import { useSelector, useDispatch } from "react-redux";
-
-import CampaignTask from "features/campaigntask";
-import Campaigns from "features/campaigns";
-import Translate from "features/translate";
-import Login from "features/login";
-import Home from "features/home";
-import Register from "features/register";
-
-import { logoutUser, checkUser } from "api";
-import { toggleGoogle } from "features/login/loginSlice";
-
-import { SHOW_BRANDING, SHOW_LOGIN } from "config";
-import { useTranslation } from "react-i18next";
 import useCookie from "react-use-cookie";
+import "semantic-ui-less/semantic.less";
+import { Checkbox, Dropdown, Message } from "semantic-ui-react";
+import "./App.css";
+import { setToggle } from "./features/translate/translateSlice";
 import mideindLogo from "./mideind.svg";
 import logo from "./velthyding_hor.png";
-
-import { setToggle } from "./features/translate/translateSlice";
 
 function VelthydingMenu(props) {
   const { t } = useTranslation();
@@ -47,18 +40,17 @@ function VelthydingMenu(props) {
           {props.lng === "is" && "English interface"}
           {props.lng !== "is" && "Íslenskt viðmót"}
         </Dropdown.Item>
-        <Dropdown.Item>
-          <Link to="/campaigns">{t("Evaluation")}</Link>
-        </Dropdown.Item>
+        <Dropdown.Item text={t("Evaluation")} as={Link} to="/campaigns" />
         {props.loggedin && (
-          <Dropdown.Item onClick={props.logoutUser}>
+          <Dropdown.Item text={t("Home")} as={Link} to="/home" />
+        )}
+        {props.loggedin && (
+          <Dropdown.Item onClick={props.logoutUser} as={Link} to="/">
             {t("Logout")}
           </Dropdown.Item>
         )}
         {!props.loggedin && (
-          <Dropdown.Item>
-            <Link to="/login"> {t("login_header")}</Link>
-          </Dropdown.Item>
+          <Dropdown.Item text={t("login_header")} as={Link} to="/login" />
         )}
       </Dropdown.Menu>
     </Dropdown>
@@ -73,12 +65,12 @@ function App() {
   );
 
   const { t, i18n } = useTranslation();
-  const setLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-  };
   useEffect(() => {
+    const setLanguage = (lang) => {
+      i18n.changeLanguage(lang);
+    };
     setLanguage(lng);
-  }, lng);
+  }, [lng, i18n]);
 
   const toggleLanguage = () => {
     if (lng === "is") {
@@ -96,8 +88,8 @@ function App() {
   };
 
   useEffect(() => {
-    checkUser();
-  }, []);
+    checkUserAndCookie();
+  }, [loggedin]);
 
   return (
     <Router>
@@ -118,6 +110,7 @@ function App() {
             </div>
             <div className="App-header-menu">
               <VelthydingMenu
+                toggleLanguage={toggleLanguage}
                 onGoogleClick={onGoogleClick}
                 logoutUser={logoutUser}
                 loggedin={loggedin}
@@ -139,10 +132,10 @@ function App() {
               {loggedin ? <Redirect to="/home" /> : <Register />}
             </Route>
             <Route exact path="/campaigns">
-              <Campaigns />
+              {!loggedin ? <Redirect to="/login" /> : <Campaigns />}
             </Route>
             <Route path="/campaigns/:id/:mode">
-              <CampaignTask />
+              {!loggedin ? <Redirect to="/login" /> : <CampaignTask />}
             </Route>
             <Route path="/">
               <Translate />
