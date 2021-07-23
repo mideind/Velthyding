@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ENGINES } from "config";
 
-
 function updateTranslation(translateState, action) {
   return translateState.map((engine) => {
     if (engine.name === action.payload.name) {
