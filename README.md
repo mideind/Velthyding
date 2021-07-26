@@ -52,6 +52,16 @@ The code should follow the [Airbnb React/JSX Style Guide](https://github.com/air
 npx eslint 'src/**/*.{js,jsx}' --fix
 ```
 
+## Production
+
+Build the final docker image.
+- Bump the version number `package.json`
+- \[Optional\] Build the project without installing node `build_project.sh`.
+- Log into the docker registry: `docker login docker.greynir.is`
+- Run `build_docker.sh`. It will add build it to an nginx image and tag it based on the version in `package.json`.
+- Upload the image: `docker push docker.greynir.is/velthyding:<tag>`.
+
+The image only serves the static content.
 ## About
 
 This work is partially funded by the Language Technology Programme of the Icelandic Government.
