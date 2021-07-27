@@ -11,11 +11,11 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  BrowserRouter as Router,
-  Link,
-  Redirect,
-  Route,
-  Switch,
+    BrowserRouter as Router,
+    Link,
+    Redirect,
+    Route,
+    Switch
 } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import "semantic-ui-less/semantic.less";
@@ -160,7 +160,7 @@ function App() {
                 "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes."
               )}
             </p>
-            <p>{t("disclaimer-last-updated", "Last updated: ")} 2020-02-02</p>
+            <p>{t("disclaimer-last-updated", "Last updated: ")} 2020-07-27</p>
           </Message>
         </div>
         {SHOW_BRANDING && (

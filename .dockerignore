@@ -1,0 +1,6 @@
+# Ignore everything
+**
+
+#Except the following
+!build/
+!nginx/nginx.conf

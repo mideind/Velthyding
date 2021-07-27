@@ -1,4 +1,3 @@
-import { HoveringSuggestion } from "components/HoveringSugestions/ index";
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { createEditor, Transforms } from "slate";
@@ -110,9 +109,6 @@ const SlateTranslator = (props) => {
         value={content}
         onChange={(newValue) => updateText(newValue)}
       >
-        {props.translation && (
-          <HoveringSuggestion setPrefix={props.setPrefix} />
-        )}
         <Editable
           spellCheck="false"
           renderElement={renderElement}
