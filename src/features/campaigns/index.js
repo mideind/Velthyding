@@ -71,6 +71,16 @@ function CampaignModal(props) {
                   action={() => setOpen(false)}
                 />
               )}
+              {props.is_direct_assessment && (
+                <TaskCard
+                  head="Direct Assessment"
+                  mode="direct_assessment"
+                  meta="Are translations acceptable"
+                  description="Does the translation convey the same meaning as the source, and is it well-formed"
+                  id={props.id}
+                  action={() => setOpen(false)}
+                />
+              )}
               {props.is_comparison && (
                 <TaskCard
                   head="Compare"
@@ -95,10 +105,33 @@ function CampaignModal(props) {
 }
 
 function CampaignTableRow(props) {
+  const {
+    name,
+    description,
+    id,
+    // eslint-disable-next-line camelcase
+    is_comparison,
+    // eslint-disable-next-line camelcase
+    is_adequacy,
+    // eslint-disable-next-line camelcase
+    is_fluency,
+    // eslint-disable-next-line camelcase
+    is_direct_assessment,
+  } = props;
   return (
-    <Table.Row>
+    <Table.Row key={id}>
       <Table.Cell>
-        <CampaignModal {...props} />
+        <CampaignModal
+          {...{
+            name,
+            is_fluency,
+            is_adequacy,
+            is_direct_assessment,
+            is_comparison,
+            id,
+            description,
+          }}
+        />
       </Table.Cell>
       <Table.Cell>{props.ends}</Table.Cell>
       <Table.Cell>
@@ -109,10 +142,10 @@ function CampaignTableRow(props) {
 }
 
 function CampaignTable() {
-  const [rows, setState] = useState([]);
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    getCampaigns().then((camp) => setState(camp.data));
+    getCampaigns().then((camp) => setRows(camp.data));
   }, []);
 
   return (
