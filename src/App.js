@@ -4,12 +4,11 @@ import Campaigns from "features/campaigns";
 import CampaignTask from "features/campaigntask";
 import Home from "features/home";
 import Login from "features/login";
-import { toggleGoogle } from "features/login/loginSlice";
 import Register from "features/register";
 import Translate from "features/translate";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Link,
@@ -21,7 +20,6 @@ import useCookie from "react-use-cookie";
 import "semantic-ui-less/semantic.less";
 import { Dropdown, Message } from "semantic-ui-react";
 import "./App.css";
-import { setToggle } from "./features/translate/translateSlice";
 import mideindLogo from "./mideind.svg";
 import logo from "./velthyding_hor.png";
 
@@ -74,13 +72,6 @@ function App() {
     }
   };
 
-  const dispatch = useDispatch();
-
-  const onGoogleClick = () => {
-    dispatch(setToggle("Google"));
-    dispatch(toggleGoogle());
-  };
-
   useEffect(() => {
     checkUserAndCookie();
   }, [loggedin]);
@@ -105,7 +96,6 @@ function App() {
             <div className="App-header-menu">
               <VelthydingMenu
                 toggleLanguage={toggleLanguage}
-                onGoogleClick={onGoogleClick}
                 logoutUser={logoutUser}
                 loggedin={loggedin}
                 lng={lng}
