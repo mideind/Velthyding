@@ -54,8 +54,8 @@ function TaskWrapper(props) {
         <Message size="tiny" warning>
           <Message.Header>{props.description.header}</Message.Header>
           <Message.List>
-            {props.description.items.map((item) => (
-              <Message.Item>{item}</Message.Item>
+            {props.description.items.map((item, idx) => (
+              <Message.Item key={idx}>{item}</Message.Item>
             ))}
           </Message.List>
         </Message>

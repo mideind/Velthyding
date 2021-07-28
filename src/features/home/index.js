@@ -43,7 +43,7 @@ function Home() {
 
         <Table.Body>
           {transl.map((trans) => (
-            <Table.Row style={{ fontSize: "14px" }}>
+            <Table.Row key={trans.id} style={{ fontSize: "14px" }}>
               <Table.Cell>
                 {moment(trans.timestamp).format("YYYY-MM-DD HH:mm")}
               </Table.Cell>
