@@ -8,7 +8,7 @@ import {
   Grid,
   Modal,
   Progress,
-  Table,
+  Table
 } from "semantic-ui-react";
 
 function TaskCard(props) {
@@ -54,8 +54,8 @@ function CampaignModal(props) {
               {props.is_fluency && (
                 <TaskCard
                   head="Fluency"
-                  meta="Are translations well formed"
-                  description="Is the output good and fluent"
+                  meta="Are translations well formed?"
+                  description="Is the output good and fluent?"
                   mode="fluency"
                   id={props.id}
                   action={() => setOpen(false)}
@@ -65,7 +65,7 @@ function CampaignModal(props) {
                 <TaskCard
                   head="Adequacy"
                   mode="adequacy"
-                  meta="Do translations convey meaning"
+                  meta="Do translations convey meaning?"
                   description="Does the output convey the same meaning as the input sentence? Is part of the message lost, added, or distorted?"
                   id={props.id}
                   action={() => setOpen(false)}
@@ -75,8 +75,8 @@ function CampaignModal(props) {
                 <TaskCard
                   head="Direct Assessment"
                   mode="direct_assessment"
-                  meta="Are translations acceptable"
-                  description="Does the translation convey the same meaning as the source, and is it well-formed"
+                  meta="Are translations acceptable?"
+                  description="Does the translation convey the same meaning as the source, and is it well-formed?"
                   id={props.id}
                   action={() => setOpen(false)}
                 />
@@ -85,8 +85,8 @@ function CampaignModal(props) {
                 <TaskCard
                   head="Compare"
                   mode="comparison"
-                  meta="Select the better"
-                  description="Select the better translation"
+                  meta="Select the better."
+                  description="Select the better translation."
                   id={props.id}
                   action={() => setOpen(false)}
                 />

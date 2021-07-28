@@ -18,8 +18,8 @@ const TASK_DESCRIPTIONS = {
   comparison: {
     header: "Comparison Task",
     items: [
-      "Select the translation that best matches the source text",
-      "Consider both if the meaning is preserved and if the sentence is well formed",
+      "Select the translation that best matches the source text.",
+      "Consider both if the meaning is preserved and if the sentence is well formed.",
     ],
   },
   fluency: {
