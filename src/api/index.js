@@ -4,8 +4,6 @@ import { login, logout } from "features/login/loginSlice";
 import { Cookies } from "react-cookie";
 import { store } from "store";
 
-const CSRF = "csrf/";
-
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.withCredentials = true;
@@ -65,7 +63,7 @@ export const checkCookie = (force = false) => {
   const csrfCookie = cookies.get(axios.defaults.xsrfCookieName);
   if (force || csrfCookie == null) {
     const ac = apiClient();
-    ac.get(`${CSRF}`)
+    ac.get("core/csrf/")
       .then((response) => {
         setCsrf(response.data);
         checkUser();
