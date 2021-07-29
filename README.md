@@ -54,14 +54,10 @@ npx eslint 'src/**/*.{js,jsx}' --fix
 
 ## Production
 
-Build the final docker image.
-- Bump the version number `package.json`
-- \[Optional\] Build the project without installing node `build_project.sh`.
-- Log into the docker registry: `docker login docker.greynir.is`
-- Run `build_docker.sh`. It will add build it to an nginx image and tag it based on the version in `package.json`.
-- Upload the image: `docker push docker.greynir.is/velthyding:<tag>`.
+- Bump the version number `package.json`.
+- Build the frontend with `build_web_frontend.sh`. This script uses docker to build.
+- Follow the instrcutions from the script to upload the bundle.
 
-The image only serves the static content.
 ## About
 
 This work is partially funded by the Language Technology Programme of the Icelandic Government.
