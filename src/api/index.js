@@ -4,8 +4,6 @@ import { login, logout } from "features/login/loginSlice";
 import { Cookies } from "react-cookie";
 import { store } from "store";
 
-const CSRF = "csrf/";
-
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.withCredentials = true;
@@ -49,7 +47,7 @@ export const apiClient = (BASE_URL = BASE_BACKEND_URL) => {
 
 export async function checkUser() {
   const ac = apiClient();
-  const response = await ac.post("check/", {});
+  const response = await ac.post("core/check/", {});
 
   if (response.data.email !== null) {
     store.dispatch(login(response.data.email));
@@ -65,7 +63,7 @@ export const checkCookie = (force = false) => {
   const csrfCookie = cookies.get(axios.defaults.xsrfCookieName);
   if (force || csrfCookie == null) {
     const ac = apiClient();
-    ac.get(`${CSRF}`)
+    ac.get("core/csrf/")
       .then((response) => {
         setCsrf(response.data);
         checkUser();
@@ -82,7 +80,7 @@ export const checkUserAndCookie = () => {
 
 export async function loginUser(username, password) {
   const ac = apiClient();
-  return ac.post("login/", {
+  return ac.post("core/login/", {
     username,
     password,
   });
@@ -90,7 +88,7 @@ export async function loginUser(username, password) {
 
 export async function registerUser(email, password) {
   const ac = apiClient();
-  return ac.post("register/", {
+  return ac.post("core/register/", {
     email,
     password,
   });
@@ -98,7 +96,7 @@ export async function registerUser(email, password) {
 
 export async function logoutUser() {
   const ac = apiClient();
-  const response = await ac.post("logout/");
+  const response = await ac.post("core/logout/");
   store.dispatch(logout());
   cookies.remove(axios.defaults.xsrfCookieName, { path: "/" });
   return response;

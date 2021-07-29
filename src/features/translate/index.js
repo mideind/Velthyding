@@ -272,7 +272,6 @@ function Translate() {
         setPrefix={setPrefix}
         hoverId={hoverId}
         setHoverId={setHoverId}
-        googleTranslation={showGoogle ? googleTranslation : ""}
       />
       <div>
         {showGoogle && googleTranslation && (
