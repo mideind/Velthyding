@@ -5,6 +5,11 @@ export async function getCampaigns() {
   return ac.get("core/api/reviews/campaigns/");
 }
 
+export async function getCampaignProgress(id) {
+  const ac = apiClient();
+  return ac.get(`core/api/reviews/campaigns/${id}/get_progress`);
+}
+
 export async function getTask(id, mode) {
   const ac = apiClient();
   return ac.get(`core/api/reviews/campaigns/${id}/get_task?mode=${mode}`);
