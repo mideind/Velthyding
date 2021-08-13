@@ -1,4 +1,4 @@
-import { answerTask, getTask } from "api/reviews";
+import { answerTask, getCampaignProgress, getTask } from "api/reviews";
 import Error from "components/Error";
 import React, { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
@@ -11,7 +11,7 @@ import {
   Message,
   Progress,
   Rating,
-  Segment
+  Segment,
 } from "semantic-ui-react";
 
 const TASK_DESCRIPTIONS = {
@@ -47,48 +47,53 @@ const TASK_DESCRIPTIONS = {
   },
 };
 
-function TaskWrapper(props) {
+function TaskWrapper({ description, progress, tasksLeft, children }) {
   return (
     <div>
-      {props.description && (
+      {description && (
         <Message size="tiny" warning>
-          <Message.Header>{props.description.header}</Message.Header>
+          <Message.Header>{description.header}</Message.Header>
           <Message.List>
-            {props.description.items.map((item, idx) => (
-              <Message.Item key={idx}>{item}</Message.Item>
+            {description.items.map((item) => (
+              <Message.Item key={item.toString()}>{item}</Message.Item>
             ))}
           </Message.List>
         </Message>
       )}
       <Grid>
         <Grid.Column width={13}>
-          <Progress percent={props.progress} color="olive" progress />
+          <Progress percent={progress} color="olive" progress />
         </Grid.Column>
         <Grid.Column align="right" width={3} float="right">
           <Label align="right" color="yellow">
-            {props.tasksLeft} <Label.Detail> tasks left</Label.Detail>
+            {tasksLeft} <Label.Detail> tasks left</Label.Detail>
           </Label>
         </Grid.Column>
       </Grid>
-      {props.children}
+      {children}
     </div>
   );
 }
+const ID_IDX = 0;
+const TEXT_IDX = 1;
 
-function ComparisonTask(props) {
-  const ID_IDX = 0;
-  const TEXT_IDX = 1;
-
+function ComparisonTask({
+  targets,
+  source,
+  mode,
+  tasksLeft,
+  progress,
+  onSubmit,
+}) {
   function sendAnswer(value) {
     const answerData = {
-      option_1: props.targets[0][ID_IDX],
-      option_2: props.targets[1][ID_IDX],
-      preference_id: props.targets[value][ID_IDX],
-      mode: props.mode,
+      option_1: targets[0][ID_IDX],
+      option_2: targets[1][ID_IDX],
+      preference_id: targets[value][ID_IDX],
+      mode,
     };
-    props.onSubmit(answerData);
+    onSubmit(answerData);
   }
-  const { tasksLeft, progress } = props;
 
   return (
     <TaskWrapper
@@ -98,18 +103,18 @@ function ComparisonTask(props) {
     >
       <Segment>
         <Header as="h3">Source text</Header>
-        <Message size="huge">{props.source}</Message>
+        <Message size="huge">{source}</Message>
         <Header as="h3">Target texts</Header>
         <Grid columns={2} stackable>
           <Grid.Row stretched>
             <Grid.Column>
               <Segment padded size="large">
-                {props.targets[0][TEXT_IDX]}
+                {targets[0][TEXT_IDX]}
               </Segment>
             </Grid.Column>
             <Grid.Column verticalAlign="middle">
               <Segment padded size="large">
-                {props.targets[1][TEXT_IDX]}
+                {targets[1][TEXT_IDX]}
               </Segment>
             </Grid.Column>
           </Grid.Row>
@@ -136,37 +141,43 @@ function ComparisonTask(props) {
   );
 }
 
-function RatingTask(props) {
+function RatingTask({
+  targets,
+  source,
+  mode,
+  onSubmit,
+  description,
+  tasksLeft,
+  progress,
+  maxStars,
+}) {
+  console.log(targets);
   const [rating, setRating] = useState(0);
-  const maxStars = props.maxStars || 5;
+  const targetId = targets[0][ID_IDX];
+  const targetText = targets[0][TEXT_IDX];
 
   function sendAnswer(value) {
     const answerData = {
-      target_id: props.targets[0][0],
+      target_id: targetId,
       review_value: value,
-      mode: props.mode,
+      mode,
     };
-    props.onSubmit(answerData);
+    onSubmit(answerData);
     setRating(0);
   }
-  const { description, tasksLeft, progress } = props;
   return (
-    <TaskWrapper
-      progress={progress}
-      tasksLeft={tasksLeft}
-      description={description}
-    >
+    <TaskWrapper {...{ progress, tasksLeft, description }}>
       <Segment>
         <Header as="h3">Source text</Header>
-        <Message size="huge">{props.source}</Message>
+        <Message size="huge">{source}</Message>
         <Header as="h3">Target texts</Header>
-        <Message size="huge">{props.target}</Message>
+        <Message size="huge">{targetText}</Message>
 
         <Segment padded size="large">
           <Grid verticalAlign="middle" columns={2}>
             <Grid.Row key={1}>
               <Grid.Column>
-                {props.mode === "adequacy" && (
+                {mode === "adequacy" && (
                   <List>
                     <List.Item>5. All meaning</List.Item>
                     <List.Item>4. Most meaning</List.Item>
@@ -175,7 +186,7 @@ function RatingTask(props) {
                     <List.Item>1. No meaning</List.Item>
                   </List>
                 )}
-                {props.mode === "fluency" && (
+                {mode === "fluency" && (
                   <List>
                     <List.Item>5. Flawless text</List.Item>
                     <List.Item>4. Good text</List.Item>
@@ -184,7 +195,7 @@ function RatingTask(props) {
                     <List.Item>1. Incomprehensible</List.Item>
                   </List>
                 )}
-                {props.mode === "direct_assessment" && (
+                {mode === "direct_assessment" && (
                   <List>
                     <List.Item>
                       4. Perfect or near perfect (typographical errors only)
@@ -230,48 +241,67 @@ function RatingTask(props) {
   );
 }
 
-function FluencyTask(props) {
+function FluencyTask({ mode, source, tasksLeft, progress, targets, onSubmit }) {
   return (
     <RatingTask
-      description={TASK_DESCRIPTIONS.fluency}
-      mode={props.mode}
-      source={props.source}
-      target={props.target}
-      tasksLeft={props.tasksLeft}
-      progress={props.progress}
-      targets={props.targets}
-      onSubmit={props.onSubmit}
+      {...{
+        description: TASK_DESCRIPTIONS.fluency,
+        mode,
+        source,
+        targets,
+        tasksLeft,
+        progress,
+        onSubmit,
+        maxStars: 5,
+      }}
     />
   );
 }
 
-function AdequacyTask(props) {
+function AdequacyTask({
+  mode,
+  source,
+  targets,
+  tasksLeft,
+  progress,
+  onSubmit,
+}) {
   return (
     <RatingTask
-      description={TASK_DESCRIPTIONS.adequacy}
-      mode={props.mode}
-      source={props.source}
-      target={props.target}
-      tasksLeft={props.tasksLeft}
-      progress={props.progress}
-      targets={props.targets}
-      onSubmit={props.onSubmit}
+      {...{
+        description: TASK_DESCRIPTIONS.adequacy,
+        mode,
+        source,
+        targets,
+        tasksLeft,
+        progress,
+        onSubmit,
+        maxStars: 5,
+      }}
     />
   );
 }
 
-function DirectAssessmentTask(props) {
+function DirectAssessmentTask({
+  mode,
+  source,
+  targets,
+  tasksLeft,
+  progress,
+  onSubmit,
+}) {
   return (
     <RatingTask
-      description={TASK_DESCRIPTIONS.directAssessment}
-      mode={props.mode}
-      source={props.source}
-      target={props.target}
-      tasksLeft={props.tasksLeft}
-      progress={props.progress}
-      targets={props.targets}
-      maxStars={4}
-      onSubmit={props.onSubmit}
+      {...{
+        description: TASK_DESCRIPTIONS.directAssessment,
+        mode,
+        source,
+        targets,
+        tasksLeft,
+        progress,
+        onSubmit,
+        maxStars: 4,
+      }}
     />
   );
 }
@@ -300,8 +330,6 @@ function CampaignTask() {
             source: response.data.source,
             targets: response.data.targets, // List[Tuple[id,target]]
           });
-          setTasksTotal(response.data.stats.total);
-          setTasksDone(response.data.stats.progress[mode]);
         }
       }
     }
@@ -309,6 +337,12 @@ function CampaignTask() {
     // eslint-disable-next-line no-return-assign
     return () => (isCancelled = true);
   }, [id, mode, tasksDone]);
+  useEffect(() => {
+    getCampaignProgress(id).then((response) => {
+      setTasksTotal(response.data[mode].total);
+      setTasksDone(response.data[mode].completed);
+    });
+  }, [id]); // We do not re-render this, just so that we don't spam the server.
 
   if (tasksDone === tasksTotal) {
     return <Redirect to="/campaigns" />;
@@ -344,7 +378,6 @@ function CampaignTask() {
         <ComparisonTask
           mode={mode}
           source={task.source}
-          target={task.targets[0][1]}
           tasksLeft={tasksTotal - tasksDone}
           progress={progress}
           targets={task.targets}
@@ -355,7 +388,6 @@ function CampaignTask() {
         <FluencyTask
           mode={mode}
           source={task.source}
-          target={task.targets[0][1]}
           tasksLeft={tasksTotal - tasksDone}
           progress={progress}
           targets={task.targets}
@@ -366,7 +398,6 @@ function CampaignTask() {
         <DirectAssessmentTask
           mode={mode}
           source={task.source}
-          target={task.targets[0][1]}
           tasksLeft={tasksTotal - tasksDone}
           progress={progress}
           targets={task.targets}
@@ -377,7 +408,6 @@ function CampaignTask() {
         <AdequacyTask
           mode={mode}
           source={task.source}
-          target={task.targets[0][1]}
           tasksLeft={tasksTotal - tasksDone}
           progress={progress}
           targets={task.targets}
