@@ -81,6 +81,16 @@ function CampaignModal(props) {
                   action={() => setOpen(false)}
                 />
               )}
+              {props.is_ees_assessment && (
+                <TaskCard
+                  head="EES Assessment"
+                  mode="ees_assessment"
+                  meta="Are translations acceptable?"
+                  description="Does the translation convey the same meaning as the source, and is it well-formed?"
+                  id={props.id}
+                  action={() => setOpen(false)}
+                />
+              )}
               {props.is_comparison && (
                 <TaskCard
                   head="Compare"
@@ -119,6 +129,8 @@ function CampaignTableCell(props) {
     is_fluency,
     // eslint-disable-next-line camelcase
     is_direct_assessment,
+    // eslint-disable-next-line camelcase
+    is_ees_assessment,
   } = props;
   useEffect(() => {
     getCampaignProgress(id).then((response) => {
@@ -135,6 +147,7 @@ function CampaignTableCell(props) {
             is_fluency,
             is_adequacy,
             is_direct_assessment,
+            is_ees_assessment,
             is_comparison,
             id,
             description,

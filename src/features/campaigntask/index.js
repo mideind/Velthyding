@@ -25,7 +25,7 @@ const TASK_DESCRIPTIONS = {
   fluency: {
     header: "Fluency Task",
     items: [
-      "Is the output good fluent English?",
+      "Is the output good and fluent?",
       "This involves both grammatical correctness and idiomatic word choices.",
     ],
   },
@@ -38,6 +38,15 @@ const TASK_DESCRIPTIONS = {
   },
   directAssessment: {
     header: "Direct Assessment Task",
+    items: [
+      "Does the translation convey the same meaning as the source, and is it well-formed?",
+      "Does it conserve all meaning or is part of the message lost, added, or distorted?",
+      "Is the correct terminology used?",
+      "Is the translation grammatically correct and fluent?",
+    ],
+  },
+  EESAssessment: {
+    header: "Regulatory Text Assessment Task",
     items: [
       "Does the translation convey the same meaning as the source, and is it well-formed?",
       "Does it conserve all meaning or is part of the message lost, added, or distorted?",
@@ -198,6 +207,25 @@ function RatingTask({
                 {mode === "direct_assessment" && (
                   <List>
                     <List.Item>
+                      5. Perfect or near perfect
+                    </List.Item>
+                    <List.Item>
+                      4. Good quality translation but some minor errors
+                    </List.Item>
+                    <List.Item>
+                      3. Decent, most of the source is conserved but contains some errors
+                    </List.Item>
+                    <List.Item>
+                      2. Poor, serious errors in the translation
+                    </List.Item>
+                    <List.Item>
+                      1. Very poor, doesn't reflect the source text at all
+                    </List.Item>
+                  </List>
+                )}
+                {mode === "ees_assessment" && (
+                  <List>
+                    <List.Item>
                       4. Perfect or near perfect (typographical errors only)
                     </List.Item>
                     <List.Item>
@@ -300,6 +328,30 @@ function DirectAssessmentTask({
         tasksLeft,
         progress,
         onSubmit,
+        maxStars: 5,
+      }}
+    />
+  );
+}
+
+function EESAssessmentTask({
+  mode,
+  source,
+  targets,
+  tasksLeft,
+  progress,
+  onSubmit,
+}) {
+  return (
+    <RatingTask
+      {...{
+        description: TASK_DESCRIPTIONS.eesAssessment,
+        mode,
+        source,
+        targets,
+        tasksLeft,
+        progress,
+        onSubmit,
         maxStars: 4,
       }}
     />
@@ -339,6 +391,7 @@ function CampaignTask() {
   }, [id, mode, tasksDone]);
   useEffect(() => {
     getCampaignProgress(id).then((response) => {
+      console.log(response.data)
       setTasksTotal(response.data[mode].total);
       setTasksDone(response.data[mode].completed);
     });
@@ -396,6 +449,16 @@ function CampaignTask() {
       )}
       {task.mode === "direct_assessment" && (
         <DirectAssessmentTask
+          mode={mode}
+          source={task.source}
+          tasksLeft={tasksTotal - tasksDone}
+          progress={progress}
+          targets={task.targets}
+          onSubmit={answer}
+        />
+      )}
+       {task.mode === "ees_assessment" && (
+        <EESAssessmentTask
           mode={mode}
           source={task.source}
           tasksLeft={tasksTotal - tasksDone}
