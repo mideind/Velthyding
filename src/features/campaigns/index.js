@@ -75,7 +75,7 @@ function CampaignModal(props) {
                 <TaskCard
                   head="Direct Assessment"
                   mode="direct_assessment"
-                  meta="Are translations acceptable?"
+                  meta="Are the translations acceptable?"
                   description="Does the translation convey the same meaning as the source, and is it well-formed?"
                   id={props.id}
                   action={() => setOpen(false)}
@@ -85,7 +85,7 @@ function CampaignModal(props) {
                 <TaskCard
                   head="EES Assessment"
                   mode="ees_assessment"
-                  meta="Are translations acceptable?"
+                  meta="Are the translations acceptable?"
                   description="Does the translation convey the same meaning as the source, and is it well-formed?"
                   id={props.id}
                   action={() => setOpen(false)}
@@ -95,7 +95,7 @@ function CampaignModal(props) {
                 <TaskCard
                   head="Compare"
                   mode="comparison"
-                  meta="Select the better."
+                  meta="Select the better translation."
                   description="Select the better translation."
                   id={props.id}
                   action={() => setOpen(false)}

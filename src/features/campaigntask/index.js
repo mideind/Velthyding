@@ -60,7 +60,7 @@ function TaskWrapper({ description, progress, tasksLeft, children }) {
   return (
     <div>
       {description && (
-        <Message size="tiny" warning>
+        <Message size="warning">
           <Message.Header>{description.header}</Message.Header>
           <Message.List>
             {description.items.map((item) => (
@@ -345,7 +345,7 @@ function EESAssessmentTask({
   return (
     <RatingTask
       {...{
-        description: TASK_DESCRIPTIONS.eesAssessment,
+        description: TASK_DESCRIPTIONS.EESAssessment,
         mode,
         source,
         targets,
