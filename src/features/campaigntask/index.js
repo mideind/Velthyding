@@ -60,7 +60,7 @@ function TaskWrapper({ description, progress, tasksLeft, children }) {
   return (
     <div>
       {description && (
-        <Message size="warning">
+        <Message size="small" warning>
           <Message.Header>{description.header}</Message.Header>
           <Message.List>
             {description.items.map((item) => (
