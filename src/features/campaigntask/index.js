@@ -179,13 +179,13 @@ function RatingTask({
       <Segment>
         <Header as="h3">Source text</Header>
         <Message size="huge">{source}</Message>
-        <Header as="h3">Target texts</Header>
+        <Header as="h3">Target text</Header>
         <Message size="huge">{targetText}</Message>
 
         <Segment padded size="large">
           <Grid verticalAlign="middle" columns={2}>
             <Grid.Row key={1}>
-              <Grid.Column>
+              <Grid.Column width={10} >
                 {mode === "adequacy" && (
                   <List>
                     <List.Item>5. All meaning</List.Item>
@@ -226,7 +226,7 @@ function RatingTask({
                 {mode === "ees_assessment" && (
                   <List>
                     <List.Item>
-                      4. Perfect or near perfect (typographical errors only)
+                      4. Perfect or near perfect (minor typographical errors only)
                     </List.Item>
                     <List.Item>
                       3. Very good, can be post-edited quickly
@@ -238,7 +238,7 @@ function RatingTask({
                   </List>
                 )}
               </Grid.Column>
-              <Grid.Column>
+              <Grid.Column width={6} >
                 <br />
                 <br />
                 <Rating
@@ -391,7 +391,6 @@ function CampaignTask() {
   }, [id, mode, tasksDone]);
   useEffect(() => {
     getCampaignProgress(id).then((response) => {
-      console.log(response.data)
       setTasksTotal(response.data[mode].total);
       setTasksDone(response.data[mode].completed);
     });

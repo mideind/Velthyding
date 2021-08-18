@@ -164,11 +164,9 @@ function CampaignTableCell(props) {
 
 function CampaignTable() {
   const [rows, setRows] = useState([]);
-
   useEffect(() => {
     getCampaigns().then((camp) => setRows(camp.data));
   }, []);
-
   return (
     <Table celled>
       <Table.Header>
