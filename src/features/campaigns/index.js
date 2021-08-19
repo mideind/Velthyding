@@ -1,4 +1,4 @@
-import { getCampaigns } from "api/reviews";
+import { getCampaignProgress, getCampaigns } from "api/reviews";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -104,7 +104,9 @@ function CampaignModal(props) {
   );
 }
 
-function CampaignTableRow(props) {
+function CampaignTableCell(props) {
+  const [total, setTotal] = useState(1);
+  const [value, setValue] = useState(0);
   const {
     name,
     description,
@@ -118,8 +120,14 @@ function CampaignTableRow(props) {
     // eslint-disable-next-line camelcase
     is_direct_assessment,
   } = props;
+  useEffect(() => {
+    getCampaignProgress(id).then((response) => {
+      setTotal(response.data.modes_total.total);
+      setValue(response.data.modes_total.completed);
+    });
+  }, [id]);
   return (
-    <Table.Row key={id}>
+    <>
       <Table.Cell>
         <CampaignModal
           {...{
@@ -135,9 +143,9 @@ function CampaignTableRow(props) {
       </Table.Cell>
       <Table.Cell>{props.ends}</Table.Cell>
       <Table.Cell>
-        <Progress progress percent={props.progress} success />
+        <Progress total={total} value={value} progress="percent" success />
       </Table.Cell>
-    </Table.Row>
+    </>
   );
 }
 
@@ -158,7 +166,13 @@ function CampaignTable() {
         </Table.Row>
       </Table.Header>
 
-      <Table.Body>{rows.map((row) => CampaignTableRow(row))}</Table.Body>
+      <Table.Body>
+        {rows.map((row) => (
+          <Table.Row key={row.id}>
+            <CampaignTableCell {...row} />
+          </Table.Row>
+        ))}
+      </Table.Body>
       <Table.Footer>
         <Table.Row>
           <Table.HeaderCell colSpan="3" />
