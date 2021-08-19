@@ -62,7 +62,7 @@ function TaskWrapper({ description, progress, tasksLeft, children }) {
       )}
       <Grid>
         <Grid.Column width={13}>
-          <Progress percent={progress} color="olive" progress />
+          <Progress percent={progress} color="olive" progress precision="0" />
         </Grid.Column>
         <Grid.Column align="right" width={3} float="right">
           <Label align="right" color="yellow">
