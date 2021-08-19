@@ -11,7 +11,7 @@ import {
   Message,
   Progress,
   Rating,
-  Segment,
+  Segment
 } from "semantic-ui-react";
 
 const TASK_DESCRIPTIONS = {
@@ -342,7 +342,7 @@ function CampaignTask() {
       setTasksTotal(response.data[mode].total);
       setTasksDone(response.data[mode].completed);
     });
-  }, [id]); // We do not re-render this, just so that we don't spam the server.
+  }, [id, mode]); // We do not re-render this, just so that we don't spam the server.
 
   if (tasksDone === tasksTotal) {
     return <Redirect to="/campaigns" />;
