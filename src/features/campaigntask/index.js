@@ -210,10 +210,10 @@ function RatingTask({
                       5. Perfect or near perfect
                     </List.Item>
                     <List.Item>
-                      4. Good quality translation but some minor errors
+                      4. Very good, some minor issues
                     </List.Item>
                     <List.Item>
-                      3. Decent, most of the source is conserved but contains some errors
+                      3. Decent, but contains some issues
                     </List.Item>
                     <List.Item>
                       2. Poor, serious errors in the translation
@@ -260,7 +260,7 @@ function RatingTask({
           </Button>
         )}
         {rating !== 0 && (
-          <Button onClick={() => sendAnswer(rating)} fluid color="blue">
+          <Button onClick={() => sendAnswer(rating) } fluid color="blue">
             Submit
           </Button>
         )}
