@@ -156,7 +156,7 @@ function CampaignTableCell(props) {
       </Table.Cell>
       <Table.Cell>{props.ends}</Table.Cell>
       <Table.Cell>
-        <Progress total={total} value={value} progress="percent" success />
+        <Progress total={total} value={value} progress="percent" precision="0" success />
       </Table.Cell>
     </>
   );
