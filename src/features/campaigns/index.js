@@ -8,7 +8,7 @@ import {
   Grid,
   Modal,
   Progress,
-  Table
+  Table,
 } from "semantic-ui-react";
 
 function TaskCard(props) {
@@ -156,7 +156,11 @@ function CampaignTableCell(props) {
       </Table.Cell>
       <Table.Cell>{props.ends}</Table.Cell>
       <Table.Cell>
-        <Progress total={total} value={value} progress="percent" precision="0" success />
+        <Progress total={total}
+                  value={value}
+                  progress="percent"
+                  precision="0"
+                  success />
       </Table.Cell>
     </>
   );
