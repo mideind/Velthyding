@@ -25,7 +25,7 @@ const TASK_DESCRIPTIONS = {
   fluency: {
     header: "Fluency Task",
     items: [
-      "Is the output good fluent English?",
+      "Is the output good and fluent?",
       "This involves both grammatical correctness and idiomatic word choices.",
     ],
   },
@@ -42,6 +42,15 @@ const TASK_DESCRIPTIONS = {
       "Does the translation convey the same meaning as the source, and is it well-formed?",
       "Does it conserve all meaning or is part of the message lost, added, or distorted?",
       "Is the correct terminology used?",
+      "Is the translation grammatically correct and fluent?",
+    ],
+  },
+  EESAssessment: {
+    header: "Regulatory Text Assessment Task",
+    items: [
+      "Does the translation convey the same meaning as the source, and is it well-formed?",
+      "Does it conserve all meaning or is part of the message lost, added, or distorted?",
+      "Is the correct terminology used?",
       "Is the translation grammatically correct and in compliance with textual requirements for regulatory translations?",
     ],
   },
@@ -51,7 +60,7 @@ function TaskWrapper({ description, progress, tasksLeft, children }) {
   return (
     <div>
       {description && (
-        <Message size="tiny" warning>
+        <Message size="small" warning>
           <Message.Header>{description.header}</Message.Header>
           <Message.List>
             {description.items.map((item) => (
@@ -170,13 +179,13 @@ function RatingTask({
       <Segment>
         <Header as="h3">Source text</Header>
         <Message size="huge">{source}</Message>
-        <Header as="h3">Target texts</Header>
+        <Header as="h3">Target text</Header>
         <Message size="huge">{targetText}</Message>
 
         <Segment padded size="large">
           <Grid verticalAlign="middle" columns={2}>
             <Grid.Row key={1}>
-              <Grid.Column>
+              <Grid.Column width={10} >
                 {mode === "adequacy" && (
                   <List>
                     <List.Item>5. All meaning</List.Item>
@@ -198,7 +207,26 @@ function RatingTask({
                 {mode === "direct_assessment" && (
                   <List>
                     <List.Item>
-                      4. Perfect or near perfect (typographical errors only)
+                      5. Perfect or near perfect
+                    </List.Item>
+                    <List.Item>
+                      4. Very good, some minor issues
+                    </List.Item>
+                    <List.Item>
+                      3. Decent, but contains some issues
+                    </List.Item>
+                    <List.Item>
+                      2. Poor, serious errors in the translation
+                    </List.Item>
+                    <List.Item>
+                      1. Very poor, doesn't reflect the source text at all
+                    </List.Item>
+                  </List>
+                )}
+                {mode === "ees_assessment" && (
+                  <List>
+                    <List.Item>
+                      4. Perfect or near perfect (minor typographical errors only)
                     </List.Item>
                     <List.Item>
                       3. Very good, can be post-edited quickly
@@ -210,7 +238,7 @@ function RatingTask({
                   </List>
                 )}
               </Grid.Column>
-              <Grid.Column>
+              <Grid.Column width={6} >
                 <br />
                 <br />
                 <Rating
@@ -232,7 +260,7 @@ function RatingTask({
           </Button>
         )}
         {rating !== 0 && (
-          <Button onClick={() => sendAnswer(rating)} fluid color="blue">
+          <Button onClick={() => sendAnswer(rating) } fluid color="blue">
             Submit
           </Button>
         )}
@@ -294,6 +322,30 @@ function DirectAssessmentTask({
     <RatingTask
       {...{
         description: TASK_DESCRIPTIONS.directAssessment,
+        mode,
+        source,
+        targets,
+        tasksLeft,
+        progress,
+        onSubmit,
+        maxStars: 5,
+      }}
+    />
+  );
+}
+
+function EESAssessmentTask({
+  mode,
+  source,
+  targets,
+  tasksLeft,
+  progress,
+  onSubmit,
+}) {
+  return (
+    <RatingTask
+      {...{
+        description: TASK_DESCRIPTIONS.EESAssessment,
         mode,
         source,
         targets,
@@ -396,6 +448,16 @@ function CampaignTask() {
       )}
       {task.mode === "direct_assessment" && (
         <DirectAssessmentTask
+          mode={mode}
+          source={task.source}
+          tasksLeft={tasksTotal - tasksDone}
+          progress={progress}
+          targets={task.targets}
+          onSubmit={answer}
+        />
+      )}
+       {task.mode === "ees_assessment" && (
+        <EESAssessmentTask
           mode={mode}
           source={task.source}
           tasksLeft={tasksTotal - tasksDone}

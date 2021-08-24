@@ -8,7 +8,7 @@ import {
   Grid,
   Modal,
   Progress,
-  Table
+  Table,
 } from "semantic-ui-react";
 
 function TaskCard(props) {
@@ -75,7 +75,17 @@ function CampaignModal(props) {
                 <TaskCard
                   head="Direct Assessment"
                   mode="direct_assessment"
-                  meta="Are translations acceptable?"
+                  meta="Are the translations acceptable?"
+                  description="Does the translation convey the same meaning as the source, and is it well-formed?"
+                  id={props.id}
+                  action={() => setOpen(false)}
+                />
+              )}
+              {props.is_ees_assessment && (
+                <TaskCard
+                  head="EES Assessment"
+                  mode="ees_assessment"
+                  meta="Are the translations acceptable?"
                   description="Does the translation convey the same meaning as the source, and is it well-formed?"
                   id={props.id}
                   action={() => setOpen(false)}
@@ -85,7 +95,7 @@ function CampaignModal(props) {
                 <TaskCard
                   head="Compare"
                   mode="comparison"
-                  meta="Select the better."
+                  meta="Select the better translation."
                   description="Select the better translation."
                   id={props.id}
                   action={() => setOpen(false)}
@@ -119,6 +129,8 @@ function CampaignTableCell(props) {
     is_fluency,
     // eslint-disable-next-line camelcase
     is_direct_assessment,
+    // eslint-disable-next-line camelcase
+    is_ees_assessment,
   } = props;
   useEffect(() => {
     getCampaignProgress(id).then((response) => {
@@ -135,6 +147,7 @@ function CampaignTableCell(props) {
             is_fluency,
             is_adequacy,
             is_direct_assessment,
+            is_ees_assessment,
             is_comparison,
             id,
             description,
@@ -143,7 +156,11 @@ function CampaignTableCell(props) {
       </Table.Cell>
       <Table.Cell>{props.ends}</Table.Cell>
       <Table.Cell>
-        <Progress total={total} value={value} progress="percent" success />
+        <Progress total={total}
+                  value={value}
+                  progress="percent"
+                  precision="0"
+                  success />
       </Table.Cell>
     </>
   );
@@ -151,11 +168,9 @@ function CampaignTableCell(props) {
 
 function CampaignTable() {
   const [rows, setRows] = useState([]);
-
   useEffect(() => {
     getCampaigns().then((camp) => setRows(camp.data));
   }, []);
-
   return (
     <Table celled>
       <Table.Header>
