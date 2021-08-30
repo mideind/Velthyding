@@ -48,10 +48,12 @@ const TASK_DESCRIPTIONS = {
   EESAssessment: {
     header: "Regulatory Text Assessment Task",
     items: [
+      "Rate each translation of the source text. For each target, pleaseconsider the following:",
       "Does the translation convey the same meaning as the source, and is it well-formed?",
       "Does it conserve all meaning or is part of the message lost, added, or distorted?",
       "Is the correct terminology used?",
       "Is the translation grammatically correct and in compliance with textual requirements for regulatory translations?",
+      "Difference in the number of target texts indicates that some translations were identical",
     ],
   },
 };
@@ -71,7 +73,7 @@ function TaskWrapper({ description, progress, tasksLeft, children }) {
       )}
       <Grid>
         <Grid.Column width={13}>
-          <Progress percent={progress} color="olive" progress precision="0" />
+          <Progress percent={progress} color="olive" progress precision={0} />
         </Grid.Column>
         <Grid.Column align="right" width={3} float="right">
           <Label align="right" color="yellow">
@@ -223,20 +225,6 @@ function RatingTask({
                     </List.Item>
                   </List>
                 )}
-                {mode === "ees_assessment" && (
-                  <List>
-                    <List.Item>
-                      4. Perfect or near perfect (minor typographical errors only)
-                    </List.Item>
-                    <List.Item>
-                      3. Very good, can be post-edited quickly
-                    </List.Item>
-                    <List.Item>
-                      2. Poor, requires significant post-editing
-                    </List.Item>
-                    <List.Item>1. Very poor, requires retranslation</List.Item>
-                  </List>
-                )}
               </Grid.Column>
               <Grid.Column width={6} >
                 <br />
@@ -261,6 +249,88 @@ function RatingTask({
         )}
         {rating !== 0 && (
           <Button onClick={() => sendAnswer(rating) } fluid color="blue">
+            Submit
+          </Button>
+        )}
+      </Segment>
+    </TaskWrapper>
+  );
+}
+
+function RateMultipleTask({
+  targets,
+  source,
+  mode,
+  onSubmit,
+  description,
+  tasksLeft,
+  progress,
+  maxStars,
+}) {
+  console.log(targets);
+  const [ratings, setRatings] = useState({});
+  
+  function sendAnswers(value) {
+    console.log(ratings)
+    const answerData = {
+      ratings,
+      mode,
+    };
+    onSubmit(answerData);
+    setRatings({});
+  }
+  return (
+    <TaskWrapper {...{ progress, tasksLeft, description }}>
+      <Segment>
+        <Header as="h3">Source text</Header>
+        <Message size="huge">{source}</Message>
+        <Header as="h3">Target texts</Header>
+        {targets.map((target) => 
+        <Segment key={target[ID_IDX]}>
+          <Message size="huge"> {target[TEXT_IDX]}</Message> 
+          <Rating float="right" key={target[ID_IDX] }
+          rating={ratings[target[ID_IDX]]}
+          // eslint-disable-next-line no-shadow
+          onRate={(_e, { rating }) => setRatings({...ratings, [target[ID_IDX]]: rating})}
+          maxRating={maxStars} 
+          icon="star"
+          size="massive"
+          />{" "}
+          {ratings[target[ID_IDX]] || "0"} / {maxStars} 
+        </Segment>)}
+        <Segment padded size="large">
+          <Grid verticalAlign="middle" columns={2}>
+            <Grid.Row key={1}>
+              <Grid.Column width={10} >
+                {mode === "ees_assessment" && (
+                  <List>
+                    <List.Item>
+                      4. Perfect or near perfect (minor typographical errors only)
+                    </List.Item>
+                    <List.Item>
+                      3. Very good, can be post-edited quickly
+                    </List.Item>
+                    <List.Item>
+                      2. Poor, requires significant post-editing
+                    </List.Item>
+                    <List.Item>1. Very poor, requires retranslation</List.Item>
+                  </List>
+                )}
+              </Grid.Column>
+              <Grid.Column width={6} >
+                <br />
+                <br />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+        {Object.keys(ratings).length < Object.keys(targets).length && (
+          <Button disabled fluid color="blue">
+            Submit
+          </Button>
+        )}
+        {Object.keys(ratings).length === Object.keys(targets).length && (
+          <Button onClick={() => sendAnswers(ratings) } fluid color="blue">
             Submit
           </Button>
         )}
@@ -343,7 +413,7 @@ function EESAssessmentTask({
   onSubmit,
 }) {
   return (
-    <RatingTask
+    <RateMultipleTask
       {...{
         description: TASK_DESCRIPTIONS.EESAssessment,
         mode,
@@ -396,7 +466,7 @@ function CampaignTask() {
     });
   }, [id, mode]); // We do not re-render this, just so that we don't spam the server.
 
-  if (tasksDone === tasksTotal) {
+  if (tasksDone >= tasksTotal) {
     return <Redirect to="/campaigns" />;
   }
 
