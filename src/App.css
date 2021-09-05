@@ -43,6 +43,12 @@ body {
   }
 }
 
+@media(min-width: 1024px) {
+  .App-header-content{
+    width: 1000px; /* Matches .App-body below */
+  }
+}
+
 .App-header a{
   text-decoration: none;
   color: #444;
@@ -64,7 +70,6 @@ body {
   font-size: 0.7em;
 }
 
-
 @media(max-width: 800px) {
   .App-body{
     max-width: calc(100% - 60px);
@@ -72,6 +77,12 @@ body {
   }
   .ui.selection.dropdown{
     min-width: 13em !important;
+  }
+}
+
+@media(min-width: 1024px) {
+  .App-body{
+    max-width: 1000px; /* Matches .App-header-content above */
   }
 }
 
@@ -189,8 +200,6 @@ body {
   position: absolute;
   right: 0;
 }
-
-
 
 .ui.progress:last-child{
   margin: 0 !important;
