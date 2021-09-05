@@ -257,6 +257,10 @@
     text-decoration: underline;
 }
 
+.TranslateBox-submit {
+    margin-right: 0;
+}
+
 .hidden{
   display: none;
 }
