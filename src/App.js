@@ -84,7 +84,7 @@ function App() {
             <div>
               <Link to="/">
                 {SHOW_BRANDING && (
-                  <img alt="logo" src={logo} height="40" width="140" />
+                  <img alt="logo" src={logo} height="50" width="175" />
                 )}
                 {!SHOW_BRANDING && (
                   <span>
