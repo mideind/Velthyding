@@ -20,13 +20,13 @@ See `config.js` for setting endpoint domains, default selections and customizing
 
 ### Setup and development
 
-You’ll need to have Node >= 8.10<=14 > and npm >= 5.6 on your machine. To install dependancies run
+You’ll need to have Node >= 8.10<=14 > and npm >= 5.6 on your machine. To install dependencies run
 
 ```bash
 npm install
 ```
 
-To start up the development server run
+To start the development server run
 
 ```bash
 npm run-script start
@@ -38,7 +38,7 @@ To create a build run
 npm run-script build
 ```
 
-If you run into issues when building or running the development server, try increasing the available memory with 
+If you have problems when building or running the development server, try increasing the available memory with
 
 ```bash
 export NODE_OPTIONS=--max_old_space_size=4096
@@ -46,7 +46,8 @@ export NODE_OPTIONS=--max_old_space_size=4096
 
 ### Linting
 
-The code should follow the [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react). Linting is configured in `.eslintrc.json` and the code can be fixed using prettier by running 
+The code should follow the [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react).
+Linting is configured in `.eslintrc.json` and the code can be fixed using prettier by running
 
 ```bash
 npx eslint 'src/**/*.{js,jsx}' --fix
@@ -55,18 +56,18 @@ npx eslint 'src/**/*.{js,jsx}' --fix
 ## Production
 
 - Bump the version number `package.json`.
-- Build the frontend with `build_web_frontend.sh`. This script uses docker to build.
-- Follow the instrcutions from the script to upload the bundle.
+- Build the frontend with `build_web_frontend.sh`. This script uses Docker to build.
+- Follow the instructions from the script to upload the bundle.
 
 ## About
 
-This work is partially funded by the Language Technology Programme of the Icelandic Government.
+This work is partially funded by the Language Technology Programme of the Icelandic Government, managed by Almannarómur.
 
 ### Copyright and licensing
 
 <img src="https://github.com/mideind/GreynirPackage/blob/master/doc/_static/MideindLogoVert100.png?raw=true" align="right" style="margin-left:20px;" alt="Miðeind ehf.">
 
-Velthyding is *copyright ©2021 Miðeind ehf.*
+Velthyding is *copyright © 2021 Miðeind ehf.*
 
 This software is licensed under the **MIT License**:
 
