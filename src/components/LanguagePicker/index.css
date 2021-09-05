@@ -5,7 +5,7 @@
 }
 
 .LanguageDirection{
-    width: 50%;
+    width: calc(50% - 6px);
 }
 
 @media (max-width: 650px){
