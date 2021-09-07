@@ -429,11 +429,8 @@ function CampaignTask() {
   const [tasksTotal, setTasksTotal] = useState(1);
   const { id, mode } = useParams();
   const progress = Math.floor(100 * (tasksDone / tasksTotal));
-
   const [error, setError] = useState(false);
-
   const [task, setTask] = useState(null);
-
   useEffect(() => {
     let isCancelled = false;
     async function fetchTask() {
@@ -443,10 +440,21 @@ function CampaignTask() {
           setTasksTotal(0);
           setTasksDone(0);
         } else {
+          let sum = 0;
+          if (response.data.mode === "ees_assessment") { // need the total number of targets for each source for calculating tasks done
+            function sum_targets(item) {
+              sum += item;
+            }
+            response.data.targets.forEach(elem => sum_targets(elem[0].length));
+          }
+          else {
+            sum = response.data.targets.length;  // general case + comparison
+          }
           setTask({
             mode: response.data.mode,
             source: response.data.source,
             targets: response.data.targets, // List[Tuple[id,target]]
+            target_count: sum,
           });
         }
       }
@@ -473,7 +481,7 @@ function CampaignTask() {
   function answer(answerData) {
     answerTask(id, answerData)
       .then(() => {
-        setTasksDone(tasksDone + 1);  // "task" is ambiguous here - interpreting it as the number of source segments
+        setTasksDone(tasksDone + task.target_count);
       })
       .catch((err) => {
         setError(true);
