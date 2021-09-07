@@ -86,7 +86,7 @@ function CampaignModal(props) {
                   head="EES Assessment"
                   mode="ees_assessment"
                   meta="Are the translations acceptable?"
-                  description="Does the translation convey the same meaning as the source, and is it well-formed?"
+                  description="Do the translations convey the same meaning as the source, and are they well-formed?"
                   id={props.id}
                   action={() => setOpen(false)}
                 />
@@ -159,7 +159,7 @@ function CampaignTableCell(props) {
         <Progress total={total}
                   value={value}
                   progress="percent"
-                  precision="0"
+                  precision={0}
                   success />
       </Table.Cell>
     </>
