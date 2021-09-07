@@ -443,21 +443,10 @@ function CampaignTask() {
           setTasksTotal(0);
           setTasksDone(0);
         } else {
-          let sum = 0;
-          if (response.data.mode === "ees_assessment") { // need the total number of targets for each source for calculating tasks done
-            function sum_targets(item) {
-              sum += item;
-            }
-            response.data.targets.forEach(elem => sum_targets(elem[0].length));
-          }
-          else {
-            sum = response.data.targets.length;  // general case + comparison
-          }
           setTask({
             mode: response.data.mode,
             source: response.data.source,
             targets: response.data.targets, // List[Tuple[id,target]]
-            target_count: sum,
           });
         }
       }
@@ -484,7 +473,7 @@ function CampaignTask() {
   function answer(answerData) {
     answerTask(id, answerData)
       .then(() => {
-        setTasksDone(tasksDone + task.target_count);
+        setTasksDone(tasksDone + 1);  // "task" is ambiguous here - interpreting it as the number of source segments
       })
       .catch((err) => {
         setError(true);
