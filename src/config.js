@@ -29,7 +29,7 @@ export const ENGINES = [
     url: `${BASE_BACKEND_URL}/translate/`,
     name: "Fairseq DEV",
     extraData: {
-      model: "fairseq-dev",
+      model: "mbart25-cont",
     },
     selected: true,
     textOnly: false,
