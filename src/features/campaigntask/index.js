@@ -429,11 +429,8 @@ function CampaignTask() {
   const [tasksTotal, setTasksTotal] = useState(1);
   const { id, mode } = useParams();
   const progress = Math.floor(100 * (tasksDone / tasksTotal));
-
   const [error, setError] = useState(false);
-
   const [task, setTask] = useState(null);
-
   useEffect(() => {
     let isCancelled = false;
     async function fetchTask() {
