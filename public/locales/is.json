@@ -1,6 +1,9 @@
 {
   "fallback_header": "Íslenska -- Enska",
   "show_google_trans": "Sýna Google þýðingu",
+  "Evaluation": "Mat á þýðingum",
+  "Use EEA model": "Nota EES-líkan",
+  "Don't use EEA model": "Ekki nota EES-líkan",
   "Logout": "Útskrá",
   "login_header": "Innskrá",
   "fallback_login": "Beta",

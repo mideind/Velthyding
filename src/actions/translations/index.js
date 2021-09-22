@@ -1,5 +1,6 @@
 import { PREFIX_TRANSLATION_URL } from "config";
 import { decodeHTML } from "../../utils/text";
+import { getCookie } from "react-use-cookie";
 
 // Simplified wrapper to ignore structure
 export async function updateSentenceTranslation(text, prefix, source, target) {
@@ -34,12 +35,20 @@ export async function updateSentenceTranslation(text, prefix, source, target) {
 }
 
 export async function translate(engine, text, source, target, prefix) {  // eslint-disable-line
+
+  // MODEL override hack
+  const modelName = getCookie("chosen-model");
+  let model = `${source}-${target}`;
+  if (engine.extraData !== undefined && engine.extraData.model !== undefined){
+    model = engine.extraData.model;
+  }
+  if (modelName !== undefined && modelName !== "") {
+    model = modelName;
+  }
+
   const data = {
     ...engine.extraData,
-    model:
-      engine.extraData !== undefined && engine.extraData.model !== undefined
-        ? engine.extraData.model
-        : `${source}-${target}`,
+    model,
     contents: text.map((pg) => pg.children.map((ch) => ch.text).join("")),
     sourceLanguageCode: source,
     targetLanguageCode: target,
