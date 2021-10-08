@@ -29,5 +29,11 @@
   "revise_button": "Revise",
   "drop_button": "Drop here",
   "upload_button": "Upload",
-  "Miðeind and Google translation active": "Miðeind and Google translation active"
+  "Miðeind and Google translation active": "Miðeind and Google translation active",
+  "disclaimer-header": "About Vélþýðing.is",
+  "disclaimer-content": "This website is under active development. No responsibility is taken for the quality of translations. All translations are made using a neural network and the output can be unpredictable and biased.",
+  "disclaimer-cookie": "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes.",
+  "disclaimer-last-updated": "Last updated: ",
+  "Evaluation": "Evaluation",
+  "Home": "Home"
 }
