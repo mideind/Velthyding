@@ -19,8 +19,8 @@ function Login() {
   const apiLogin = (pEmail, pPassword) => {
     loginUser(pEmail, pPassword)
       .then(() => dispatch(login(pEmail)))
-      .catch((error) => {
-        console.error(error);
+      .catch((e) => {
+        console.error(e);
         setError(t("Incorrect email or password."));
       });
   };

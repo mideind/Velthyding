@@ -8,7 +8,7 @@ import {
   Grid,
   Modal,
   Progress,
-  Table
+  Table,
 } from "semantic-ui-react";
 
 function TaskCard(props) {
@@ -186,7 +186,10 @@ function CampaignTable() {
       <Table.Body>
         {rows.map((row) => (
           <Table.Row key={row.id}>
-            <CampaignTableCell {...row} />
+            <CampaignTableCell
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...row}
+            />
           </Table.Row>
         ))}
       </Table.Body>

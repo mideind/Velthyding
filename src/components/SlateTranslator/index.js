@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { createEditor, Transforms } from "slate";
@@ -24,6 +25,7 @@ const SentenceElement = (props) => (
 const DefaultElement = (props) => <p {...props.attributes}>{props.children}</p>;
 
 const Leaf = (props) => (
+  // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
   <span
     onMouseOver={() => props.setHoverId(props.leaf.uId)}
     {...props.attributes}
@@ -70,12 +72,12 @@ const SlateTranslator = (props) => {
 
   const editor = useMemo(() => withBreak(withReact(createEditor())), []);
 
-  const renderElement = useCallback((props) => {
-    switch (props.element.type) {
+  const renderElement = useCallback((innerProps) => {
+    switch (innerProps.element.type) {
       case "sentence":
-        return <SentenceElement {...props} />;
+        return <SentenceElement {...innerProps} />;
       default:
-        return <DefaultElement {...props} />;
+        return <DefaultElement {...innerProps} />;
     }
   }, []);
 

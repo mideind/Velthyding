@@ -11,7 +11,7 @@ import {
   Message,
   Progress,
   Rating,
-  Segment
+  Segment,
 } from "semantic-ui-react";
 
 const TASK_DESCRIPTIONS = {
@@ -214,7 +214,8 @@ function RatingTask({
                       2. Poor, serious errors in the translation
                     </List.Item>
                     <List.Item>
-                      1. Very poor, doesn't reflect the source text at all
+                      1. Very poor, doesn`&apos;`t reflect the source text at
+                      all
                     </List.Item>
                   </List>
                 )}
@@ -261,7 +262,7 @@ function RateMultipleTask({
   maxStars,
 }) {
   const [ratings, setRatings] = useState({});
-  function sendAnswers(value) {
+  function sendAnswers() {
     const answerData = {
       ratings,
       mode,
@@ -326,7 +327,7 @@ function RateMultipleTask({
           </Button>
         )}
         {Object.keys(ratings).length === Object.keys(targets).length && (
-          <Button onClick={() => sendAnswers(ratings)} fluid color="blue">
+          <Button onClick={() => sendAnswers()} fluid color="blue">
             Submit
           </Button>
         )}
@@ -443,11 +444,9 @@ function CampaignTask() {
           let sum = 0;
           if (response.data.mode === "ees_assessment") {
             // need the total number of targets for each source for calculating tasks done
-            function sum_targets(item) {
-              sum += item;
-            }
-            response.data.targets.forEach((elem) =>
-              sum_targets(elem[0].length)
+            sum = response.data.targets.reduce(
+              (total, elem) => total + elem[0].length,
+              sum
             );
           } else {
             sum = response.data.targets.length; // general case + comparison
