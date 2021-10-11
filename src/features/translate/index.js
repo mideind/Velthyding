@@ -1,5 +1,5 @@
 import { translateMany, updateSentenceTranslation } from "actions/translations";
-import { storeTranslation, storeTranslationCorrection } from "api/translations";
+import { storeTranslationCorrection } from "api/translations";
 import "App.css";
 import Translator from "components/Translator";
 import mammoth from "mammoth";
@@ -135,21 +135,6 @@ function Translate() {
       .filter((tran) => tran.engine.selected && tran.engine.textOnly)
       .map((tran) => setGoogleTranslation(tran.text));
 
-    trans.forEach((tran) =>
-      storeTranslation(
-        translationId,
-        `${source}-${target}`,
-        tran.engine.name,
-        text
-          .map((pg) => pg.children.map((ch) => ch.text).join(""))
-          .join("\n\n"),
-        tran.text.join("\n\n")
-      ).then((resp) => {
-        if (resp.data.id) {
-          setTranslationId(resp.data.id);
-        }
-      })
-    );
     setLoading(trans === []);
   };
 

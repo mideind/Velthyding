@@ -186,7 +186,7 @@ function RatingTask({
         <Segment padded size="large">
           <Grid verticalAlign="middle" columns={2}>
             <Grid.Row key={1}>
-              <Grid.Column width={10} >
+              <Grid.Column width={10}>
                 {mode === "adequacy" && (
                   <List>
                     <List.Item>5. All meaning</List.Item>
@@ -207,15 +207,9 @@ function RatingTask({
                 )}
                 {mode === "direct_assessment" && (
                   <List>
-                    <List.Item>
-                      5. Perfect or near perfect
-                    </List.Item>
-                    <List.Item>
-                      4. Very good, some minor issues
-                    </List.Item>
-                    <List.Item>
-                      3. Decent, but contains some issues
-                    </List.Item>
+                    <List.Item>5. Perfect or near perfect</List.Item>
+                    <List.Item>4. Very good, some minor issues</List.Item>
+                    <List.Item>3. Decent, but contains some issues</List.Item>
                     <List.Item>
                       2. Poor, serious errors in the translation
                     </List.Item>
@@ -225,7 +219,7 @@ function RatingTask({
                   </List>
                 )}
               </Grid.Column>
-              <Grid.Column width={6} >
+              <Grid.Column width={6}>
                 <br />
                 <br />
                 <Rating
@@ -247,7 +241,7 @@ function RatingTask({
           </Button>
         )}
         {rating !== 0 && (
-          <Button onClick={() => sendAnswer(rating) } fluid color="blue">
+          <Button onClick={() => sendAnswer(rating)} fluid color="blue">
             Submit
           </Button>
         )}
@@ -281,27 +275,33 @@ function RateMultipleTask({
         <Header as="h3">Source text</Header>
         <Message size="huge">{source}</Message>
         <Header as="h3">Target texts</Header>
-        {targets.map((target) => 
-        <Segment key={target[ID_IDX]}>
-          <Message size="huge"> {target[TEXT_IDX]}</Message> 
-          <Rating float="right" key={target[ID_IDX] }
-          rating={ratings[target[ID_IDX]]}
-          // eslint-disable-next-line no-shadow
-          onRate={(_e, { rating }) => setRatings({...ratings, [target[ID_IDX]]: rating})}
-          maxRating={maxStars} 
-          icon="star"
-          size="massive"
-          />{" "}
-          {ratings[target[ID_IDX]] || "0"} / {maxStars} 
-        </Segment>)}
+        {targets.map((target) => (
+          <Segment key={target[ID_IDX]}>
+            <Message size="huge"> {target[TEXT_IDX]}</Message>
+            <Rating
+              float="right"
+              key={target[ID_IDX]}
+              rating={ratings[target[ID_IDX]]}
+              // eslint-disable-next-line no-shadow
+              onRate={(_e, { rating }) =>
+                setRatings({ ...ratings, [target[ID_IDX]]: rating })
+              }
+              maxRating={maxStars}
+              icon="star"
+              size="massive"
+            />{" "}
+            {ratings[target[ID_IDX]] || "0"} / {maxStars}
+          </Segment>
+        ))}
         <Segment padded size="large">
           <Grid verticalAlign="middle" columns={2}>
             <Grid.Row key={1}>
-              <Grid.Column width={10} >
+              <Grid.Column width={10}>
                 {mode === "ees_assessment" && (
                   <List>
                     <List.Item>
-                      4. Perfect or near perfect (minor typographical errors only)
+                      4. Perfect or near perfect (minor typographical errors
+                      only)
                     </List.Item>
                     <List.Item>
                       3. Very good, can be post-edited quickly
@@ -313,7 +313,7 @@ function RateMultipleTask({
                   </List>
                 )}
               </Grid.Column>
-              <Grid.Column width={6} >
+              <Grid.Column width={6}>
                 <br />
                 <br />
               </Grid.Column>
@@ -326,7 +326,7 @@ function RateMultipleTask({
           </Button>
         )}
         {Object.keys(ratings).length === Object.keys(targets).length && (
-          <Button onClick={() => sendAnswers(ratings) } fluid color="blue">
+          <Button onClick={() => sendAnswers(ratings)} fluid color="blue">
             Submit
           </Button>
         )}
@@ -441,14 +441,16 @@ function CampaignTask() {
           setTasksDone(0);
         } else {
           let sum = 0;
-          if (response.data.mode === "ees_assessment") { // need the total number of targets for each source for calculating tasks done
+          if (response.data.mode === "ees_assessment") {
+            // need the total number of targets for each source for calculating tasks done
             function sum_targets(item) {
               sum += item;
             }
-            response.data.targets.forEach(elem => sum_targets(elem[0].length));
-          }
-          else {
-            sum = response.data.targets.length;  // general case + comparison
+            response.data.targets.forEach((elem) =>
+              sum_targets(elem[0].length)
+            );
+          } else {
+            sum = response.data.targets.length; // general case + comparison
           }
           setTask({
             mode: response.data.mode,
@@ -530,7 +532,7 @@ function CampaignTask() {
           onSubmit={answer}
         />
       )}
-       {task.mode === "ees_assessment" && (
+      {task.mode === "ees_assessment" && (
         <EESAssessmentTask
           mode={mode}
           source={task.source}

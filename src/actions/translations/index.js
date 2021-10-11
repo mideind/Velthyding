@@ -1,6 +1,7 @@
+import { apiClient } from "api";
 import { PREFIX_TRANSLATION_URL } from "config";
-import { decodeHTML } from "../../utils/text";
 import { getCookie } from "react-use-cookie";
+import { decodeHTML } from "../../utils/text";
 
 // Simplified wrapper to ignore structure
 export async function updateSentenceTranslation(text, prefix, source, target) {
@@ -34,12 +35,13 @@ export async function updateSentenceTranslation(text, prefix, source, target) {
   }
 }
 
-export async function translate(engine, text, source, target, prefix) {  // eslint-disable-line
+export async function translate(engine, text, source, target, prefix) {
+  // eslint-disable-line
 
   // MODEL override hack
   const modelName = getCookie("chosen-model");
   let model = `${source}-${target}`;
-  if (engine.extraData !== undefined && engine.extraData.model !== undefined){
+  if (engine.extraData !== undefined && engine.extraData.model !== undefined) {
     model = engine.extraData.model;
   }
   if (modelName !== undefined && modelName !== "") {
@@ -56,28 +58,15 @@ export async function translate(engine, text, source, target, prefix) {  // esli
 
   // prefix is a tuple []
 
-  const { url } = engine;
-  const param = {
-    method: "POST",
-    crossDomain: true,
-    mode: "cors",
-    ...engine.extraParam,
-    headers: {
-      "Content-Type": "application/json; utf-8",
-      ...engine.extraHeader,
-    },
-  };
-  param.body = JSON.stringify(data);
-
   if (source === target) {
     return text;
   }
+  const ac = apiClient();
+  const response = await ac.post("translate/", data);
 
-  let transl;
-  const response = await fetch(url, param).catch((e) => console.log(e));
   if (response !== undefined) {
     try {
-      transl = await response.json();
+      const transl = response.data;
       const returnTrans = transl.translations.map((trans) =>
         decodeHTML(trans.translatedText)
       );
