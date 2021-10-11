@@ -1,6 +1,6 @@
 import { answerTask, getCampaignProgress, getTask } from "api/reviews";
 import Error from "components/Error";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import {
   Button,
@@ -478,17 +478,19 @@ function CampaignTask() {
   if (task === null) {
     return <></>;
   }
-
-  function answer(answerData) {
-    answerTask(id, answerData)
-      .then(() => {
-        setTasksDone(tasksDone + task.target_count);
-      })
-      .catch((err) => {
-        setError(true);
-        console.log(err);
-      });
-  }
+  const answer = useCallback(
+    (answerData) => {
+      answerTask(id, answerData)
+        .then(() => {
+          setTasksDone(tasksDone + task.target_count);
+        })
+        .catch((err) => {
+          setError(true);
+          console.log(err);
+        });
+    },
+    [id, tasksDone, task]
+  );
 
   if (error) {
     return (

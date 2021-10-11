@@ -52,6 +52,7 @@ const flipTextAndTranslation = (text) =>
 const withBreak = (editor) => {
   // Note: this breaks lists etc.
   // CHECK FOR PARAGRAPH if introducing more complex formating.
+  // eslint-disable-next-line no-param-reassign
   editor.insertBreak = () => {
     const newLine = {
       type: "paragraph",
