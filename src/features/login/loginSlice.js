@@ -5,10 +5,7 @@ export const loginSlice = createSlice({
   initialState: {
     loggedin: false,
     email: null,
-    source: "en",
-    target: "is",
     hoverId: null,
-    showGoogle: false,
   },
   reducers: {
     login: (state, action) => ({
@@ -21,21 +18,8 @@ export const loginSlice = createSlice({
       email: action.payload,
       loggedin: false,
     }),
-    switchLanguage: (state, _action) => ({
-      source: state.target,
-      target: state.source,
-    }),
-    toggleGoogle: (state, _action) => ({
-      ...state,
-      showGoogle: !state.showGoogle,
-    }),
   },
 });
 
 export const loginReducer = loginSlice.reducer;
-export const {
-  login,
-  logout,
-  switchLanguage,
-  toggleGoogle,
-} = loginSlice.actions;
+export const { login, logout } = loginSlice.actions;

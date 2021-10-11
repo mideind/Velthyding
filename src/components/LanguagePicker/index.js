@@ -1,4 +1,4 @@
-import { switchLanguage } from "features/login/loginSlice";
+import { switchLanguage } from "features/translate/translateSlice";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +22,7 @@ function LanguagePicker(props) {
     },
   ];
 
-  const { source, target } = useSelector((state) => state.login);
+  const { sourceLang, targetLang } = useSelector((state) => state.translation);
   const dispatch = useDispatch();
   return (
     <Dropdown
@@ -33,7 +33,7 @@ function LanguagePicker(props) {
       icon="world"
       options={LANGUAGE_OPTIONS}
       selection
-      value={!props.isSource ? target : source}
+      value={!props.isSource ? targetLang : sourceLang}
       onChange={() => dispatch(switchLanguage())}
       placeholder={props.text}
     />

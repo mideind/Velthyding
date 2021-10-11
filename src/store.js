@@ -5,7 +5,7 @@ import logger from "redux-logger";
 
 const reducer = {
   login: loginReducer,
-  engines: translateReducer,
+  translation: translateReducer,
 };
 
 const middleware = [...getDefaultMiddleware(), logger];
