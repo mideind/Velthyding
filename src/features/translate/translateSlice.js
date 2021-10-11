@@ -11,8 +11,6 @@ function updateTranslation(translateState, action) {
 export const translateSlice = createSlice({
   name: "translation",
   initialState: {
-    // TODO: Fetch from cookie and support setting the model parameter
-    model: "mbart25-cont",
     selected: true,
     // TODO: Do we need to set the text and structuredText? What are their funcions?
     textOnly: false,

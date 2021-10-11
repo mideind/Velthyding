@@ -49,7 +49,6 @@ export async function getTranslations() {
 }
 
 export async function translate(model, text, sourceLang, targetLang) {
-  // eslint-disable-line
   if (sourceLang === targetLang) {
     return text;
   }

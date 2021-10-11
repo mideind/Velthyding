@@ -1,6 +1,8 @@
 {
   "fallback_header": "Icelandic -- English translation",
   "show_google_trans": "Show Google translation",
+  "Use EEA model": "Use EEA model",
+  "Don't use EEA model": "Don't use EEA model",
   "Logout": "Logout",
   "login_header": "Login",
   "fallback_login": "Beta",

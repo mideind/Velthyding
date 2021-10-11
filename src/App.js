@@ -23,6 +23,9 @@ import "./App.css";
 import mideindLogo from "./mideind.svg";
 import logo from "./velthyding_hor.png";
 
+const EEA_MODEL = "mbart25-cont-ees";
+const DEFAULT_MODEL = "mbart25-cont";
+
 function VelthydingMenu(props) {
   const { t } = useTranslation();
   return (
@@ -31,6 +34,10 @@ function VelthydingMenu(props) {
         <Dropdown.Item onClick={props.toggleLanguage}>
           {props.lng === "is" && "English interface"}
           {props.lng !== "is" && "Íslenskt viðmót"}
+        </Dropdown.Item>
+        <Dropdown.Item onClick={props.toggleEEAModel}>
+          {props.modelName === EEA_MODEL && t("Don't use EEA model")}
+          {props.modelName !== EEA_MODEL && t("Use EEA model")}
         </Dropdown.Item>
         <Dropdown.Item text={t("Evaluation")} as={Link} to="/campaigns" />
         {props.loggedin && (
@@ -51,10 +58,13 @@ function VelthydingMenu(props) {
 
 function App() {
   const { loggedin } = useSelector((state) => state.login);
+
   const [lng, setLng] = useCookie(
     "lang",
     window.navigator.language.includes("is") ? "is" : "en"
   );
+
+  const [modelName, setModel] = useCookie("chosen-model", "");
 
   const { t, i18n } = useTranslation();
   useEffect(() => {
@@ -69,6 +79,14 @@ function App() {
       setLng("en");
     } else {
       setLng("is");
+    }
+  };
+
+  const toggleEEAModel = () => {
+    if (modelName !== EEA_MODEL) {
+      setModel(EEA_MODEL);
+    } else {
+      setModel(DEFAULT_MODEL);
     }
   };
 
@@ -96,6 +114,8 @@ function App() {
             <div className="App-header-menu">
               <VelthydingMenu
                 toggleLanguage={toggleLanguage}
+                toggleEEAModel={toggleEEAModel}
+                modelName={modelName}
                 logoutUser={logoutUser}
                 loggedin={loggedin}
                 lng={lng}
@@ -122,7 +142,7 @@ function App() {
               {!loggedin ? <Redirect to="/login" /> : <CampaignTask />}
             </Route>
             <Route path="/">
-              <Translate />
+              <Translate modelName={modelName} />
             </Route>
           </Switch>
         </div>

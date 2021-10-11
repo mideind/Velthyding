@@ -76,7 +76,7 @@ const updateText = (translationObject) => {
   }));
 };
 
-function Translate() {
+function Translate({ modelName }) {
   const { t } = useTranslation();
   const [hoverId, setHoverId] = useState(-1);
   const [translationId, setTranslationId] = useState(null);
@@ -94,9 +94,7 @@ function Translate() {
   ]);
 
   const [loading, setLoading] = useState(false);
-  const { sourceLang, targetLang, model } = useSelector(
-    (state) => state.translation
-  );
+  const { sourceLang, targetLang } = useSelector((state) => state.translation);
   const dispatch = useDispatch();
   const { getRootProps, getInputProps, isDragActive } = useOnDrop(setText);
   function isNoOp(inputText) {
@@ -113,7 +111,7 @@ function Translate() {
     }
     setLoading(true);
 
-    const tran = await translateText(model, text, sourceLang, targetLang);
+    const tran = await translateText(modelName, text, sourceLang, targetLang);
 
     const newText = updateText(tran);
     setText(newText);
@@ -135,7 +133,7 @@ function Translate() {
     storeTranslationCorrection(
       translationId,
       `${sourceLang}-${targetLang}`,
-      model,
+      modelName,
       text.map((pg) => pg.children.map((ch) => ch.text).join("")).join("\n\n"),
       text
         .map((pg) => pg.children.map((ch) => ch.translation).join(""))
