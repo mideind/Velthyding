@@ -1,4 +1,5 @@
 import { checkUserAndCookie, logoutUser } from "api";
+import { ErrorBoundary } from "components/Error";
 import { SHOW_BRANDING, SHOW_LOGIN } from "config";
 import Campaigns from "features/campaigns";
 import CampaignTask from "features/campaigntask";
@@ -124,26 +125,28 @@ function App() {
           </div>
         </header>
         <div className="App-body">
-          <Switch>
-            <Route path="/login">
-              {loggedin ? <Redirect to="/home" /> : <Login />}
-            </Route>
-            <Route path="/home">
-              {!loggedin ? <Redirect to="/login" /> : <Home />}
-            </Route>
-            <Route path="/register">
-              {loggedin ? <Redirect to="/home" /> : <Register />}
-            </Route>
-            <Route exact path="/campaigns">
-              {!loggedin ? <Redirect to="/login" /> : <Campaigns />}
-            </Route>
-            <Route path="/campaigns/:id/:mode">
-              {!loggedin ? <Redirect to="/login" /> : <CampaignTask />}
-            </Route>
-            <Route path="/">
-              <Translate modelName={modelName} />
-            </Route>
-          </Switch>
+          <ErrorBoundary>
+            <Switch>
+              <Route path="/login">
+                {loggedin ? <Redirect to="/home" /> : <Login />}
+              </Route>
+              <Route path="/home">
+                {!loggedin ? <Redirect to="/login" /> : <Home />}
+              </Route>
+              <Route path="/register">
+                {loggedin ? <Redirect to="/home" /> : <Register />}
+              </Route>
+              <Route exact path="/campaigns">
+                {!loggedin ? <Redirect to="/login" /> : <Campaigns />}
+              </Route>
+              <Route path="/campaigns/:id/:mode">
+                {!loggedin ? <Redirect to="/login" /> : <CampaignTask />}
+              </Route>
+              <Route path="/">
+                <Translate modelName={modelName} />
+              </Route>
+            </Switch>
+          </ErrorBoundary>
         </div>
 
         <div className="App-body disclaimer">
