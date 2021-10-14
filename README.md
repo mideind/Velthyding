@@ -24,6 +24,7 @@ You’ll need to have Node >= 8.10<=14 > and npm >= 5.6 on your machine. To inst
 
 ```bash
 npm install
+# You might need to run npm install twice.
 ```
 
 To start the development server run
@@ -32,7 +33,7 @@ To start the development server run
 npm run-script start
 ```
 
-To create a build run
+To create a production build run
 
 ```bash
 npm run-script build
@@ -53,7 +54,7 @@ Linting is configured in `.eslintrc.json` and the code can be fixed using pretti
 npx eslint 'src/**/*.{js,jsx}' --fix
 ```
 
-## Production
+## Release
 
 - Bump the version number `package.json`.
 - Build the frontend with `build_web_frontend.sh`. This script uses Docker to build.
