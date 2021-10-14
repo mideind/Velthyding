@@ -1,24 +1,29 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Button, Header, Modal } from "semantic-ui-react";
 
-function ModalExampleBasic(props) {
-  const [open, setOpen] = React.useState(true);
+function InformationModal({ header, message, onDismiss }) {
+  const [open, setOpen] = useState(true);
+
+  const onModalDismiss = useCallback(() => {
+    setOpen(false);
+    if (onDismiss !== undefined) {
+      onDismiss();
+    }
+  }, [open]);
 
   return (
     <Modal
-      basic
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
       size="small"
-      trigger={<></>}
     >
-      <Header icon>{props.header}</Header>
+      <Header icon>{header}</Header>
       <Modal.Content>
-        <p>{props.message}</p>
+        <p>{message}</p>
       </Modal.Content>
       <Modal.Actions>
-        <Button color="green" inverted onClick={() => setOpen(false)}>
+        <Button color="green" inverted onClick={onModalDismiss}>
           Dismiss
         </Button>
       </Modal.Actions>
@@ -26,4 +31,4 @@ function ModalExampleBasic(props) {
   );
 }
 
-export default ModalExampleBasic;
+export { InformationModal };

@@ -58,7 +58,6 @@ function VelthydingMenu(props) {
 
 function App() {
   const { loggedin } = useSelector((state) => state.login);
-
   const [lng, setLng] = useCookie(
     "lang",
     window.navigator.language.includes("is") ? "is" : "en"

@@ -1,5 +1,5 @@
 import { answerTask, getCampaignProgress, getTask } from "api/reviews";
-import Error from "components/Error";
+import { InformationModal } from "components/Error";
 import React, { useCallback, useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import {
@@ -494,7 +494,7 @@ function CampaignTask() {
 
   if (error) {
     return (
-      <Error
+      <InformationModal
         header="Something went wrong"
         message="Please check your internet connection or be in touch if the problem persists."
       />

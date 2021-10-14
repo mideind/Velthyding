@@ -59,10 +59,7 @@ export async function translate(model, text, sourceLang, targetLang) {
     targetLanguageCode: targetLang,
   };
 
-  // prefix is a tuple []
-
   const ac = apiClient();
-  const response = await ac.post("translate/", data);
   //   {
   //   "translations": [
   //     {
@@ -79,22 +76,14 @@ export async function translate(model, text, sourceLang, targetLang) {
   //   "targetLanguageCode": "is",
   //   "model": "mbart25-cont"
   // }
-
-  if (response !== undefined) {
-    try {
-      const transl = response.data;
-      const returnTrans = transl.translations.map((trans) =>
-        // Why is this decodeHTML here?
-        decodeHTML(trans.translatedText)
-      );
-      const structuredTrans = transl.translations
-        .filter((trans) => trans.translatedTextStructured)
-        .map((trans) => trans.translatedTextStructured);
-      return { text: returnTrans, structuredText: structuredTrans };
-    } catch (err) {
-      return ["Error"];
-    }
-  } else {
-    return ["Error"];
-  }
+  const response = await ac.post("translate/", data);
+  const transl = response.data;
+  const translatedText = transl.translations.map((trans) =>
+    // Why is this decodeHTML here?
+    decodeHTML(trans.translatedText)
+  );
+  const structuredTrans = transl.translations
+    .filter((trans) => trans.translatedTextStructured)
+    .map((trans) => trans.translatedTextStructured);
+  return { text: translatedText, structuredText: structuredTrans };
 }

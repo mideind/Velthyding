@@ -3,6 +3,7 @@ import {
   translate as translateText,
 } from "api/translations";
 import "App.css";
+import { InformationModal } from "components/Error";
 import Translator from "components/Translator";
 import mammoth from "mammoth";
 import React, { useCallback, useEffect, useState } from "react";
@@ -94,6 +95,7 @@ function Translate({ modelName }) {
   ]);
 
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const { sourceLang, targetLang } = useSelector((state) => state.translation);
   const dispatch = useDispatch();
   const { getRootProps, getInputProps, isDragActive } = useOnDrop(setText);
@@ -104,6 +106,9 @@ function Translate({ modelName }) {
       inputText[0].children[0].text === ""
     );
   }
+  const resetError = useCallback(() => {
+    setErrorMsg("");
+  }, [setErrorMsg]);
 
   const translate = async () => {
     if (isNoOp(text)) {
@@ -111,16 +116,20 @@ function Translate({ modelName }) {
     }
     setLoading(true);
 
-    const tran = await translateText(modelName, text, sourceLang, targetLang);
+    try {
+      const tran = await translateText(modelName, text, sourceLang, targetLang);
+      const newText = updateText(tran);
+      setText(newText);
+      dispatch(
+        setTranslation({
+          text: tran.text,
+          structuredText: tran.structuredText,
+        })
+      );
+    } catch (error) {
+      setErrorMsg(error.message);
+    }
 
-    const newText = updateText(tran);
-    setText(newText);
-    dispatch(
-      setTranslation({
-        text: tran.text,
-        structuredText: tran.structuredText,
-      })
-    );
     setLoading(false);
   };
 
@@ -146,8 +155,8 @@ function Translate({ modelName }) {
         setLoading(false);
       })
       .catch((error) => {
-        console.error(error);
         setLoading(false);
+        setErrorMsg(error.message);
       });
   };
 
@@ -217,6 +226,13 @@ function Translate({ modelName }) {
           {translationId && reviseButton}
         </div>
       </div>
+      {errorMsg !== "" && (
+        <InformationModal
+          header="Unable to translate"
+          message={errorMsg}
+          onDismiss={resetError}
+        />
+      )}
     </div>
   );
 }
