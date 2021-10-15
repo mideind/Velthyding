@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Button } from "semantic-ui-react";
-import { setTranslation } from "./translateSlice";
 
 const parseForSlate = (text) =>
   text
@@ -120,12 +119,6 @@ function Translate({ modelName }) {
       const tran = await translateText(modelName, text, sourceLang, targetLang);
       const newText = updateText(tran);
       setText(newText);
-      dispatch(
-        setTranslation({
-          text: tran.text,
-          structuredText: tran.structuredText,
-        })
-      );
     } catch (error) {
       setErrorMsg(error.message);
     }
