@@ -1,6 +1,8 @@
 {
   "fallback_header": "Icelandic -- English translation",
   "show_google_trans": "Show Google translation",
+  "Use EEA model": "Use EEA model",
+  "Don't use EEA model": "Don't use EEA model",
   "Logout": "Logout",
   "login_header": "Login",
   "fallback_login": "Beta",
@@ -29,5 +31,11 @@
   "revise_button": "Revise",
   "drop_button": "Drop here",
   "upload_button": "Upload",
-  "Miðeind and Google translation active": "Miðeind and Google translation active"
+  "Miðeind and Google translation active": "Miðeind and Google translation active",
+  "disclaimer-header": "About Vélþýðing.is",
+  "disclaimer-content": "This website is under active development. No responsibility is taken for the quality of translations. All translations are made using a neural network and the output can be unpredictable and biased.",
+  "disclaimer-cookie": "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes.",
+  "disclaimer-last-updated": "Last updated: ",
+  "Evaluation": "Evaluation",
+  "Home": "Home"
 }

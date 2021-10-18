@@ -1,4 +1,5 @@
 import { checkUserAndCookie, logoutUser } from "api";
+import { ErrorBoundary } from "components/Error";
 import { SHOW_BRANDING, SHOW_LOGIN } from "config";
 import Campaigns from "features/campaigns";
 import CampaignTask from "features/campaigntask";
@@ -24,6 +25,7 @@ import mideindLogo from "./mideind.svg";
 import logo from "./velthyding_hor.png";
 
 const EEA_MODEL = "mbart25-cont-ees";
+const DEFAULT_MODEL = "mbart25-cont";
 
 function VelthydingMenu(props) {
   const { t } = useTranslation();
@@ -57,7 +59,6 @@ function VelthydingMenu(props) {
 
 function App() {
   const { loggedin } = useSelector((state) => state.login);
-
   const [lng, setLng] = useCookie(
     "lang",
     window.navigator.language.includes("is") ? "is" : "en"
@@ -85,7 +86,7 @@ function App() {
     if (modelName !== EEA_MODEL) {
       setModel(EEA_MODEL);
     } else {
-      setModel("");
+      setModel(DEFAULT_MODEL);
     }
   };
 
@@ -124,26 +125,28 @@ function App() {
           </div>
         </header>
         <div className="App-body">
-          <Switch>
-            <Route path="/login">
-              {loggedin ? <Redirect to="/home" /> : <Login />}
-            </Route>
-            <Route path="/home">
-              {!loggedin ? <Redirect to="/login" /> : <Home />}
-            </Route>
-            <Route path="/register">
-              {loggedin ? <Redirect to="/home" /> : <Register />}
-            </Route>
-            <Route exact path="/campaigns">
-              {!loggedin ? <Redirect to="/login" /> : <Campaigns />}
-            </Route>
-            <Route path="/campaigns/:id/:mode">
-              {!loggedin ? <Redirect to="/login" /> : <CampaignTask />}
-            </Route>
-            <Route path="/">
-              <Translate />
-            </Route>
-          </Switch>
+          <ErrorBoundary>
+            <Switch>
+              <Route path="/login">
+                {loggedin ? <Redirect to="/home" /> : <Login />}
+              </Route>
+              <Route path="/home">
+                {!loggedin ? <Redirect to="/login" /> : <Home />}
+              </Route>
+              <Route path="/register">
+                {loggedin ? <Redirect to="/home" /> : <Register />}
+              </Route>
+              <Route exact path="/campaigns">
+                {!loggedin ? <Redirect to="/login" /> : <Campaigns />}
+              </Route>
+              <Route path="/campaigns/:id/:mode">
+                {!loggedin ? <Redirect to="/login" /> : <CampaignTask />}
+              </Route>
+              <Route path="/">
+                <Translate modelName={modelName} />
+              </Route>
+            </Switch>
+          </ErrorBoundary>
         </div>
 
         <div className="App-body disclaimer">
@@ -163,7 +166,7 @@ function App() {
                 "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes."
               )}
             </p>
-            <p>{t("disclaimer-last-updated", "Last updated: ")} 2020-07-27</p>
+            <p>{t("disclaimer-last-updated", "Last updated: ")} 2021-10-15</p>
           </Message>
         </div>
         {SHOW_BRANDING && (

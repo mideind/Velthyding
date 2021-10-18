@@ -31,9 +31,9 @@ function TranslateBox(props) {
   );
 }
 
-function Translator(props) {
+function Translator({ sourceText, setText, hoverId, setHoverId }) {
   const clearText = () => {
-    props.setText([
+    setText([
       {
         type: "paragraph",
         children: [
@@ -64,20 +64,19 @@ function Translator(props) {
       <LanguagePicker />
       <div className="Translator-containers">
         <TranslateBox
-          setText={props.setText}
-          text={props.sourceText}
+          setText={setText}
+          text={sourceText}
           translation={false}
-          setHoverId={props.setHoverId}
-          hoverId={props.hoverId}
+          setHoverId={setHoverId}
+          hoverId={hoverId}
           clearText={clearText}
         />
         <TranslateBox
-          setText={props.setText}
-          text={props.sourceText}
+          setText={setText}
+          text={sourceText}
           translation
-          setHoverId={props.setHoverId}
-          hoverId={props.hoverId}
-          setPrefix={props.setPrefix}
+          setHoverId={setHoverId}
+          hoverId={hoverId}
         />
       </div>
     </div>

@@ -1,42 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ENGINES } from "config";
 
-function updateTranslation(translateState, action) {
-  return translateState.map((engine) => {
-    if (engine.name === action.payload.name) {
-      return {
-        ...engine,
-        text: action.payload.text,
-        structuredText: action.payload.structuredText,
-      };
-    }
-    return engine;
-  });
-}
-
-function toggle(translateState, action) {
-  return translateState.map((engine) => {
-    if (engine.name === action.payload) {
-      return { ...engine, selected: !engine.selected, text: [] };
-    }
-    return engine;
-  });
-}
-
-function clear(translateState, _action) {
-  return translateState.map((engine) => ({ ...engine, text: [] }));
-}
-
-const storeEngines = ENGINES.map((e) => ({ ...e, text: [] }));
 export const translateSlice = createSlice({
-  name: "engines",
-  initialState: storeEngines,
+  name: "translation",
+  initialState: {
+    sourceLang: "en",
+    targetLang: "is",
+  },
   reducers: {
-    setTranslation: updateTranslation,
-    setToggle: toggle,
-    clearAll: clear,
+    switchLanguage: (state, _action) => ({
+      ...state,
+      sourceLang: state.targetLang,
+      targetLang: state.sourceLang,
+    }),
   },
 });
 
 export const translateReducer = translateSlice.reducer;
-export const { setTranslation, setToggle, clearAll } = translateSlice.actions;
+export const { switchLanguage } = translateSlice.actions;

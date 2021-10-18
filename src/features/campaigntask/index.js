@@ -1,6 +1,6 @@
 import { answerTask, getCampaignProgress, getTask } from "api/reviews";
-import Error from "components/Error";
-import React, { useEffect, useState } from "react";
+import { InformationModal } from "components/Error";
+import React, { useCallback, useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import {
   Button,
@@ -11,7 +11,7 @@ import {
   Message,
   Progress,
   Rating,
-  Segment
+  Segment,
 } from "semantic-ui-react";
 
 const TASK_DESCRIPTIONS = {
@@ -214,7 +214,8 @@ function RatingTask({
                       2. Poor, serious errors in the translation
                     </List.Item>
                     <List.Item>
-                      1. Very poor, doesn't reflect the source text at all
+                      1. Very poor, doesn`&apos;`t reflect the source text at
+                      all
                     </List.Item>
                   </List>
                 )}
@@ -261,7 +262,7 @@ function RateMultipleTask({
   maxStars,
 }) {
   const [ratings, setRatings] = useState({});
-  function sendAnswers(value) {
+  function sendAnswers() {
     const answerData = {
       ratings,
       mode,
@@ -326,7 +327,7 @@ function RateMultipleTask({
           </Button>
         )}
         {Object.keys(ratings).length === Object.keys(targets).length && (
-          <Button onClick={() => sendAnswers(ratings)} fluid color="blue">
+          <Button onClick={() => sendAnswers()} fluid color="blue">
             Submit
           </Button>
         )}
@@ -443,11 +444,9 @@ function CampaignTask() {
           let sum = 0;
           if (response.data.mode === "ees_assessment") {
             // need the total number of targets for each source for calculating tasks done
-            function sum_targets(item) {
-              sum += item;
-            }
-            response.data.targets.forEach((elem) =>
-              sum_targets(elem[0].length)
+            sum = response.data.targets.reduce(
+              (total, elem) => total + elem[0].length,
+              sum
             );
           } else {
             sum = response.data.targets.length; // general case + comparison
@@ -479,21 +478,23 @@ function CampaignTask() {
   if (task === null) {
     return <></>;
   }
-
-  function answer(answerData) {
-    answerTask(id, answerData)
-      .then(() => {
-        setTasksDone(tasksDone + task.target_count);
-      })
-      .catch((err) => {
-        setError(true);
-        console.log(err);
-      });
-  }
+  const answer = useCallback(
+    (answerData) => {
+      answerTask(id, answerData)
+        .then(() => {
+          setTasksDone(tasksDone + task.target_count);
+        })
+        .catch((err) => {
+          setError(true);
+          console.log(err);
+        });
+    },
+    [id, tasksDone, task]
+  );
 
   if (error) {
     return (
-      <Error
+      <InformationModal
         header="Something went wrong"
         message="Please check your internet connection or be in touch if the problem persists."
       />

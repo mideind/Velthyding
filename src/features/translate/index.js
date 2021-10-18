@@ -1,6 +1,9 @@
-import { translateMany, updateSentenceTranslation } from "actions/translations";
-import { storeTranslationCorrection } from "api/translations";
+import {
+  storeTranslationCorrection,
+  translate as translateText,
+} from "api/translations";
 import "App.css";
+import { InformationModal } from "components/Error";
 import Translator from "components/Translator";
 import mammoth from "mammoth";
 import React, { useCallback, useEffect, useState } from "react";
@@ -9,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Button } from "semantic-ui-react";
-import { setTranslation } from "./translateSlice";
 
 const parseForSlate = (text) =>
   text
@@ -67,18 +69,16 @@ const updateParagraph = (pg, pgId) =>
   }));
 
 const updateText = (translationObject) => {
-  const firstEngine = translationObject[0];
-  const translations = firstEngine.structuredText;
+  const translations = translationObject.structuredText;
   return translations.map((v, i) => ({
     type: "paragraph",
     children: updateParagraph(v, i),
   }));
 };
 
-function Translate() {
+function Translate({ modelName }) {
   const { t } = useTranslation();
   const [hoverId, setHoverId] = useState(-1);
-  const [prefix, setPrefix] = useState("");
   const [translationId, setTranslationId] = useState(null);
   const [text, setText] = useState([
     {
@@ -94,112 +94,64 @@ function Translate() {
   ]);
 
   const [loading, setLoading] = useState(false);
-  const engines = useSelector((state) => state.engines);
-  const { source, target, showGoogle } = useSelector((state) => state.login);
-  const [googleTranslation, setGoogleTranslation] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const { sourceLang, targetLang } = useSelector((state) => state.translation);
   const dispatch = useDispatch();
   const { getRootProps, getInputProps, isDragActive } = useOnDrop(setText);
+  function isNoOp(inputText) {
+    return (
+      inputText.length === 1 &&
+      inputText[0].children.length === 1 &&
+      inputText[0].children[0].text === ""
+    );
+  }
+  const resetError = useCallback(() => {
+    setErrorMsg("");
+  }, [setErrorMsg]);
 
   const translate = async () => {
-    if (
-      text.length === 1 &&
-      text[0].children.length === 1 &&
-      text[0].children[0].text === ""
-    ) {
+    if (isNoOp(text)) {
       return;
     }
     setLoading(true);
 
-    const activeEngines = engines.filter((engine) => engine.selected);
+    try {
+      const tran = await translateText(modelName, text, sourceLang, targetLang);
+      const newText = updateText(tran);
+      setText(newText);
+    } catch (error) {
+      setErrorMsg(error.message);
+    }
 
-    // TODO handle not sending translation if revising,
-    // keep translation logic in effect of dropdown suggestion changes?
-
-    // TODO reconsider use of translateMany
-
-    const trans = await translateMany(activeEngines, text, source, target);
-
-    const newText = updateText(trans);
-    setText(newText);
-    trans.forEach((tran) =>
-      dispatch(
-        setTranslation({
-          name: tran.engine.name,
-          text: tran.text,
-          structuredText: tran.structuredText,
-        })
-      )
-    );
-
-    trans
-      .filter((tran) => tran.engine.selected && tran.engine.textOnly)
-      .map((tran) => setGoogleTranslation(tran.text));
-
-    setLoading(trans === []);
+    setLoading(false);
   };
 
   const revise = async () => {
-    if (
-      text.length === 1 &&
-      text[0].children.length === 1 &&
-      text[0].children[0].text === ""
-    ) {
+    if (isNoOp(text)) {
       return;
     }
     setLoading(true);
 
-    const activeEngines = engines.filter((engine) => engine.selected);
-
     storeTranslationCorrection(
       translationId,
-      `${source}-${target}`,
-      activeEngines[0].name,
+      `${sourceLang}-${targetLang}`,
+      modelName,
       text.map((pg) => pg.children.map((ch) => ch.text).join("")).join("\n\n"),
       text
         .map((pg) => pg.children.map((ch) => ch.translation).join(""))
         .join("\n\n")
-    ).then((resp) => {
-      if (resp.data.id) {
-        setTranslationId(resp.data.id);
-      }
-      setLoading(false);
-    });
-  };
-
-  useEffect(() => {
-    if (prefix.length < 2) {
-      return;
-    }
-    const translatePrefix = async () => {
-      setLoading(true);
-      const pgIdx = prefix[1][0];
-      const sntIdx = prefix[1][1];
-      const srcText = text[pgIdx].children[sntIdx].text;
-
-      const translation = await updateSentenceTranslation(
-        srcText,
-        prefix[0],
-        source,
-        target
-      );
-
-      const newText = text.map((pg, i) => {
-        if (i === pgIdx) {
-          const children = pg.children.map((snt, j) => {
-            if (j === sntIdx) {
-              return { ...snt, translation };
-            }
-            return snt;
-          });
-          return { ...pg, children };
+    )
+      .then((resp) => {
+        if (resp.data.id) {
+          setTranslationId(resp.data.id);
         }
-        return pg;
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        setErrorMsg(error.message);
       });
-      setLoading(false);
-      setText(newText);
-    };
-    translatePrefix();
-  }, [prefix, source, target, text]);
+  };
 
   useEffect(() => {
     if (
@@ -236,9 +188,13 @@ function Translate() {
   const uploadButton = (
     <Button
       className="TranslateBox-submit TranslateBox-upload"
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...getRootProps()}
     >
-      <input {...getInputProps()} />
+      <input
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...getInputProps()}
+      />
       {isDragActive ? (
         <span>{t("drop_button", "Drop here")}</span>
       ) : (
@@ -253,28 +209,23 @@ function Translate() {
       <Translator
         sourceText={text}
         setText={setText}
-        prefix={prefix}
-        setPrefix={setPrefix}
         hoverId={hoverId}
         setHoverId={setHoverId}
       />
       <div>
-        {showGoogle && googleTranslation && (
-          <div className="Translator-containers reverse">
-            <div className="Translator-subtext">
-              <h4>Google Translate</h4>
-              {googleTranslation.map((pg) => (
-                <p>{pg}</p>
-              ))}
-            </div>
-          </div>
-        )}
         <div className="Translate-footer">
           {uploadButton}
           {translateButton}
           {translationId && reviseButton}
         </div>
       </div>
+      {errorMsg !== "" && (
+        <InformationModal
+          header="Unable to translate"
+          message={errorMsg}
+          onDismiss={resetError}
+        />
+      )}
     </div>
   );
 }
