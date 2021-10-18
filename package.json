@@ -6,6 +6,8 @@
     "@craco/craco": "^6.3.0",
     "@reduxjs/toolkit": "^1.6.2",
     "@semantic-ui-react/craco-less": "^1.2.3",
+    "@sentry/react": "^6.13.3",
+    "@sentry/tracing": "^6.13.3",
     "axios": "^0.22.0",
     "emotion": "^11.0.0",
     "i18next": "^21.3.0",

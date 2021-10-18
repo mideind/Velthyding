@@ -1,5 +1,5 @@
+import * as Sentry from "@sentry/react";
 import { checkUserAndCookie, logoutUser } from "api";
-import { ErrorBoundary } from "components/Error";
 import { SHOW_BRANDING, SHOW_LOGIN } from "config";
 import Campaigns from "features/campaigns";
 import CampaignTask from "features/campaigntask";
@@ -26,6 +26,20 @@ import logo from "./velthyding_hor.png";
 
 const EEA_MODEL = "mbart25-cont-ees";
 const DEFAULT_MODEL = "mbart25-cont";
+
+// eslint-disable-next-line no-unused-vars
+function FallbackComponent({ error, componentStack, resetError }) {
+  return (
+    <div className="App-body">
+      <h2>Oops!</h2>
+      <p>Something, somewhere went terribly wrong.</p>
+      <p>Please reload the page.</p>
+      <button type="button" onClick={resetError}>
+        Reload
+      </button>
+    </div>
+  );
+}
 
 function VelthydingMenu(props) {
   const { t } = useTranslation();
@@ -95,37 +109,37 @@ function App() {
   }, [loggedin]);
 
   return (
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          <div className="App-header-content">
-            <div>
-              <Link to="/">
-                {SHOW_BRANDING && (
-                  <img alt="logo" src={logo} height="50" width="175" />
-                )}
-                {!SHOW_BRANDING && (
-                  <span>
-                    {t("fallback_header", "Icelandic - English Translation")}
-                  </span>
-                )}
-              </Link>
+    <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
+      <Router>
+        <div className="App">
+          <header className="App-header">
+            <div className="App-header-content">
+              <div>
+                <Link to="/">
+                  {SHOW_BRANDING && (
+                    <img alt="logo" src={logo} height="50" width="175" />
+                  )}
+                  {!SHOW_BRANDING && (
+                    <span>
+                      {t("fallback_header", "Icelandic - English Translation")}
+                    </span>
+                  )}
+                </Link>
+              </div>
+              <div className="App-header-menu">
+                <VelthydingMenu
+                  toggleLanguage={toggleLanguage}
+                  toggleEEAModel={toggleEEAModel}
+                  modelName={modelName}
+                  logoutUser={logoutUser}
+                  loggedin={loggedin}
+                  lng={lng}
+                />
+                {!SHOW_LOGIN && <span>{t("fallback_login", "Beta")}</span>}
+              </div>
             </div>
-            <div className="App-header-menu">
-              <VelthydingMenu
-                toggleLanguage={toggleLanguage}
-                toggleEEAModel={toggleEEAModel}
-                modelName={modelName}
-                logoutUser={logoutUser}
-                loggedin={loggedin}
-                lng={lng}
-              />
-              {!SHOW_LOGIN && <span>{t("fallback_login", "Beta")}</span>}
-            </div>
-          </div>
-        </header>
-        <div className="App-body">
-          <ErrorBoundary>
+          </header>
+          <div className="App-body">
             <Switch>
               <Route path="/login">
                 {loggedin ? <Redirect to="/home" /> : <Login />}
@@ -146,45 +160,45 @@ function App() {
                 <Translate modelName={modelName} />
               </Route>
             </Switch>
-          </ErrorBoundary>
-        </div>
-
-        <div className="App-body disclaimer">
-          <Message info size="big">
-            <Message.Header>
-              {t("disclaimer-header", "About Vélþýðing.is")}
-            </Message.Header>
-            <p>
-              {t(
-                "disclaimer-content",
-                "This website is under active development. No responsibility is taken for the quality of translations. All translations are made using a neural network and the output can be unpredictable and biased."
-              )}
-            </p>
-            <p>
-              {t(
-                "disclaimer-cookie",
-                "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes."
-              )}
-            </p>
-            <p>{t("disclaimer-last-updated", "Last updated: ")} 2021-10-15</p>
-          </Message>
-        </div>
-        {SHOW_BRANDING && (
-          <div className="Footer">
-            <div className="Footer-logo">
-              <a href="https://mideind.is">
-                <img alt="logo" src={mideindLogo} width="67" height="76" />
-              </a>
-              <p>Miðeind ehf., kt. 591213-1480</p>
-              <p>Fiskislóð 31, rými B/303, 101 Reykjavík</p>
-              <p>
-                <a href="mailto:mideind@mideind.is">mideind@mideind.is</a>
-              </p>
-            </div>
           </div>
-        )}
-      </div>
-    </Router>
+
+          <div className="App-body disclaimer">
+            <Message info size="big">
+              <Message.Header>
+                {t("disclaimer-header", "About Vélþýðing.is")}
+              </Message.Header>
+              <p>
+                {t(
+                  "disclaimer-content",
+                  "This website is under active development. No responsibility is taken for the quality of translations. All translations are made using a neural network and the output can be unpredictable and biased."
+                )}
+              </p>
+              <p>
+                {t(
+                  "disclaimer-cookie",
+                  "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes."
+                )}
+              </p>
+              <p>{t("disclaimer-last-updated", "Last updated: ")} 2021-10-15</p>
+            </Message>
+          </div>
+          {SHOW_BRANDING && (
+            <div className="Footer">
+              <div className="Footer-logo">
+                <a href="https://mideind.is">
+                  <img alt="logo" src={mideindLogo} width="67" height="76" />
+                </a>
+                <p>Miðeind ehf., kt. 591213-1480</p>
+                <p>Fiskislóð 31, rými B/303, 101 Reykjavík</p>
+                <p>
+                  <a href="mailto:mideind@mideind.is">mideind@mideind.is</a>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </Router>
+    </Sentry.ErrorBoundary>
   );
 }
 
