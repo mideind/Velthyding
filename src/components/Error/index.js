@@ -30,38 +30,5 @@ function InformationModal({ header, message, onDismiss }) {
     </Modal>
   );
 }
-
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
-    console.log(error);
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    const errorMsg = `Encountered an error: ${error}. errorInfo: ${errorInfo}`;
-    // TODO: send error to sentry.
-    console.log(errorMsg);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      // Fallback UI.
-      return (
-        <div className="App-body">
-          <h2>Oops!</h2>
-          <p>Something, somewhere went terribly wrong.</p>
-          <p>Please reload the page.</p>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
-export { InformationModal, ErrorBoundary };
+// eslint-disable-next-line import/prefer-default-export
+export { InformationModal };

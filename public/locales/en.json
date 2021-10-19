@@ -37,5 +37,9 @@
   "disclaimer-cookie": "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes.",
   "disclaimer-last-updated": "Last updated: ",
   "Evaluation": "Evaluation",
-  "Home": "Home"
+  "Home": "Home",
+  "Oops!": "Oops!",
+  "Something, somewhere went terribly wrong.": "Something, somewhere went terribly wrong.",
+  "Please reload the page.": "Please reload the page.",
+  "Reload": "Reload"
 }

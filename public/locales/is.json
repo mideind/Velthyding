@@ -37,5 +37,9 @@
   "disclaimer-cookie": "Með því að nota þessa þjónustu samþykkir þú notkun smygilda. Þýðingar kunna að vera skráðar í þágu vöruþróunar.",
   "disclaimer-last-updated": "Síðast uppfært: ",
   "Evaluation": "Meta",
-  "Home": "Heima"
+  "Home": "Heima",
+  "Oops!": "Æ-æ!",
+  "Something, somewhere went terribly wrong.": "Það fór eitthvað svakalegt úrskeiðis.",
+  "Please reload the page.": "Prófaðu að endurhlaða síðunni",
+  "Reload": "Endurhlaða"
 }
