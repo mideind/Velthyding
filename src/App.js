@@ -29,13 +29,14 @@ const DEFAULT_MODEL = "mbart25-cont";
 
 // eslint-disable-next-line no-unused-vars
 function FallbackComponent({ error, componentStack, resetError }) {
+  const { t } = useTranslation();
   return (
     <div className="App-body">
-      <h2>Oops!</h2>
-      <p>Something, somewhere went terribly wrong.</p>
-      <p>Please reload the page.</p>
+      <h2>{t("Oops!")}</h2>
+      <p>{t("Something, somewhere went terribly wrong.")}</p>
+      <p>{t("Please reload the page.")}</p>
       <button type="button" onClick={resetError}>
-        Reload
+        {t("Reload")}
       </button>
     </div>
   );
