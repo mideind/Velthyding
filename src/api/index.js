@@ -7,6 +7,7 @@ import { store } from "store";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.withCredentials = true;
+axios.defaults.timeout = 30000; // 30sec default timeout
 
 const cookies = new Cookies();
 
