@@ -1,0 +1,8 @@
+.SliderRating{
+    text-align: right;
+}
+
+.SliderRatingSubtext{
+    display: flex;
+    justify-content: space-between;
+}
