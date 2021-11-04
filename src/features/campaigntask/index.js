@@ -1,6 +1,7 @@
+import "./index.css";
 import { answerTask, getCampaignProgress, getTask } from "api/reviews";
 import { InformationModal } from "components/Error";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import {
   Button,
@@ -96,15 +97,18 @@ function ComparisonTask({
   progress,
   onSubmit,
 }) {
-  function sendAnswer(value) {
+  const [rating, setRating] = useState(300);
+
+  const sendAnswer = () => {
     const answerData = {
       option_1: targets[0][ID_IDX],
       option_2: targets[1][ID_IDX],
-      preference_id: targets[value][ID_IDX],
+      review_value: rating / 100,
       mode,
     };
+    setRating(300);
     onSubmit(answerData);
-  }
+  };
 
   return (
     <TaskWrapper
@@ -129,19 +133,38 @@ function ComparisonTask({
               </Segment>
             </Grid.Column>
           </Grid.Row>
+        </Grid>
+        <Grid>
           <Grid.Row stretched>
             <Grid.Column>
-              <Button
-                size="medium"
-                onClick={() => sendAnswer(0)}
-                fluid
-                color="blue"
-              >
-                Select
-              </Button>
+              <div className="SliderRating">
+                <input
+                  type="range"
+                  min={100}
+                  max={500}
+                  value={rating}
+                  style={{ width: "100%" }}
+                  list="tickmarks"
+                  onChange={(e) => setRating(e.target.value)}
+                />
+                <datalist id="tickmarks">
+                  <option>100</option>
+                  <option>200</option>
+                  <option>300</option>
+                  <option>400</option>
+                  <option>500</option>
+                </datalist>
+              </div>
+              <div className="SliderRatingSubtext">
+                <div>Left translation better</div>
+                <div>Both translations equal</div>
+                <div>Right translation better</div>
+              </div>
             </Grid.Column>
-            <Grid.Column verticalAlign="middle">
-              <Button onClick={() => sendAnswer(1)} fluid color="blue">
+          </Grid.Row>
+          <Grid.Row stretched>
+            <Grid.Column>
+              <Button size="medium" onClick={sendAnswer} fluid color="blue">
                 Select
               </Button>
             </Grid.Column>
@@ -160,7 +183,6 @@ function RatingTask({
   description,
   tasksLeft,
   progress,
-  maxStars,
 }) {
   const [rating, setRating] = useState(0);
   const targetId = targets[0][ID_IDX];
@@ -169,7 +191,7 @@ function RatingTask({
   function sendAnswer(value) {
     const answerData = {
       target_id: targetId,
-      review_value: value,
+      review_value: value / 100,
       mode,
     };
     onSubmit(answerData);
@@ -186,7 +208,7 @@ function RatingTask({
         <Segment padded size="large">
           <Grid verticalAlign="middle" columns={2}>
             <Grid.Row key={1}>
-              <Grid.Column width={10}>
+              <Grid.Column width={7}>
                 {mode === "adequacy" && (
                   <List>
                     <List.Item>5. All meaning</List.Item>
@@ -214,24 +236,32 @@ function RatingTask({
                       2. Poor, serious errors in the translation
                     </List.Item>
                     <List.Item>
-                      1. Very poor, doesn`&apos;`t reflect the source text at
-                      all
+                      1. Very poor, doesn&#39;t reflect the source text at all
                     </List.Item>
                   </List>
                 )}
               </Grid.Column>
-              <Grid.Column width={6}>
+              <Grid.Column width={9}>
                 <br />
-                <br />
-                <Rating
-                  rating={rating}
-                  // eslint-disable-next-line no-shadow
-                  onRate={(_e, { rating }) => setRating(rating)}
-                  maxRating={maxStars}
-                  icon="star"
-                  size="massive"
-                />{" "}
-                {rating} / {maxStars}
+                <div className="SliderRating">
+                  <input
+                    type="range"
+                    min={100}
+                    max={500}
+                    value={rating}
+                    style={{ width: "100%" }}
+                    list="tickmarks"
+                    onChange={(e) => setRating(e.target.value)}
+                  />
+                  <datalist id="tickmarks">
+                    <option>100</option>
+                    <option>200</option>
+                    <option>300</option>
+                    <option>400</option>
+                    <option>500</option>
+                  </datalist>
+                  {rating / 100} / 5
+                </div>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -347,7 +377,6 @@ function FluencyTask({ mode, source, tasksLeft, progress, targets, onSubmit }) {
         tasksLeft,
         progress,
         onSubmit,
-        maxStars: 5,
       }}
     />
   );
@@ -371,7 +400,6 @@ function AdequacyTask({
         tasksLeft,
         progress,
         onSubmit,
-        maxStars: 5,
       }}
     />
   );
@@ -395,7 +423,6 @@ function DirectAssessmentTask({
         tasksLeft,
         progress,
         onSubmit,
-        maxStars: 5,
       }}
     />
   );
@@ -464,6 +491,7 @@ function CampaignTask() {
     // eslint-disable-next-line no-return-assign
     return () => (isCancelled = true);
   }, [id, mode, tasksDone]);
+
   useEffect(() => {
     getCampaignProgress(id).then((response) => {
       setTasksTotal(response.data[mode].total);
@@ -478,19 +506,17 @@ function CampaignTask() {
   if (task === null) {
     return <></>;
   }
-  const answer = useCallback(
-    (answerData) => {
-      answerTask(id, answerData)
-        .then(() => {
-          setTasksDone(tasksDone + task.target_count);
-        })
-        .catch((err) => {
-          setError(true);
-          console.log(err);
-        });
-    },
-    [id, tasksDone, task]
-  );
+
+  const answer = (answerData) => {
+    answerTask(id, answerData)
+      .then(() => {
+        setTasksDone(tasksDone + task.target_count);
+      })
+      .catch((err) => {
+        setError(true);
+        console.log(err);
+      });
+  };
 
   if (error) {
     return (
