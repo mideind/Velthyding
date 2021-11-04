@@ -99,7 +99,7 @@ function ComparisonTask({
 }) {
   const [rating, setRating] = useState(300);
 
-  function sendAnswer() {
+  const sendAnswer = () => {
     const answerData = {
       option_1: targets[0][ID_IDX],
       option_2: targets[1][ID_IDX],
@@ -108,7 +108,7 @@ function ComparisonTask({
     };
     setRating(300);
     onSubmit(answerData);
-  }
+  };
 
   return (
     <TaskWrapper
@@ -164,12 +164,7 @@ function ComparisonTask({
           </Grid.Row>
           <Grid.Row stretched>
             <Grid.Column>
-              <Button
-                size="medium"
-                onClick={() => sendAnswer()}
-                fluid
-                color="blue"
-              >
+              <Button size="medium" onClick={sendAnswer} fluid color="blue">
                 Select
               </Button>
             </Grid.Column>
@@ -188,7 +183,6 @@ function RatingTask({
   description,
   tasksLeft,
   progress,
-  maxStars,
 }) {
   const [rating, setRating] = useState(0);
   const targetId = targets[0][ID_IDX];
@@ -266,7 +260,7 @@ function RatingTask({
                     <option>400</option>
                     <option>500</option>
                   </datalist>
-                  {rating / 100} / {maxStars}
+                  {rating / 100} / 5
                 </div>
               </Grid.Column>
             </Grid.Row>
@@ -383,7 +377,6 @@ function FluencyTask({ mode, source, tasksLeft, progress, targets, onSubmit }) {
         tasksLeft,
         progress,
         onSubmit,
-        maxStars: 5,
       }}
     />
   );
@@ -407,7 +400,6 @@ function AdequacyTask({
         tasksLeft,
         progress,
         onSubmit,
-        maxStars: 5,
       }}
     />
   );
@@ -431,7 +423,6 @@ function DirectAssessmentTask({
         tasksLeft,
         progress,
         onSubmit,
-        maxStars: 5,
       }}
     />
   );
