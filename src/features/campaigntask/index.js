@@ -1,4 +1,3 @@
-import "./index.css";
 import { answerTask, getCampaignProgress, getTask } from "api/reviews";
 import { InformationModal } from "components/Error";
 import React, { useEffect, useState } from "react";
@@ -14,6 +13,7 @@ import {
   Rating,
   Segment,
 } from "semantic-ui-react";
+import "./index.css";
 
 const TASK_DESCRIPTIONS = {
   comparison: {
@@ -476,8 +476,10 @@ function CampaignTask() {
               (total, elem) => total + elem[0].length,
               sum
             );
+          } else if (response.data.mode === "comparison") {
+            sum = 1;
           } else {
-            sum = response.data.targets.length; // general case + comparison
+            sum = response.data.targets.length; // general case
           }
           setTask({
             mode: response.data.mode,
