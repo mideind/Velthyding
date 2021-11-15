@@ -97,16 +97,16 @@ function ComparisonTask({
   progress,
   onSubmit,
 }) {
-  const [rating, setRating] = useState(300);
+  const [rating, setRating] = useState(30);
 
   const sendAnswer = () => {
     const answerData = {
       option_1: targets[0][ID_IDX],
       option_2: targets[1][ID_IDX],
-      review_value: rating / 100,
+      review_value: rating / 10,
       mode,
     };
-    setRating(300);
+    setRating(30);
     onSubmit(answerData);
   };
 
@@ -139,20 +139,21 @@ function ComparisonTask({
             <Grid.Column>
               <div className="SliderRating">
                 <input
+                  className="slider"
                   type="range"
-                  min={100}
-                  max={500}
+                  min={10}
+                  max={50}
                   value={rating}
                   style={{ width: "100%" }}
                   list="tickmarks"
                   onChange={(e) => setRating(e.target.value)}
                 />
                 <datalist id="tickmarks">
-                  <option>100</option>
-                  <option>200</option>
-                  <option>300</option>
-                  <option>400</option>
-                  <option>500</option>
+                  <option>10</option>
+                  <option>20</option>
+                  <option>30</option>
+                  <option>40</option>
+                  <option>50</option>
                 </datalist>
               </div>
               <div className="SliderRatingSubtext">
@@ -165,7 +166,7 @@ function ComparisonTask({
           <Grid.Row stretched>
             <Grid.Column>
               <Button size="medium" onClick={sendAnswer} fluid color="blue">
-                Select
+                Submit
               </Button>
             </Grid.Column>
           </Grid.Row>
