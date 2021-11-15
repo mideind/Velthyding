@@ -24,6 +24,7 @@ module.exports = {
     "react/destructuring-assignment": [0],
     "no-console": [0],
     "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }]
   },
   settings: {
     "import/resolver": {
