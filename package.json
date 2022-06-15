@@ -3,41 +3,36 @@
   "version": "0.4.6",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^6.3.0",
     "@reduxjs/toolkit": "^1.6.2",
-    "@semantic-ui-react/craco-less": "^1.2.3",
-    "@sentry/react": "^6.13.3",
-    "@sentry/tracing": "^6.13.3",
-    "axios": "^0.22.0",
+    "@sentry/react": "^7.1.1",
+    "@sentry/tracing": "^7.1.1",
+    "axios": "^0.27.2",
     "emotion": "^11.0.0",
     "i18next": "^21.3.0",
     "i18next-http-backend": "^1.3.1",
     "mammoth": "^1.4.18",
     "moment": "^2.29.2",
     "query-string": "^7.0.1",
-    "react": "^17.0.2",
+    "react": "^18.1.0",
     "react-cookie": "^4.1.1",
-    "react-dom": "^17.0.2",
-    "react-dropzone": "^11.4.2",
+    "react-dom": "^18.1.0",
+    "react-dropzone": "^14.2.1",
     "react-i18next": "^11.12.0",
-    "react-redux": "^7.2.5",
-    "react-router-dom": "^5.3.0",
-    "react-scripts": "^4.0.3",
-    "react-spinners": "^0.11.0",
+    "react-redux": "^8.0.2",
+    "react-router-dom": "^6.3.0",
+    "react-spinners": "^0.12.0",
     "react-use-cookie": "^1.2.1",
     "redux-logger": "^3.0.6",
     "semantic-ui-less": "^2.4.1",
     "semantic-ui-react": "^2.0.4",
-    "slate": "^0.66.5",
-    "slate-react": "^0.66.7",
-    "yarn": "^1.22.15"
+    "slate": "^0.81.0",
+    "slate-react": "^0.81.0"
   },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject",
-    "build-greynir": "react-scripts build && cp -v build/static/js/main.*.js ../static/build/js/main.js && cp -v build/static/js/2.*.js ../static/build/js/2.js && cp -v build/static/css/main.*.css ../static/build/css/main.css"
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [
@@ -57,15 +52,22 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb": "^18.2.1",
+    "@babel/core": "^7.18.5",
+    "@babel/eslint-parser": "^7.18.2",
+    "@babel/plugin-syntax-flow": "^7.17.12",
+    "@babel/plugin-transform-react-jsx": "^7.17.12",
+    "@craco/craco": "6.4.3",
+    "@semantic-ui-react/craco-less": "1.2.3",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
-    "eslint-plugin-react-hooks": "^1.7.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
     "prettier": "^2.4.1",
-    "renamer": "^4.0.0"
+    "react-scripts": "^4.0.3",
+    "renamer": "^4.0.0",
+    "yarn": "^1.22.19"
   }
 }
