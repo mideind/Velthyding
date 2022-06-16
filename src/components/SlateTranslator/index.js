@@ -13,31 +13,37 @@ import { Editable, Slate, withReact } from "slate-react";
 //     type: "paragraph",
 //   }));
 
-const SentenceElement = (props) => (
-  <span
-    style={{ backgroundColor: "yellow", marginRight: "20px" }}
-    {...props.attributes}
-  >
-    {props.children}
-  </span>
-);
+function SentenceElement(props) {
+  return (
+    <span
+      style={{ backgroundColor: "yellow", marginRight: "20px" }}
+      {...props.attributes}
+    >
+      {props.children}
+    </span>
+  );
+}
 
-const DefaultElement = (props) => <p {...props.attributes}>{props.children}</p>;
+function DefaultElement(props) {
+  return <p {...props.attributes}>{props.children}</p>;
+}
 
-const Leaf = (props) => (
-  // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-  <span
-    onMouseOver={() => props.setHoverId(props.leaf.uId)}
-    {...props.attributes}
-    style={{
-      marginRight: "5px",
-      backgroundColor:
-        props.hoverId && props.leaf.uId === props.hoverId ? "azure" : "white",
-    }}
-  >
-    {props.children}
-  </span>
-);
+function Leaf(props) {
+  return (
+    // eslint-disable-next-line
+    <span
+      onMouseOver={() => props.setHoverId(props.leaf.uId)}
+      {...props.attributes}
+      style={{
+        marginRight: "5px",
+        backgroundColor:
+          props.hoverId && props.leaf.uId === props.hoverId ? "azure" : "white",
+      }}
+    >
+      {props.children}
+    </span>
+  );
+}
 
 const flipTextAndTranslation = (text) =>
   text.map((pg) => ({
@@ -68,7 +74,7 @@ const withBreak = (editor) => {
   return editor;
 };
 
-const SlateTranslator = (props) => {
+function SlateTranslator(props) {
   const { t } = useTranslation();
 
   const editor = useMemo(() => withBreak(withReact(createEditor())), []);
@@ -123,6 +129,6 @@ const SlateTranslator = (props) => {
       </Slate>
     </div>
   );
-};
+}
 
 export default SlateTranslator;

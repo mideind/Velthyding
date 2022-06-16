@@ -507,6 +507,7 @@ function CampaignTask() {
   }
 
   if (task === null) {
+    // eslint-disable-next-line
     return <></>;
   }
 

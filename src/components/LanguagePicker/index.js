@@ -26,7 +26,7 @@ function LanguagePicker(props) {
   );
 }
 
-const LanguageDirectionPicker = () => {
+function LanguageDirectionPicker() {
   const { t } = useTranslation();
   const { sourceLang, targetLang } = useSelector((state) => state.translation);
   const [tgtLanguageOptions, setTgtLanuageOptions] = useState([]);
@@ -102,6 +102,6 @@ const LanguageDirectionPicker = () => {
       </div>
     </div>
   );
-};
+}
 
 export default LanguageDirectionPicker;

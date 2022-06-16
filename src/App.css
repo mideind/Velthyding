@@ -18,7 +18,7 @@ body {
   color: white;
 }
 
-.App-header-menu{
+.App-header-menu {
   font-size: 16px;
   display: flex;
   justify-content: space-between;
@@ -28,112 +28,112 @@ body {
   text-align: right;
 }
 
-.App-header-content{
+.App-header-content {
   width: 800px;
   margin: auto;
-  color:#8b8b93;
+  color: #8b8b93;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-@media(max-width: 800px) {
-  .App-header-content{
+@media (max-width: 800px) {
+  .App-header-content {
     width: calc(100% - 80px);
   }
 }
 
-@media(min-width: 1024px) {
-  .App-header-content{
+@media (min-width: 1024px) {
+  .App-header-content {
     width: 1000px; /* Matches .App-body below */
   }
 }
 
-.App-header a{
+.App-header a {
   text-decoration: none;
   color: #444;
 }
 
-.App-content{
+.App-content {
   max-width: 800px;
   margin: 0 auto;
 }
 
-.App-body{
+.App-body {
   max-width: 800px;
   margin: 0 auto;
   margin-top: 25px;
   position: relative;
 }
 
-.App-body.disclaimer{
+.App-body.disclaimer {
   font-size: 0.7em;
 }
 
-@media(max-width: 800px) {
-  .App-body{
+@media (max-width: 800px) {
+  .App-body {
     max-width: calc(100% - 60px);
     margin-top: 30px;
   }
-  .ui.selection.dropdown{
+  .ui.selection.dropdown {
     min-width: 13em !important;
   }
 }
 
-@media(min-width: 1024px) {
-  .App-body{
+@media (min-width: 1024px) {
+  .App-body {
     max-width: 1000px; /* Matches .App-header-content above */
   }
 }
 
-.Translate-main{
+.Translate-main {
   display: flex;
   justify-content: space-between;
 }
 
-.Translate-footer{
+.Translate-footer {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
 }
-@media(max-width: 800px) {
-  .Translate-engines{
+@media (max-width: 800px) {
+  .Translate-engines {
     margin-top: 70px;
   }
 }
 
-.TranslateBox{
+.TranslateBox {
   width: 350px;
 }
 
-.TranslateBox-header{
+.TranslateBox-header {
   text-align: left;
   margin-bottom: 20px;
 }
 
-.TranslateBox-area{
+.TranslateBox-area {
   width: 350px;
   height: 300px;
   margin-top: 12px;
   padding: 12px;
 }
 
-.TranslateBox-area-trans{
+.TranslateBox-area-trans {
   width: 350px;
   padding: 12px;
   margin-bottom: 20px;
   font-size: 0.5em;
 }
 
-.TranslateBox-area-trans-sent{
+.TranslateBox-area-trans-sent {
   margin-bottom: 10px;
 }
 
-.TranslateBox-area-blurb-header{
+.TranslateBox-area-blurb-header {
   font-size: 0.5em;
 }
 
-.TranslateBox-submit{
+.TranslateBox-submit {
   background: #006eff;
   color: white;
   font-weight: 600;
@@ -154,28 +154,27 @@ body {
   z-index: 100;
 }
 
-@media(max-width: 800px) {
-  .TranslateBox-upload{
+@media (max-width: 800px) {
+  .TranslateBox-upload {
     left: 0;
   }
 }
 
-
-.Checkbox{
+.Checkbox {
   font-size: 14px;
   margin-bottom: 10px;
 }
 
-.PairPicker{
+.PairPicker {
   font-size: 14px;
   display: flex;
   width: 120px;
   justify-content: space-between;
 }
 
-.Footer{
+.Footer {
   margin-top: 100px;
-  font-size: .8rem;
+  font-size: 0.8rem;
   display: flex;
   justify-content: center;
   margin-bottom: 50px;
@@ -184,23 +183,22 @@ body {
   line-height: 1.8rem;
 }
 
-.Footer p{
-   text-align: center;
+.Footer p {
+  text-align: center;
   font-weight: 300;
   line-height: 1.4rem;
-
 }
 
-.Footer a{
+.Footer a {
   color: #333333;
   text-decoration: underline;
 }
 
-.Translate-loader{
+.Translate-loader {
   position: absolute;
   right: 0;
 }
 
-.ui.progress:last-child{
+.ui.progress:last-child {
   margin: 0 !important;
 }

@@ -23,6 +23,7 @@ function App() {
     window.navigator.language.includes("is") ? "is" : "en"
   );
 
+  // eslint-disable-next-line
   const { _t, i18n } = useTranslation();
   useEffect(() => {
     const setLanguage = (lang) => {

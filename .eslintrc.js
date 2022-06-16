@@ -3,7 +3,11 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  extends: ["plugin:react/recommended", "airbnb", "prettier"],
+  extends: [
+    "plugin:react/recommended",
+    "airbnb",
+    "plugin:prettier/recommended",
+  ],
   globals: {
     Atomics: "readonly",
     SharedArrayBuffer: "readonly",
@@ -24,7 +28,7 @@ module.exports = {
     "react/destructuring-assignment": [0],
     "no-console": [0],
     "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-    "import/no-extraneous-dependencies": ["error", { devDependencies: true }]
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
   },
   settings: {
     "import/resolver": {

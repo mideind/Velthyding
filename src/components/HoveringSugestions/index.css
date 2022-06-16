@@ -1,18 +1,16 @@
-.HoveringList{
-
+.HoveringList {
 }
 
-.HoveringList-head{
-     
+.HoveringList-head {
 }
 
-.HoveringList-item{
-    border-top: 1px solid;
-    padding: 5px;
-    width: 100%;
+.HoveringList-item {
+  border-top: 1px solid;
+  padding: 5px;
+  width: 100%;
 }
 
-.HoveringList-item:hover{
-    background: azure;
-    cursor: pointer;
+.HoveringList-item:hover {
+  background: azure;
+  cursor: pointer;
 }
