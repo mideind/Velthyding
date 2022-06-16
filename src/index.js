@@ -9,7 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "store";
 import App from "./App";
-import "./i18n";
+import "./features/i18n";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 

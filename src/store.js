@@ -1,4 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { languageSettingReducer } from "features/i18n/languageSettingSlice";
 import { loginReducer } from "features/login/loginSlice";
 import { translateReducer } from "features/translate/translateSlice";
 import logger from "redux-logger";
@@ -17,6 +18,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 const rootReducer = combineReducers({
   login: loginReducer,
   translation: translateReducer,
+  language: languageSettingReducer,
 });
 
 // eslint-disable-next-line import/prefer-default-export

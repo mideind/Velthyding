@@ -2,6 +2,7 @@ import axios from "axios";
 import BASE_BACKEND_URL from "config";
 import { login, logout } from "features/login/loginSlice";
 import { Cookies } from "react-cookie";
+import { useDispatch } from "react-redux";
 import { store } from "store";
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -98,7 +99,8 @@ export async function registerUser(email, password) {
 export async function logoutUser() {
   const ac = apiClient();
   const response = await ac.post("core/logout/");
-  store.dispatch(logout());
+  const dispatch = useDispatch();
+  dispatch(logout());
   cookies.remove(axios.defaults.xsrfCookieName, { path: "/" });
   return response;
 }

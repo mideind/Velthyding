@@ -5,38 +5,33 @@ import Header from "components/Header";
 import Campaigns from "features/campaigns";
 import CampaignTask from "features/campaigntask";
 import Home from "features/home";
+import { changeLanguage } from "features/i18n/languageSettingSlice";
 import Login from "features/login";
 import Register from "features/register";
 import Translate from "features/translate";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import useCookie from "react-use-cookie";
 import "semantic-ui-less/semantic.less";
 import "./App.css";
 
 function App() {
+  const dispatch = useDispatch();
   const { loggedin } = useSelector((state) => state.login);
-  const [lng, setLng] = useCookie(
-    "lang",
-    window.navigator.language.includes("is") ? "is" : "en"
-  );
+  const { lang } = useSelector((state) => state.language);
 
   // eslint-disable-next-line
   const { _t, i18n } = useTranslation();
   useEffect(() => {
-    const setLanguage = (lang) => {
-      i18n.changeLanguage(lang);
-    };
-    setLanguage(lng);
-  }, [lng, i18n]);
+    i18n.changeLanguage(lang);
+  }, [lang, i18n]);
 
   const toggleLanguage = () => {
-    if (lng === "is") {
-      setLng("en");
+    if (lang === "is") {
+      dispatch(changeLanguage("en"));
     } else {
-      setLng("is");
+      dispatch(changeLanguage("is"));
     }
   };
 
@@ -50,7 +45,7 @@ function App() {
         toggleLanguage={toggleLanguage}
         logoutUser={logoutUser}
         loggedin={loggedin}
-        lng={lng}
+        lng={lang}
       />
       <div className="App-body">
         <Routes>
