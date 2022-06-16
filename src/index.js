@@ -6,7 +6,8 @@ import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { store } from "store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor, store } from "store";
 import App from "./App";
 import "./i18n";
 
@@ -48,15 +49,17 @@ const root = createRoot(container);
 
 root.render(
   <Provider store={store}>
-    <Suspense fallback={null}>
-      <React.StrictMode>
-        <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </Sentry.ErrorBoundary>
-      </React.StrictMode>
-    </Suspense>
+    <PersistGate loading={null} persistor={persistor}>
+      <Suspense fallback={null}>
+        <React.StrictMode>
+          <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </Sentry.ErrorBoundary>
+        </React.StrictMode>
+      </Suspense>
+    </PersistGate>
   </Provider>
 );
 
