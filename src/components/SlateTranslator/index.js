@@ -3,6 +3,7 @@ import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { createEditor, Transforms } from "slate";
 import { Editable, Slate, withReact } from "slate-react";
+import "./index.css";
 
 // Define a deserializing function that takes a string and returns a value.
 // Do we still need this?
