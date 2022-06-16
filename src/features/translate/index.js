@@ -5,7 +5,7 @@ import {
 import "App.css";
 import { InformationModal } from "components/Error";
 import Translator from "components/Translator";
-import mammoth from "mammoth";
+import mammoth from "mammoth/mammoth.browser";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";

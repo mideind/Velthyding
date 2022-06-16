@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_BACKEND_URL } from "config";
+import BASE_BACKEND_URL from "config";
 import { login, logout } from "features/login/loginSlice";
 import { Cookies } from "react-cookie";
 import { store } from "store";

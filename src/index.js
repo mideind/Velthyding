@@ -2,12 +2,13 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import { checkCookie } from "api";
 import React, { Suspense } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
+import { useTranslation } from "react-i18next";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 import { store } from "store";
 import App from "./App";
 import "./i18n";
-import * as serviceWorker from "./serviceWorker";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -17,7 +18,7 @@ Sentry.init({
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
+  tracesSampleRate: 0.6,
   environment: process.env.NODE_ENV,
   release: `velthyding@${process.env.npm_package_version}`,
   beforeSend: (event) => {
@@ -28,17 +29,38 @@ Sentry.init({
   },
 });
 checkCookie();
+function FallbackComponent({ _error, _componentStack, resetError }) {
+  const { t } = useTranslation();
+  return (
+    <div className="App-body">
+      <h2>{t("Oops!")}</h2>
+      <p>{t("Something, somewhere went terribly wrong.")}</p>
+      <p>{t("Please reload the page.")}</p>
+      <button type="button" onClick={resetError}>
+        {t("Reload")}
+      </button>
+    </div>
+  );
+}
 
-ReactDOM.render(
+const container = document.getElementById("root");
+const root = createRoot(container);
+
+root.render(
   <Provider store={store}>
     <Suspense fallback={null}>
-      <App />
+      <React.StrictMode>
+        <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </Sentry.ErrorBoundary>
+      </React.StrictMode>
     </Suspense>
-  </Provider>,
-  document.getElementById("root")
+  </Provider>
 );
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// serviceWorker.unregister();

@@ -1,6 +1,7 @@
-import * as Sentry from "@sentry/react";
 import { checkUserAndCookie, logoutUser } from "api";
-import { SHOW_BRANDING, SHOW_LOGIN } from "config";
+import Disclaimer from "components/Disclaimer";
+import Footer from "components/Footer";
+import Header from "components/Header";
 import Campaigns from "features/campaigns";
 import CampaignTask from "features/campaigntask";
 import Home from "features/home";
@@ -10,67 +11,10 @@ import Translate from "features/translate";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import {
-  BrowserRouter as Router,
-  Link,
-  Redirect,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import "semantic-ui-less/semantic.less";
-import { Dropdown, Message } from "semantic-ui-react";
 import "./App.css";
-import mideindLogo from "./mideind.svg";
-import logo from "./velthyding_hor.png";
-
-const EEA_MODEL = "mbart25-cont-ees";
-const DEFAULT_MODEL = "mbart25-cont";
-
-// eslint-disable-next-line no-unused-vars
-function FallbackComponent({ error, componentStack, resetError }) {
-  const { t } = useTranslation();
-  return (
-    <div className="App-body">
-      <h2>{t("Oops!")}</h2>
-      <p>{t("Something, somewhere went terribly wrong.")}</p>
-      <p>{t("Please reload the page.")}</p>
-      <button type="button" onClick={resetError}>
-        {t("Reload")}
-      </button>
-    </div>
-  );
-}
-
-function VelthydingMenu(props) {
-  const { t } = useTranslation();
-  return (
-    <Dropdown item icon="cog" floating direction="left">
-      <Dropdown.Menu>
-        <Dropdown.Item onClick={props.toggleLanguage}>
-          {props.lng === "is" && "English interface"}
-          {props.lng !== "is" && "Íslenskt viðmót"}
-        </Dropdown.Item>
-        <Dropdown.Item onClick={props.toggleEEAModel}>
-          {props.modelName === EEA_MODEL && t("Don't use EEA model")}
-          {props.modelName !== EEA_MODEL && t("Use EEA model")}
-        </Dropdown.Item>
-        <Dropdown.Item text={t("Evaluation")} as={Link} to="/campaigns" />
-        {props.loggedin && (
-          <Dropdown.Item text={t("Home")} as={Link} to="/home" />
-        )}
-        {props.loggedin && (
-          <Dropdown.Item onClick={props.logoutUser} as={Link} to="/">
-            {t("Logout")}
-          </Dropdown.Item>
-        )}
-        {!props.loggedin && (
-          <Dropdown.Item text={t("login_header")} as={Link} to="/login" />
-        )}
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-}
 
 function App() {
   const { loggedin } = useSelector((state) => state.login);
@@ -79,9 +23,7 @@ function App() {
     window.navigator.language.includes("is") ? "is" : "en"
   );
 
-  const [modelName, setModel] = useCookie("chosen-model", "");
-
-  const { t, i18n } = useTranslation();
+  const { _t, i18n } = useTranslation();
   useEffect(() => {
     const setLanguage = (lang) => {
       i18n.changeLanguage(lang);
@@ -97,109 +39,43 @@ function App() {
     }
   };
 
-  const toggleEEAModel = () => {
-    if (modelName !== EEA_MODEL) {
-      setModel(EEA_MODEL);
-    } else {
-      setModel(DEFAULT_MODEL);
-    }
-  };
-
   useEffect(() => {
     checkUserAndCookie();
   }, [loggedin]);
 
   return (
-    <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
-      <Router>
-        <div className="App">
-          <header className="App-header">
-            <div className="App-header-content">
-              <div>
-                <Link to="/">
-                  {SHOW_BRANDING && (
-                    <img alt="logo" src={logo} height="50" width="175" />
-                  )}
-                  {!SHOW_BRANDING && (
-                    <span>
-                      {t("fallback_header", "Icelandic - English Translation")}
-                    </span>
-                  )}
-                </Link>
-              </div>
-              <div className="App-header-menu">
-                <VelthydingMenu
-                  toggleLanguage={toggleLanguage}
-                  toggleEEAModel={toggleEEAModel}
-                  modelName={modelName}
-                  logoutUser={logoutUser}
-                  loggedin={loggedin}
-                  lng={lng}
-                />
-                {!SHOW_LOGIN && <span>{t("fallback_login", "Beta")}</span>}
-              </div>
-            </div>
-          </header>
-          <div className="App-body">
-            <Switch>
-              <Route path="/login">
-                {loggedin ? <Redirect to="/home" /> : <Login />}
-              </Route>
-              <Route path="/home">
-                {!loggedin ? <Redirect to="/login" /> : <Home />}
-              </Route>
-              <Route path="/register">
-                {loggedin ? <Redirect to="/home" /> : <Register />}
-              </Route>
-              <Route exact path="/campaigns">
-                {!loggedin ? <Redirect to="/login" /> : <Campaigns />}
-              </Route>
-              <Route path="/campaigns/:id/:mode">
-                {!loggedin ? <Redirect to="/login" /> : <CampaignTask />}
-              </Route>
-              <Route path="/">
-                <Translate modelName={modelName} />
-              </Route>
-            </Switch>
-          </div>
-
-          <div className="App-body disclaimer">
-            <Message info size="big">
-              <Message.Header>
-                {t("disclaimer-header", "About Vélþýðing.is")}
-              </Message.Header>
-              <p>
-                {t(
-                  "disclaimer-content",
-                  "This website is under active development. No responsibility is taken for the quality of translations. All translations are made using a neural network and the output can be unpredictable and biased."
-                )}
-              </p>
-              <p>
-                {t(
-                  "disclaimer-cookie",
-                  "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes."
-                )}
-              </p>
-              <p>{t("disclaimer-last-updated", "Last updated: ")} 2022-06-13</p>
-            </Message>
-          </div>
-          {SHOW_BRANDING && (
-            <div className="Footer">
-              <div className="Footer-logo">
-                <a href="https://mideind.is">
-                  <img alt="logo" src={mideindLogo} width="67" height="76" />
-                </a>
-                <p>Miðeind ehf., kt. 591213-1480</p>
-                <p>Fiskislóð 31, rými B/303, 101 Reykjavík</p>
-                <p>
-                  <a href="mailto:mideind@mideind.is">mideind@mideind.is</a>
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </Router>
-    </Sentry.ErrorBoundary>
+    <div className="App">
+      <Header
+        toggleLanguage={toggleLanguage}
+        logoutUser={logoutUser}
+        loggedin={loggedin}
+        lng={lng}
+      />
+      <div className="App-body">
+        <Routes>
+          <Route path="/">
+            <Route index element={<Translate />} />
+            <Route path="login" element={<Login />}>
+              {/* {loggedin ? <Redirect to="/home" /> : } */}
+            </Route>
+            <Route path="/home" element={<Home />}>
+              {/* {!loggedin ? <Redirect to="/login" /> : } */}
+            </Route>
+            <Route path="/register" element={<Register />}>
+              {/* {loggedin ? <Redirect to="/home" /> : } */}
+            </Route>
+            <Route exact path="/campaigns" element={<Campaigns />}>
+              {/* {!loggedin ? <Redirect to="/login" /> : } */}
+            </Route>
+            <Route path="/campaigns/:id/:mode" element={<CampaignTask />}>
+              {/* {!loggedin ? <Redirect to="/login" /> : } */}
+            </Route>
+          </Route>
+        </Routes>
+      </div>
+      <Disclaimer />
+      <Footer />
+    </div>
   );
 }
 

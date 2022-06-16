@@ -1,7 +1,7 @@
 import { answerTask, getCampaignProgress, getTask } from "api/reviews";
 import { InformationModal } from "components/Error";
 import React, { useEffect, useState } from "react";
-import { Redirect, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import {
   Button,
   Grid,
@@ -503,7 +503,7 @@ function CampaignTask() {
   }, [id, mode]); // We do not re-render this, just so that we don't spam the server.
 
   if (tasksDone >= tasksTotal) {
-    return <Redirect to="/campaigns" />;
+    return <Navigate to="/campaigns" />;
   }
 
   if (task === null) {
