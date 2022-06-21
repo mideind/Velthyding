@@ -4,10 +4,11 @@ import { login } from "features/login/loginSlice";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
+import { Navigate } from "react-router-dom";
 import { Button, Divider, Form, Header, Icon } from "semantic-ui-react";
 import "./index.css";
 
-function Register() {
+function Register({ loggedin }) {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,6 +17,10 @@ function Register() {
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
+
+  if (loggedin) {
+    return <Navigate to="/home" />;
+  }
   const apiRegister = (pEmail, pPassword) => {
     registerUser(pEmail, pPassword)
       .then(() => dispatch(login(pEmail)))

@@ -2,11 +2,12 @@ import { getTranslations } from "api/translations";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Navigate } from "react-router-dom";
 import { Table } from "semantic-ui-react";
 
 moment().format();
 
-function Home() {
+function Home({ loggedin }) {
   const { t } = useTranslation();
   const [transl, setTransl] = useState([]);
 
@@ -16,6 +17,9 @@ function Home() {
     });
   }, []);
 
+  if (!loggedin) {
+    return <Navigate to="/login" />;
+  }
   return (
     <div className="Home">
       <h3>{t("home_header", "Prior Translations")}</h3>

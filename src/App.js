@@ -1,4 +1,4 @@
-import { checkUserAndCookie, logoutUser } from "api";
+import { checkUser, logoutUser, resetCSRFCookie } from "api";
 import Disclaimer from "components/Disclaimer";
 import Footer from "components/Footer";
 import Header from "components/Header";
@@ -7,6 +7,7 @@ import CampaignTask from "features/campaigntask";
 import Home from "features/home";
 import { changeLanguage } from "features/i18n/languageSettingSlice";
 import Login from "features/login";
+import { login, logout } from "features/login/loginSlice";
 import Register from "features/register";
 import Translate from "features/translate";
 import React, { useEffect } from "react";
@@ -22,7 +23,7 @@ function App() {
   const { lang } = useSelector((state) => state.language);
 
   // eslint-disable-next-line
-  const { _t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   useEffect(() => {
     i18n.changeLanguage(lang);
   }, [lang, i18n]);
@@ -35,15 +36,25 @@ function App() {
     }
   };
 
+  const logoutAction = () => {
+    logoutUser().finally(() => dispatch(logout()));
+  };
+
   useEffect(() => {
-    checkUserAndCookie();
-  }, [loggedin]);
+    resetCSRFCookie().then((_status) => {
+      checkUser().then((email) => {
+        if (email) {
+          dispatch(login(email));
+        }
+      });
+    });
+  }, [dispatch]);
 
   return (
     <div className="App">
       <Header
         toggleLanguage={toggleLanguage}
-        logoutUser={logoutUser}
+        logoutUser={logoutAction}
         loggedin={loggedin}
         lng={lang}
       />
@@ -51,20 +62,11 @@ function App() {
         <Routes>
           <Route path="/">
             <Route index element={<Translate />} />
-            <Route path="login" element={<Login />}>
-              {/* {loggedin ? <Redirect to="/home" /> : } */}
-            </Route>
-            <Route path="/home" element={<Home />}>
-              {/* {!loggedin ? <Redirect to="/login" /> : } */}
-            </Route>
-            <Route path="/register" element={<Register />}>
-              {/* {loggedin ? <Redirect to="/home" /> : } */}
-            </Route>
-            <Route exact path="/campaigns" element={<Campaigns />}>
-              {/* {!loggedin ? <Redirect to="/login" /> : } */}
-            </Route>
-            <Route path="/campaigns/:id/:mode" element={<CampaignTask />}>
-              {/* {!loggedin ? <Redirect to="/login" /> : } */}
+            <Route path="login" element={<Login loggedin={loggedin} />} />
+            <Route path="home" element={<Home loggedin={loggedin} />} />
+            <Route path="register" element={<Register loggedin={loggedin} />} />
+            <Route path="campaigns" element={<Campaigns loggedin={loggedin} />}>
+              <Route path=":id/:mode" element={<CampaignTask />} />
             </Route>
           </Route>
         </Routes>

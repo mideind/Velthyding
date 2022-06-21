@@ -1,6 +1,5 @@
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
-import { checkCookie } from "api";
 import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
@@ -29,7 +28,6 @@ Sentry.init({
     return event;
   },
 });
-checkCookie();
 function FallbackComponent({ _error, _componentStack, resetError }) {
   const { t } = useTranslation();
   return (

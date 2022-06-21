@@ -1,6 +1,6 @@
 import { getCampaignProgress, getCampaigns } from "api/reviews";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import {
   Button,
   Card,
@@ -202,7 +202,10 @@ function CampaignTable() {
   );
 }
 
-function Campaigns() {
+function Campaigns({ loggedin }) {
+  if (!loggedin) {
+    return <Navigate to="/login" />;
+  }
   return (
     <div>
       <CampaignTable />
