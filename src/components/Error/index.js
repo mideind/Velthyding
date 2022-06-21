@@ -9,7 +9,7 @@ function InformationModal({ header, message, onDismiss }) {
     if (onDismiss !== undefined) {
       onDismiss();
     }
-  }, [open]);
+  }, [onDismiss]);
 
   return (
     <Modal
