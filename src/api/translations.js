@@ -48,12 +48,11 @@ export async function getTranslations() {
   return ac.get("core/api/translations/usertranslations/", {});
 }
 
-export async function translate(model, text, sourceLang, targetLang) {
+export async function translate(text, sourceLang, targetLang) {
   if (sourceLang === targetLang) {
     return text;
   }
   const data = {
-    model,
     contents: text.map((pg) => pg.children.map((ch) => ch.text).join("")),
     sourceLanguageCode: sourceLang,
     targetLanguageCode: targetLang,
