@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
@@ -25,14 +25,15 @@
     "redux-persist": "^6.0.0",
     "semantic-ui-less": "^2.4.1",
     "semantic-ui-react": "^2.0.4",
-    "slate": "^0.81.0",
+    "slate": "^0.81.1",
     "slate-react": "^0.81.0"
   },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": [
@@ -68,6 +69,7 @@
     "prettier": "^2.4.1",
     "react-scripts": "^4.0.3",
     "renamer": "^4.0.0",
+    "source-map-explorer": "^2.5.2",
     "yarn": "^1.22.19"
   }
 }
