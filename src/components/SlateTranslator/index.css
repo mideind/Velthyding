@@ -1,5 +1,0 @@
-@supports (-moz-appearance: none) {
-  span[data-slate-leaf="true"] {
-    margin-right: 0px !important;
-  }
-}

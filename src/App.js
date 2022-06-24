@@ -9,8 +9,8 @@ import { changeLanguage } from "features/i18n/languageSettingSlice";
 import Login from "features/login";
 import { login, logout } from "features/login/loginSlice";
 import Register from "features/register";
-import Translate from "features/translate";
-import React, { useEffect } from "react";
+import Translator from "features/translate";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
@@ -41,13 +41,21 @@ function App() {
   };
 
   useEffect(() => {
-    resetCSRFCookie().then((_status) => {
-      checkUser().then((email) => {
-        if (email) {
-          dispatch(login(email));
-        }
+    resetCSRFCookie()
+      .then((_status) => {
+        checkUser()
+          .then((email) => {
+            if (email) {
+              dispatch(login(email));
+            }
+          })
+          .catch((_err) => {
+            dispatch(logout());
+          });
+      })
+      .catch((_err) => {
+        console.log("Unable to reset CSRF cookie");
       });
-    });
   }, [dispatch]);
 
   return (
@@ -61,7 +69,7 @@ function App() {
       <div className="App-body">
         <Routes>
           <Route path="/">
-            <Route index element={<Translate />} />
+            <Route index element={<Translator />} />
             <Route path="login" element={<Login loggedin={loggedin} />} />
             <Route path="home" element={<Home loggedin={loggedin} />} />
             <Route path="register" element={<Register loggedin={loggedin} />} />

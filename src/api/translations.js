@@ -1,5 +1,4 @@
 import { apiClient } from "api";
-import { decodeHTML } from "utils/text";
 
 export async function storeTranslation(
   translationId,
@@ -53,13 +52,15 @@ export async function translate(text, sourceLang, targetLang) {
     return text;
   }
   const data = {
-    contents: text.map((pg) => pg.children.map((ch) => ch.text).join("")),
+    contents: text,
     sourceLanguageCode: sourceLang,
     targetLanguageCode: targetLang,
   };
 
   const ac = apiClient();
-  //   {
+  const response = await ac.post("translate/", data);
+  return response.data;
+  // data = {
   //   "translations": [
   //     {
   //       "translatedText": "feafeafdsa",
@@ -75,14 +76,4 @@ export async function translate(text, sourceLang, targetLang) {
   //   "targetLanguageCode": "is",
   //   "model": "mbart25-cont"
   // }
-  const response = await ac.post("translate/", data);
-  const transl = response.data;
-  const translatedText = transl.translations.map((trans) =>
-    // Why is this decodeHTML here?
-    decodeHTML(trans.translatedText)
-  );
-  const structuredTrans = transl.translations
-    .filter((trans) => trans.translatedTextStructured)
-    .map((trans) => trans.translatedTextStructured);
-  return { text: translatedText, structuredText: structuredTrans };
 }
