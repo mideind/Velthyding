@@ -1,6 +1,6 @@
 import { answerTask, getCampaignProgress, getTask } from "api/reviews";
 import { InformationModal } from "components/Error";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import {
   Button,

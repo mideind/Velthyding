@@ -1,8 +1,8 @@
+import _ from "lodash";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Transforms } from "slate";
 import { Editable, Slate } from "slate-react";
-import _ from "underscore";
 
 /**
  * Useful functions for the SlateEditor.

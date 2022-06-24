@@ -3,7 +3,7 @@ import {
   setTargetLanguage,
   swapLanguages,
 } from "features/translate/translateSlice";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown } from "semantic-ui-react";

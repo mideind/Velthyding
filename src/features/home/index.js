@@ -1,6 +1,6 @@
 import { getTranslations } from "api/translations";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router-dom";
 import { Table } from "semantic-ui-react";

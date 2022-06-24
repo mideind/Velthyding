@@ -1,4 +1,3 @@
-import React from "react";
 import mideindLogo from "../../mideind.svg";
 
 export default function Footer() {

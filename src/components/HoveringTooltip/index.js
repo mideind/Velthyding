@@ -1,11 +1,11 @@
 import { Menu, Portal } from "components/common";
 import { css } from "emotion";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Editor } from "slate";
 import { ReactEditor, useSlate } from "slate-react";
 
 // eslint-disable-next-line import/prefer-default-export
-export const HoveringTooltip = () => {
+export function HoveringTooltip() {
   const ref = useRef();
   const editor = useSlate();
 
@@ -74,4 +74,4 @@ export const HoveringTooltip = () => {
       </Menu>
     </Portal>
   );
-};
+}

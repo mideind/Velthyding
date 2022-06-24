@@ -1,7 +1,7 @@
 import { registerUser } from "api/index";
 import "App.css";
 import { login } from "features/login/loginSlice";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";

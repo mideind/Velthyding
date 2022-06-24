@@ -1,7 +1,7 @@
 import getSuggestions from "actions/suggestions";
 import { Portal } from "components/common";
 import { css } from "emotion";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Transforms } from "slate";
 import { ReactEditor, useSlate } from "slate-react";
@@ -23,12 +23,7 @@ const insertTranslationFromSuggestion = (editor, sug, prefix, setPrefix) => {
   setPrefix([(prefix + sug).trim(), editor.selection.anchor.path]);
 };
 
-const SuggestionButton = ({
-  suggestion,
-  prefix,
-  setPrefix,
-  setSuggestions,
-}) => {
+function SuggestionButton({ suggestion, prefix, setPrefix, setSuggestions }) {
   const editor = useSlate();
 
   return (
@@ -59,10 +54,10 @@ const SuggestionButton = ({
       {suggestion} ...
     </div>
   );
-};
+}
 
 // eslint-disable-next-line import/prefer-default-export
-export const HoveringSuggestion = (props) => {
+export function HoveringSuggestion(props) {
   const ref = useRef();
   const editor = useSlate();
   const [curPrefix, setCurPrefix] = useState("");
@@ -162,4 +157,4 @@ export const HoveringSuggestion = (props) => {
       </div>
     </Portal>
   );
-};
+}
