@@ -8,8 +8,8 @@ import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Button } from "semantic-ui-react";
-import { createEditor } from "slate";
-import { withReact } from "slate-react";
+import { createEditor, Transforms } from "slate";
+import { ReactEditor, withReact } from "slate-react";
 import "./index.css";
 
 function useOnDrop(setText) {
@@ -46,7 +46,6 @@ function useOnDrop(setText) {
 
 export function SlateTranslationEditor({ sourceLang, targetLang }) {
   const { t } = useTranslation();
-  const [hoverId, setHoverId] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [srcEditor] = useState(() => withReact(createEditor()));
@@ -56,10 +55,24 @@ export function SlateTranslationEditor({ sourceLang, targetLang }) {
     const textNodes = SlateEditorFuncs.rawTextToTextNodes(rawText);
     SlateEditorFuncs.AppendTextNodes(srcEditor, textNodes);
   });
+  const onHover = (editor, domElement, propsToSet) => {
+    const path = ReactEditor.findPath(
+      editor,
+      ReactEditor.toSlateNode(editor, domElement)
+    );
+    Transforms.setNodes(editor, propsToSet, { at: path });
+    // Get the other editor
+    const otherEditor = srcEditor === editor ? transEditor : srcEditor;
+    try {
+      // And try to do the same on the other editor.
+      // If it fails, then the other side is probably empty.
+      Transforms.setNodes(otherEditor, propsToSet, { at: path });
+    } catch (e) {
+      // ignore
+    }
+  };
 
   const clearText = () => {
-    // resetSelection();
-    setHoverId(-1);
     SlateEditorFuncs.resetEditor(srcEditor);
     SlateEditorFuncs.resetEditor(transEditor);
   };
@@ -125,8 +138,8 @@ export function SlateTranslationEditor({ sourceLang, targetLang }) {
       )}
     </Button>
   );
-  const handleChange = (newValue) => {
-    return console.log(newValue);
+  const handleChange = (_newValue) => {
+    // return console.log(_newValue);
   };
   // the value provided to the editor is only the initial value! It's only read once.
   // OnChange is called every time the editor is updated, even set position.
@@ -139,19 +152,19 @@ export function SlateTranslationEditor({ sourceLang, targetLang }) {
         <div className="Translator-containers">
           <SlateEditor
             editor={srcEditor}
+            initialValue={SlateEditorFuncs.getInitialTextNodes()}
             isMainInput
-            hoverId={hoverId}
             onClear={clearText}
-            setHoverId={setHoverId}
+            onHover={onHover}
             onCtrlEnter={translate}
             onChange={handleChange}
           />
           <SlateEditor
             editor={transEditor}
+            initialValue={SlateEditorFuncs.getInitialTextNodes()}
             isMainInput={false}
-            hoverId={hoverId}
             onClear={clearText}
-            setHoverId={setHoverId}
+            onHover={onHover}
             onCtrlEnter={translate}
             onChange={handleChange}
           />

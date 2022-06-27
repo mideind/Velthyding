@@ -2,7 +2,7 @@ import _ from "lodash";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Transforms } from "slate";
-import { Editable, Slate } from "slate-react";
+import { Editable, Slate, useSlate } from "slate-react";
 
 /**
  * Useful functions for the SlateEditor.
@@ -15,9 +15,8 @@ export const SlateEditorFuncs = {
 
         children: [
           {
-            id: 0,
-            uId: "0-0",
             text: "",
+            hovering: false,
           },
         ],
       },
@@ -31,9 +30,9 @@ export const SlateEditorFuncs = {
       })
     );
     // And add the initial node again.
-    this.AppendTextNodes(editor, this.getInitialTextNodes());
-    // Maybe we need to manually set the selection at the end.
-    // TODO: Check if this is necessary
+    Transforms.insertNodes(editor, this.getInitialTextNodes(), {
+      at: [0],
+    });
   },
   AppendTextNodes(editor, textNodes) {
     // If we have only the initial node, we remove it and add the others.
@@ -67,26 +66,20 @@ export const SlateEditorFuncs = {
     //     "model": "mbart25-cont"
     //   }
     return {
-      sourceText: translationResponse.translations.map(
-        (paragraph, paragraphIdx) => ({
-          type: "paragraph",
-          children: paragraph.translatedTextStructured.map(
-            (sentence, sentenceIdx) => ({
-              id: sentenceIdx,
-              uId: `${paragraphIdx}-${sentenceIdx}`,
-              text: sentence[ApiStructuredSourceTextIdx],
-            })
-          ),
-        })
-      ),
+      sourceText: translationResponse.translations.map((paragraph, pIdx) => ({
+        type: "paragraph",
+        children: paragraph.translatedTextStructured.map((sentence, sIdx) => ({
+          text: sentence[ApiStructuredSourceTextIdx],
+          dummy: [pIdx, sIdx], // Slate will merge children which have the same props on text values - we prevent this by adding a dummy value
+        })),
+      })),
       translatedText: translationResponse.translations.map(
-        (paragraph, paragraphIdx) => ({
+        (paragraph, pIdx) => ({
           type: "paragraph",
           children: paragraph.translatedTextStructured.map(
-            (sentence, sentenceIdx) => ({
-              id: sentenceIdx,
-              uId: `${paragraphIdx}-${sentenceIdx}`,
+            (sentence, sIdx) => ({
               text: sentence[ApiStructuredTranslatedTextIdx],
+              dummy: [pIdx, sIdx], // Slate will merge children which have the same props on text values - we prevent this by adding a dummy value
             })
           ),
         })
@@ -98,13 +91,11 @@ export const SlateEditorFuncs = {
     text
       .split("\n")
       .filter((pg) => pg !== "")
-      .map((pg, pgIdx) => ({
+      .map((pg) => ({
         type: "paragraph",
         children: [
           {
             text: pg.trim(),
-            id: 0,
-            uId: `${pgIdx}-0`,
           },
         ],
       }));
@@ -130,29 +121,28 @@ function SlateElement(props) {
 }
 
 function HoveringLeaf(props) {
+  const currentEditor = useSlate();
   return (
     // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
     <span
-      onMouseOver={() => props.setHoverId(props.leaf.uId)}
+      onMouseEnter={(event) => {
+        props.onHover(currentEditor, event.target, { hovering: true });
+      }}
+      onMouseLeave={(event) => {
+        props.onHover(currentEditor, event.target, { hovering: false });
+      }}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props.attributes}
       style={{
         marginRight: "5px",
-        backgroundColor:
-          props.hoverId && props.leaf.uId === props.hoverId ? "azure" : "white",
+        backgroundColor: props.leaf.hovering ? "#e6f3ff" : "white",
       }}
     >
       {props.children}
     </span>
   );
 }
-function SlateTextInput({
-  hoverId,
-  setHoverId,
-  onCtrlEnter,
-  isMainInput,
-  onClear,
-}) {
+function SlateTextInput({ onHover, onCtrlEnter, isMainInput, onClear }) {
   const { t } = useTranslation();
 
   const renderElement = useCallback((innerProps) => {
@@ -166,12 +156,11 @@ function SlateTextInput({
         <HoveringLeaf
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...innerProps}
-          hoverId={hoverId}
-          setHoverId={setHoverId}
+          onHover={onHover}
         />
       );
     },
-    [setHoverId, hoverId]
+    [onHover]
   );
 
   const onKeyDown = (event) => {
@@ -194,6 +183,7 @@ function SlateTextInput({
               renderLeaf={renderLeaf}
               placeholder={placeholderText}
               autoFocus={isMainInput}
+              readOnly={!isMainInput}
               onKeyDown={onKeyDown}
               style={{ height: "100%" }}
             />
@@ -215,25 +205,20 @@ function SlateTextInput({
 
 export function SlateEditor({
   editor,
+  initialValue,
   isMainInput,
-  hoverId,
-  setHoverId,
+  onHover,
   onChange,
   onCtrlEnter,
   onClear,
 }) {
   return (
-    <Slate
-      editor={editor}
-      value={SlateEditorFuncs.getInitialTextNodes()}
-      onChange={onChange}
-    >
+    <Slate editor={editor} value={initialValue} onChange={onChange}>
       <SlateTextInput
         isMainInput={isMainInput}
-        setHoverId={setHoverId}
+        onHover={onHover}
         onCtrlEnter={onCtrlEnter}
         onClear={onClear}
-        hoverId={hoverId}
       />
     </Slate>
   );
