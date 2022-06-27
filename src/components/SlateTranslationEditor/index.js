@@ -45,12 +45,34 @@ function useOnDrop(setText) {
   return { getRootProps, getInputProps, isDragActive };
 }
 
+function withCleanPaste(editor) {
+  const { insertData } = editor;
+  // eslint-disable-next-line no-param-reassign
+  editor.insertData = (data) => {
+    const plain = data.getData("text/plain");
+
+    if (plain) {
+      const newTextNodes = SlateEditorFuncs.rawTextToTextNodes(plain);
+      SlateEditorFuncs.AppendTextNodes(editor, newTextNodes);
+      return;
+    }
+
+    insertData(data);
+  };
+
+  return editor;
+}
+
 export function SlateTranslationEditor({ sourceLang, targetLang }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [srcEditor] = useState(() => withReact(withHistory(createEditor())));
-  const [transEditor] = useState(() => withReact(withHistory(createEditor())));
+  const [srcEditor] = useState(() =>
+    withCleanPaste(withReact(withHistory(createEditor())))
+  );
+  const [transEditor] = useState(() =>
+    withCleanPaste(withReact(withHistory(createEditor())))
+  );
   const { getRootProps, getInputProps, isDragActive } = useOnDrop((rawText) => {
     SlateEditorFuncs.resetEditor(srcEditor);
     const textNodes = SlateEditorFuncs.rawTextToTextNodes(rawText);
