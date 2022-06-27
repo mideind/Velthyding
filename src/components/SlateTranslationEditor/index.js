@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Button } from "semantic-ui-react";
 import { createEditor, Transforms } from "slate";
+import { withHistory } from "slate-history";
 import { ReactEditor, withReact } from "slate-react";
 import "./index.css";
 
@@ -48,8 +49,8 @@ export function SlateTranslationEditor({ sourceLang, targetLang }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [srcEditor] = useState(() => withReact(createEditor()));
-  const [transEditor] = useState(() => withReact(createEditor()));
+  const [srcEditor] = useState(() => withReact(withHistory(createEditor())));
+  const [transEditor] = useState(() => withReact(withHistory(createEditor())));
   const { getRootProps, getInputProps, isDragActive } = useOnDrop((rawText) => {
     SlateEditorFuncs.resetEditor(srcEditor);
     const textNodes = SlateEditorFuncs.rawTextToTextNodes(rawText);
