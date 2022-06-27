@@ -69,7 +69,7 @@ export const SlateEditorFuncs = {
       sourceText: translationResponse.translations.map((paragraph, pIdx) => ({
         type: "paragraph",
         children: paragraph.translatedTextStructured.map((sentence, sIdx) => ({
-          text: sentence[ApiStructuredSourceTextIdx],
+          text: `${sentence[ApiStructuredSourceTextIdx]} `, // We add a space at the end of each sentence
           dummy: [pIdx, sIdx], // Slate will merge children which have the same props on text values - we prevent this by adding a dummy value
         })),
       })),
@@ -78,7 +78,7 @@ export const SlateEditorFuncs = {
           type: "paragraph",
           children: paragraph.translatedTextStructured.map(
             (sentence, sIdx) => ({
-              text: sentence[ApiStructuredTranslatedTextIdx],
+              text: `${sentence[ApiStructuredTranslatedTextIdx]} `, // We add a space at the end of each sentence
               dummy: [pIdx, sIdx], // Slate will merge children which have the same props on text values - we prevent this by adding a dummy value
             })
           ),
@@ -88,7 +88,7 @@ export const SlateEditorFuncs = {
   },
 
   rawTextToTextNodes(text) {
-    text
+    return text
       .split("\n")
       .filter((pg) => pg !== "")
       .map((pg) => ({
@@ -103,7 +103,7 @@ export const SlateEditorFuncs = {
 
   textNodesToApiRequest(editor) {
     return editor.children.map((paragraphs) =>
-      paragraphs.children.map((sentences) => sentences.text).join(" ")
+      paragraphs.children.map((sentences) => sentences.text.trim()).join(" ")
     );
   },
   isEmpty(editor) {
