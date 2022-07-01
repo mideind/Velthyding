@@ -3,7 +3,7 @@ import { InformationModal } from "components/Error";
 import LanguagePicker from "components/LanguagePicker";
 import { SlateEditor, SlateEditorFuncs } from "components/SlateEditor";
 import mammoth from "mammoth/mammoth.browser";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -133,6 +133,16 @@ export function SlateTranslationEditor({ sourceLang, targetLang }) {
 
     setLoading(false);
   };
+  // Set the selection on the srcEditor if it is focused and empty
+  // This is so that the user can start typing right away
+  useEffect(() => {
+    if (
+      ReactEditor.isFocused(srcEditor) &&
+      SlateEditorFuncs.isEmpty(srcEditor)
+    ) {
+      Transforms.select(srcEditor, [0, 0]);
+    }
+  }, [srcEditor]);
 
   const translateButton = (
     <Button primary className="TranslateBox-submit" onClick={translate}>
@@ -166,7 +176,6 @@ export function SlateTranslationEditor({ sourceLang, targetLang }) {
   };
   // the value provided to the editor is only the initial value! It's only read once.
   // OnChange is called every time the editor is updated, even set position.
-  // When we interract with slate's nodes, we need to update the selection value.
   return (
     <div className="Translate">
       {translateButton}
