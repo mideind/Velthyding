@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Dropdown } from "semantic-ui-react";
 import logo from "../../velthyding_hor.png";
+import "./index.css";
 
 function VelthydingMenu(props) {
   const { t } = useTranslation();
