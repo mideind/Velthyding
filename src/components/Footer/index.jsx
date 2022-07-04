@@ -1,9 +1,10 @@
 import mideindLogo from "../../mideind.svg";
+import "./index.css";
 
 export default function Footer() {
   return (
     <div className="Footer">
-      <div className="Footer-logo">
+      <div>
         <a href="https://mideind.is">
           <img alt="logo" src={mideindLogo} width="67" height="76" />
         </a>

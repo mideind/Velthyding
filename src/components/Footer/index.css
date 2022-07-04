@@ -1,0 +1,21 @@
+.Footer {
+  margin-top: 100px;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+  text-align: center;
+  font-weight: 300;
+  line-height: 1.8rem;
+}
+
+.Footer p {
+  text-align: center;
+  font-weight: 300;
+  line-height: 1.4rem;
+}
+
+.Footer a {
+  color: #333333;
+  text-decoration: underline;
+}
