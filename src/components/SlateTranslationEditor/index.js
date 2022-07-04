@@ -18,6 +18,7 @@ function useOnDrop(setText) {
     (acceptedFiles) => {
       acceptedFiles.forEach((file) => {
         const reader = new FileReader();
+
         const isDocx = file.path.split(".")[1] === "docx";
         reader.onload = () => {
           if (isDocx) {
@@ -25,11 +26,11 @@ function useOnDrop(setText) {
               .extractRawText({ arrayBuffer: reader.result })
               .then((result) => {
                 const extractedText = result.value;
-                setText(SlateEditorFuncs.rawTextToTextNodes(extractedText));
+                setText(extractedText);
               })
               .done();
           } else {
-            setText(SlateEditorFuncs.rawTextToTextNodes(reader.result));
+            setText(reader.result);
           }
         };
         if (isDocx) {
@@ -155,10 +156,12 @@ export function SlateTranslationEditor({ sourceLang, targetLang }) {
   );
 
   const uploadButton = (
-    <Button
-      className="TranslateBox-submit TranslateBox-upload"
+    <button
+      type="button"
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...getRootProps()}
+      {...getRootProps({
+        className: "ui button TranslateBox-upload",
+      })}
     >
       <input
         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -169,7 +172,7 @@ export function SlateTranslationEditor({ sourceLang, targetLang }) {
       ) : (
         <span>{t("upload_button", "Upload")}</span>
       )}
-    </Button>
+    </button>
   );
   const handleChange = (_newValue) => {
     // return console.log(_newValue);
