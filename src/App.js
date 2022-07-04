@@ -180,7 +180,7 @@ function App() {
                   "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes."
                 )}
               </p>
-              <p>{t("disclaimer-last-updated", "Last updated: ")} 2021-10-15</p>
+              <p>{t("disclaimer-last-updated", "Last updated: ")} 2022-06-13</p>
             </Message>
           </div>
           {SHOW_BRANDING && (

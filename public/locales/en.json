@@ -9,6 +9,8 @@
   "press": "Presskit",
   "Icelandic": "Icelandic",
   "English": "English",
+  "Polish": "Polish",
+  "Faroese": "Faroese",
   "slate_placeholder": "Enter text...",
   "home_header": "Translations",
   "table_header_time": "Time",
@@ -41,5 +43,5 @@
   "Oops!": "Oops!",
   "Something, somewhere went terribly wrong.": "Something, somewhere went terribly wrong.",
   "Please reload the page.": "Please reload the page.",
-  "Reload": "Reload"
+  "Reload": "Reload",
 }
