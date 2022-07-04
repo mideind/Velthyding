@@ -1,8 +1,9 @@
 import _ from "lodash";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Transforms } from "slate";
-import { Editable, Slate, useSlate } from "slate-react";
+import { Icon, Popup } from "semantic-ui-react";
+import { Editor, Transforms } from "slate";
+import { Editable, ReactEditor, Slate, useSlate } from "slate-react";
 
 /**
  * Useful functions for the SlateEditor.
@@ -135,13 +136,32 @@ function HoveringLeaf(props) {
       {...props.attributes}
       style={{
         marginRight: "5px",
-        backgroundColor: props.leaf.hovering ? "#e6f3ff" : "white",
+        backgroundColor: props.leaf.hovering ? "#e6f3ff" : "transparent",
       }}
     >
       {props.children}
     </span>
   );
 }
+
+function getClipboardDataTransfer() {
+  return {
+    getData: (_key) => {},
+    setData: (key, value) => {
+      if (key === "text/plain") {
+        if (!navigator.clipboard) {
+          console.log("Clipboard not supported");
+        } else {
+          console.log("setData", key, value);
+          navigator.clipboard.writeText(value).catch((err) => {
+            console.error("Could not copy text: ", err);
+          });
+        }
+      }
+    },
+  };
+}
+
 function SlateTextInput({ onHover, onCtrlEnter, isMainInput, onClear }) {
   const { t } = useTranslation();
 
@@ -162,7 +182,28 @@ function SlateTextInput({ onHover, onCtrlEnter, isMainInput, onClear }) {
     },
     [onHover]
   );
-
+  const editor = useSlate();
+  const copyText = useCallback(() => {
+    console.log("copyText");
+    Transforms.select(editor, {
+      anchor: Editor.start(editor, []),
+      focus: Editor.end(editor, []),
+    });
+    ReactEditor.setFragmentData(editor, getClipboardDataTransfer());
+    // const data = [
+    //   new ClipboardItem({
+    //     "text/plain": new Blob(["Text data"], { type: "text/plain" }),
+    //   }),
+    // ];
+    // navigator.clipboard.write(data).then(
+    //   function () {
+    //     console.log("Copied to clipboard successfully!");
+    //   },
+    //   function () {
+    //     console.error("Unable to write to clipboard. :-(");
+    //   }
+    // );
+  }, [editor]);
   const onKeyDown = (event) => {
     if (event.key === "Enter" && event.ctrlKey) {
       event.preventDefault();
@@ -174,7 +215,10 @@ function SlateTextInput({ onHover, onCtrlEnter, isMainInput, onClear }) {
     : t("slate_placeholder", "Enter text..");
   return (
     <div className="TranslatorSide">
-      <div className="TranslatorSide-container">
+      <div
+        className="TranslatorSide-container"
+        style={{ backgroundColor: isMainInput ? "white" : "rgb(231,231,231)" }}
+      >
         <div className="TranslatorSide-text">
           <div style={{ height: "100%" }}>
             <Editable
@@ -185,17 +229,37 @@ function SlateTextInput({ onHover, onCtrlEnter, isMainInput, onClear }) {
               autoFocus={isMainInput}
               readOnly={!isMainInput}
               onKeyDown={onKeyDown}
-              style={{ height: "100%" }}
+              style={{
+                height: "100%",
+              }}
             />
           </div>
           {isMainInput && (
             <button
-              type="submit"
+              type="button"
               className="TranslatorSide-clear"
               onClick={onClear}
             >
-              <span>×</span>
+              ×
             </button>
+          )}
+          {!isMainInput && (
+            <Popup
+              trigger={
+                <button
+                  className="TranslatorSide-copy"
+                  type="button"
+                  onClick={copyText}
+                >
+                  <Icon name="copy outline" />
+                </button>
+              }
+              on="click"
+              content="Copied!"
+              size="tiny"
+              closeOnTriggerMouseLeave
+              openOnTriggerClick
+            />
           )}
         </div>
       </div>

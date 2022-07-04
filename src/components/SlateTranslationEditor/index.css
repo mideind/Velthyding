@@ -294,6 +294,7 @@
   bottom: 6px;
   right: 6px;
   color: rgb(138, 138, 138);
+  border: 0px !important;
   position: absolute;
   font-size: 20px;
   width: 30px;
