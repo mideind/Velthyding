@@ -1,59 +1,59 @@
-.SliderRating{
-    text-align: right;
+.SliderRating {
+  text-align: right;
 }
 
-.SliderRatingSubtext{
-    display: flex;
-    justify-content: space-between;
+.SliderRatingSubtext {
+  display: flex;
+  justify-content: space-between;
 }
 
 .slider {
--webkit-appearance: none;
-appearance: none;
-width: 100%;
-height: 25px;
-background: #D3D3D3;
-outline: none;
-opacity: 0.7;
--webkit-transition: .2s;
-transition: opacity .2s;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
 }
 
 .slider:hover {
-opacity: 1;
+  opacity: 1;
 }
 
 .slider::-webkit-slider-thumb {
--webkit-appearance: none;
-appearance: none;
-width: 25px;
-height: 25px;
-border-radius: 3px;
-background: #006eff;
-cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 3px;
+  background: #006eff;
+  cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
-width: 25px;
-height: 25px;
-background: #006eff;
-cursor: pointer;
+  width: 25px;
+  height: 25px;
+  background: #006eff;
+  cursor: pointer;
 }
 
 .sliderticks {
-display: flex;
-justify-content: space-between;
-padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
 }
 
 .sliderticks p {
-position: relative;
-display: flex;
-justify-content: center;
-text-align: center;
-width: 1px;
-background: #D3D3D3;
-height: 10px;
-line-height: 40px;
-margin: 0 0 20px 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 1px;
+  background: #d3d3d3;
+  height: 10px;
+  line-height: 40px;
+  margin: 0 0 20px 0;
 }

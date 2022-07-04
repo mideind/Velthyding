@@ -1,21 +1,21 @@
-.LanguageDirectionPicker{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+.LanguageDirectionPicker {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.LanguageDirection{
-    width: calc(50% - 6px);
+.LanguageDirection {
+  width: calc(50% - 6px);
 }
 
-@media (max-width: 650px){
-    .LanguageDirectionPicker{
-        flex-direction: column;
-    }
-    .LanguageDirection:first-child{
-        margin-bottom: 15px;
-    }
-    .LanguageToggle-button{
-        display: none;
-    }
+@media (max-width: 650px) {
+  .LanguageDirectionPicker {
+    flex-direction: column;
+  }
+  .LanguageDirection:first-child {
+    margin-bottom: 15px;
+  }
+  .LanguageToggle-button {
+    display: none;
+  }
 }

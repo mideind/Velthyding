@@ -1,14 +1,14 @@
 import { loginUser } from "api/index";
 import "App.css";
 import { login } from "features/login/loginSlice";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Button, Divider, Form, Header, Icon } from "semantic-ui-react";
 import "./index.css";
 
-function Login() {
+function Login({ loggedin }) {
   const { t } = useTranslation();
 
   const [email, setEmail] = useState("");
@@ -16,6 +16,9 @@ function Login() {
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
+  if (loggedin) {
+    return <Navigate to="/home" />;
+  }
   const apiLogin = (pEmail, pPassword) => {
     loginUser(pEmail, pPassword)
       .then(() => dispatch(login(pEmail)))

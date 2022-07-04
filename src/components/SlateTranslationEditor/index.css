@@ -1,0 +1,335 @@
+@supports (-moz-appearance: none) {
+  span[data-slate-leaf="true"] {
+    margin-right: 0px !important;
+  }
+}
+
+.Translate-main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Translate-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+@media (max-width: 800px) {
+  .Translate-engines {
+    margin-top: 70px;
+  }
+}
+
+.TranslateBox {
+  width: 350px;
+}
+
+.TranslateBox-header {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.TranslateBox-area {
+  width: 350px;
+  height: 300px;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.TranslateBox-area-trans {
+  width: 350px;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 0.5em;
+}
+
+.TranslateBox-area-trans-sent {
+  margin-bottom: 10px;
+}
+
+.TranslateBox-area-blurb-header {
+  font-size: 0.5em;
+}
+
+.TranslateBox-submit {
+  background: #006eff;
+  margin-right: 0;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  text-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  font-size: 14px;
+  min-width: 101px;
+  z-index: 100;
+}
+
+.TranslateBox-upload {
+  margin-right: 20px !important;
+}
+@media (max-width: 800px) {
+  .TranslateBox-upload {
+    left: 0;
+    margin-right: 3.5px !important;
+    margin-bottom: 10px !important;
+  }
+}
+
+.Translator {
+  margin-bottom: 40px;
+}
+.Translator-subtext {
+  width: 50%;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  font-size: 12px;
+}
+
+.Translator-containers {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reverse {
+  flex-direction: row-reverse;
+}
+
+@media (max-width: 650px) {
+  .Translator {
+    margin-bottom: 20px;
+  }
+
+  .Translator-containers {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .TranslatorSide {
+    margin-bottom: 20px;
+    width: 100% !important;
+  }
+
+  .Translate-footer {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+.Translate-footer {
+  justify-content: flex-end;
+}
+
+.Translate-footer .TranslateBox-submit {
+  position: relative !important;
+  margin-left: 10px;
+}
+
+@media (max-width: 650px) {
+  .Translate-footer .TranslateBox-upload {
+    margin-bottom: 20px;
+  }
+  .Translate-footer .TranslateBox-submit {
+    margin-left: 0;
+  }
+}
+
+.TranslatorSide {
+  display: inline-block;
+  width: calc(50% - 6px);
+  min-width: 300px;
+  line-height: 1.5;
+  position: relative;
+}
+
+.TranslatorSide-lang {
+  font-size: 15px;
+  padding-bottom: 20px;
+}
+
+.TranslatorSide-container {
+  border-radius: 3px;
+  box-shadow: 0px 14px 16px rgba(0, 0, 0, 0.06) !important;
+  background-color: #fff;
+  border: 1px solid rgb(224, 224, 224);
+  transition: border 75ms ease-out;
+  position: relative;
+  font-size: 16px;
+  height: 100%;
+}
+
+.TranslatorSide-text {
+  position: relative;
+  -webkit-text-size-adjust: none;
+  min-width: 300px;
+  height: 100%;
+  min-height: 205px;
+  padding: 20px;
+}
+
+.Translator-text-editor {
+  padding: 22px 32px 16px 24px;
+  padding-bottom: 30px;
+  color: #333;
+  line-height: 1.5;
+  height: 100%;
+  min-height: 300px;
+  font-weight: 400;
+  font-size: 26px;
+  transition: height 100ms linear, min-height 100ms linear;
+  font-family: "Open Sans", sans-serif;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  font-variant-ligatures: none;
+  display: inline-block;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: none;
+  background-color: transparent;
+  background: transparent;
+  vertical-align: top;
+  text-align: left;
+  font-size: 100%;
+  position: relative;
+  resize: none;
+  margin: 0;
+  -webkit-text-size-adjust: none;
+}
+
+.TranslatorSide-text textarea {
+  padding: 22px 32px 16px 24px;
+  padding-bottom: 30px;
+  color: #333;
+  line-height: 1.5;
+  min-height: 300px;
+  font-weight: 400;
+  font-size: 26px;
+  transition: height 100ms linear, min-height 100ms linear;
+  font-family: "Open Sans", sans-serif;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  font-variant-ligatures: none;
+  display: inline-block;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: none;
+  background-color: transparent;
+  background: transparent;
+  vertical-align: top;
+  text-align: left;
+  font-size: 100%;
+  position: relative;
+  resize: none;
+  margin: 0;
+  -webkit-text-size-adjust: none;
+}
+
+.TranslatorSide-text-wrapper {
+  position: relative;
+}
+
+.Translator-text-editor p,
+.TranslatorSide-text-wrapper p {
+  line-height: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.Translator-text-editor span,
+.TranslatorSide-text-wrapper span {
+  margin-right: 4px;
+}
+
+.Translator-text-editor span:hover,
+.TranslatorSide-text-wrapper span:hover {
+  background-color: #cce2ff;
+}
+
+.Translator-text-editor span.active {
+  background-color: #cce2ff;
+}
+
+.TranslatorSide-clear {
+  top: 4px;
+  right: 6px;
+  font-weight: 400;
+  color: rgb(138, 138, 138);
+  position: absolute;
+  font-size: 20px;
+  width: 24px;
+  height: 24px;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.TranslatorSide-copy {
+  bottom: 6px;
+  right: 6px;
+  color: rgb(138, 138, 138);
+  border: 0px !important;
+  position: absolute;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.LanguagePicker {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.LanguagePicker-container {
+  font-weight: 600;
+}
+
+.LanguagePicker-menu {
+  background: white;
+  padding: 12px;
+  position: absolute;
+  z-index: 10;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.LanguagePicker-menu-item {
+  margin-bottom: 4px;
+}
+
+.LanguagePicker-menu-item:hover {
+  text-decoration: underline;
+}
+
+.hidden {
+  display: none;
+}

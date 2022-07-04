@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { Button, Header, Modal } from "semantic-ui-react";
 
 function InformationModal({ header, message, onDismiss }) {
@@ -9,7 +9,7 @@ function InformationModal({ header, message, onDismiss }) {
     if (onDismiss !== undefined) {
       onDismiss();
     }
-  }, [open]);
+  }, [onDismiss]);
 
   return (
     <Modal
