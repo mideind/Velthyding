@@ -4,6 +4,86 @@
   }
 }
 
+.Translate-main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Translate-footer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+@media (max-width: 800px) {
+  .Translate-engines {
+    margin-top: 70px;
+  }
+}
+
+.TranslateBox {
+  width: 350px;
+}
+
+.TranslateBox-header {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.TranslateBox-area {
+  width: 350px;
+  height: 300px;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.TranslateBox-area-trans {
+  width: 350px;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 0.5em;
+}
+
+.TranslateBox-area-trans-sent {
+  margin-bottom: 10px;
+}
+
+.TranslateBox-area-blurb-header {
+  font-size: 0.5em;
+}
+
+.TranslateBox-submit {
+  background: #006eff;
+  margin-right: 0;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  text-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  font-size: 14px;
+  min-width: 101px;
+  z-index: 100;
+}
+
+.TranslateBox-upload {
+  margin-right: 20px !important;
+}
+@media (max-width: 800px) {
+  .TranslateBox-upload {
+    left: 0;
+    margin-right: 3.5px !important;
+    margin-bottom: 10px !important;
+  }
+}
+
 .Translator {
   margin-bottom: 40px;
 }
@@ -79,12 +159,10 @@
 }
 
 .TranslatorSide-container {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-radius: 3px;
   box-shadow: 0px 14px 16px rgba(0, 0, 0, 0.06) !important;
-  border: 2px solid transparent !important;
   background-color: #fff;
-  border: 1px solid #bbb;
+  border: 1px solid rgb(224, 224, 224);
   transition: border 75ms ease-out;
   position: relative;
   font-size: 16px;
@@ -195,29 +273,13 @@
   background-color: #cce2ff;
 }
 
-.TranslatorSide-clear span {
-  font-size: 18px;
-  width: 160px;
-  padding-top: 10px !important;
-  text-align: right;
-}
-
-.TranslatorSide-label span {
-  font-size: 12px;
-  width: 160px;
-  padding-top: 10px !important;
-  text-align: right;
-}
-
-.TranslatorSide-label,
 .TranslatorSide-clear {
   top: 4px;
   right: 6px;
   font-weight: 400;
-  color: #d1d2d4;
+  color: rgb(138, 138, 138);
   position: absolute;
-  font-size: 30px;
-  font-weight: 400;
+  font-size: 20px;
   width: 24px;
   height: 24px;
   outline: none;
@@ -228,17 +290,18 @@
   box-sizing: border-box;
   cursor: pointer;
 }
-
-.TranslatorSide-label span,
-.TranslatorSide-clear span {
-  display: inline-block;
+.TranslatorSide-copy {
+  bottom: 6px;
+  right: 6px;
+  color: rgb(138, 138, 138);
   position: absolute;
-  top: -3px;
-  right: -3px;
-  height: 26px;
-  padding-right: 10px;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  box-sizing: border-box;
+  cursor: pointer;
 }
-
 .LanguagePicker {
   display: inline-block;
   cursor: pointer;
@@ -264,10 +327,6 @@
 
 .LanguagePicker-menu-item:hover {
   text-decoration: underline;
-}
-
-.TranslateBox-submit {
-  margin-right: 0;
 }
 
 .hidden {
