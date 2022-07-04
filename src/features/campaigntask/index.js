@@ -492,7 +492,10 @@ function CampaignTask() {
     }
     fetchTask();
     // eslint-disable-next-line no-return-assign
-    return () => (isCancelled = true);
+    return function ignoreFetchResults() {
+      isCancelled = true;
+      return null;
+    };
   }, [id, mode, tasksDone]);
 
   useEffect(() => {

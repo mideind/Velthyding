@@ -73,9 +73,11 @@ function App() {
             <Route path="login" element={<Login loggedin={loggedin} />} />
             <Route path="home" element={<Home loggedin={loggedin} />} />
             <Route path="register" element={<Register loggedin={loggedin} />} />
-            <Route path="campaigns" element={<Campaigns loggedin={loggedin} />}>
-              <Route path=":id/:mode" element={<CampaignTask />} />
-            </Route>
+            <Route
+              path="campaigns"
+              element={<Campaigns loggedin={loggedin} />}
+            />
+            <Route path="campaigns/:id/:mode" element={<CampaignTask />} />
           </Route>
         </Routes>
       </div>
