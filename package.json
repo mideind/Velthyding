@@ -1,6 +1,6 @@
 {
     "name": "frontend",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "private": true,
     "dependencies": {
         "@reduxjs/toolkit": "^1.6.2",
@@ -21,18 +21,19 @@
         "react-i18next": "^11.12.0",
         "react-redux": "^8.0.2",
         "react-router-dom": "^6.3.0",
-        "react-spinners": "^0.12.0",
+        "react-spinners": "^0.13.7",
         "redux-logger": "^3.0.6",
         "redux-persist": "^6.0.0",
         "semantic-ui-less": "^2.4.1",
         "semantic-ui-react": "^2.0.4",
-        "slate": "^0.81.1",
-        "slate-history": "^0.66.0",
-        "slate-react": "^0.81.0"
+        "slate": "^0.88.1",
+        "slate-history": "^0.86.0",
+        "slate-react": "^0.88.0"
     },
     "scripts": {
-        "start": "craco start",
-        "build": "craco build",
+        "start": "dotenv -e .env.development -- craco start",
+        "build:prod": "dotenv -e .env.production -- craco build",
+        "build:staging": "dotenv -e .env.staging -- craco build",
         "test": "craco test",
         "eject": "craco eject",
         "analyze": "source-map-explorer 'build/static/js/*.js'"
@@ -56,11 +57,12 @@
     },
     "devDependencies": {
         "@babel/core": "^7.18.5",
-        "@babel/eslint-parser": "^7.18.2",
         "@babel/plugin-syntax-flow": "^7.17.12",
         "@babel/plugin-transform-react-jsx": "^7.17.12",
-        "@craco/craco": "6.4.3",
-        "@semantic-ui-react/craco-less": "1.2.3",
+        "@craco/craco": "7.0.0",
+        "@semantic-ui-react/craco-less": "3.0.0",
+        "dotenv": "^16.0.3",
+        "dotenv-cli": "^6.0.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-import": "^2.25.2",
@@ -69,7 +71,7 @@
         "eslint-plugin-react": "^7.26.1",
         "eslint-plugin-react-hooks": "^4.6.0",
         "prettier": "^2.4.1",
-        "react-scripts": "^4.0.3",
+        "react-scripts": "^5.0.1",
         "renamer": "^4.0.0",
         "source-map-explorer": "^2.5.2",
         "yarn": "^1.22.19"

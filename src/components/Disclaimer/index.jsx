@@ -21,7 +21,7 @@ export default function Disclaimer() {
             "By using this service you agreee to our use of cookies. Translations may be logged for quality assurance purposes."
           )}
         </p>
-        <p>{t("disclaimer-last-updated", "Last updated: ")} 2022-10-19</p>
+        <p>{t("disclaimer-last-updated", "Last updated: ")} 2023-01-12</p>
       </Message>
     </div>
   );

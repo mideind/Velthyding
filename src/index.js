@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { ENVIRONMENT, SENTRY_ENABLED } from "config";
 import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { useTranslation } from "react-i18next";
@@ -10,22 +11,20 @@ import { persistor, store } from "store";
 import App from "./App";
 import "./features/i18n";
 
-const isDevelopment = process.env.NODE_ENV === "development";
-
 Sentry.init({
   dsn: "https://c4342140cbb846cab56a06581c7a1a9a@o574517.ingest.sentry.io/6012095",
   integrations: [new Integrations.BrowserTracing()],
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
-  tracesSampleRate: 0.6,
-  environment: process.env.NODE_ENV,
+  tracesSampleRate: ENVIRONMENT === "production" ? 0.5 : 1.0,
+  environment: ENVIRONMENT,
   release: `velthyding@${process.env.npm_package_version}`,
   beforeSend: (event) => {
-    if (isDevelopment) {
-      return null;
+    if (SENTRY_ENABLED) {
+      return event;
     }
-    return event;
+    return null;
   },
 });
 function FallbackComponent({ _error, _componentStack, resetError }) {
