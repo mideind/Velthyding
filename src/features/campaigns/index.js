@@ -1,3 +1,4 @@
+/* eslint camelcase: 0 */
 import { getCampaignProgress, getCampaigns } from "api/reviews";
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
@@ -121,15 +122,10 @@ function CampaignTableCell(props) {
     name,
     description,
     id,
-    // eslint-disable-next-line camelcase
     is_comparison,
-    // eslint-disable-next-line camelcase
     is_adequacy,
-    // eslint-disable-next-line camelcase
     is_fluency,
-    // eslint-disable-next-line camelcase
     is_direct_assessment,
-    // eslint-disable-next-line camelcase
     is_ees_assessment,
   } = props;
   useEffect(() => {

@@ -1,6 +1,6 @@
 import axios from "axios";
-import BASE_BACKEND_URL from "config";
 import { Cookies } from "react-cookie";
+import { BASE_BACKEND_URL } from "../config";
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";

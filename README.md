@@ -16,11 +16,7 @@ Try Velthyding at [https://velthyding.is](https://velthyding.is)!
 
 ### Configuration
 
-See `config.js` for setting endpoint domains. Endpoints need to follow the [Google translate REST specification](https://cloud.google.com/translate/docs/reference/rest) for compatibility with the interface.
-
-### Setup and development
-
-You’ll need to have Node >= 14 and yarn >= 1.0. To install dependencies run
+You’ll need to have Node >= 19 and yarn >= 1.22. To install dependencies run
 
 ```bash
 yarn install
@@ -35,14 +31,16 @@ yarn start
 To create a production build run
 
 ```bash
-yarn build
+yarn build:prod
 ```
 
-If you have problems when building or running the development server, try increasing the available memory with
+To create a staging build run
 
 ```bash
-export NODE_OPTIONS=--max_old_space_size=4096
+yarn build:staging
 ```
+
+See the [package.json](package.json) file for more scripts and note that some commands use different .env files.
 
 ### Linting
 
@@ -56,8 +54,8 @@ npx eslint 'src/**/*.{js,jsx}' --fix
 ## Release
 
 - Bump the version number `package.json`.
-- Build the frontend with `build_web_frontend.sh`. This script uses Docker to build.
-- Follow the instructions from the script to upload the bundle.
+- Run `yarn build:prod` to create a production build.
+- Create a new release on GitHub.
 
 ## About
 
