@@ -34,11 +34,15 @@ function LanguageDirectionPicker() {
   // TODO: Get this information from the backend
   const SUPPORTED_LANGUAGE_PAIRS = useMemo(() => {
     return {
-      en: ["is", "fo"],
-      is: ["en", "pl"],
-      pl: ["is"],
-      fo: ["en"],
+      is: ["en"],
+      en: ["is"],
     };
+    // return {
+    //   en: ["is", "fo"],
+    //   is: ["en", "pl"],
+    //   pl: ["is"],
+    //   fo: ["en"],
+    // };
   }, []);
   const LANGUAGE_OPTIONS = useMemo(() => {
     return {
@@ -54,18 +58,18 @@ function LanguageDirectionPicker() {
         value: "en",
         flag: "uk",
       },
-      pl: {
-        key: "pl",
-        text: t("Polish"),
-        value: "pl",
-        flag: "pl",
-      },
-      fo: {
-        key: "fo",
-        text: t("Faroese"),
-        value: "fo",
-        flag: "fo",
-      },
+      // pl: {
+      //   key: "pl",
+      //   text: t("Polish"),
+      //   value: "pl",
+      //   flag: "pl",
+      // },
+      // fo: {
+      //   key: "fo",
+      //   text: t("Faroese"),
+      //   value: "fo",
+      //   flag: "fo",
+      // },
     };
   }, [t]);
   useEffect(() => {
@@ -87,6 +91,13 @@ function LanguageDirectionPicker() {
   const SRC_LANGUAGE_OPTIONS = Object.keys(LANGUAGE_OPTIONS).map(
     (key) => LANGUAGE_OPTIONS[key]
   );
+  // In case the currently selected sourceLang is not supported, select the first as sourceLang
+  if (
+    SRC_LANGUAGE_OPTIONS.map((option) => option.value).indexOf(sourceLang) ===
+    -1
+  ) {
+    dispatch(setSourceLanguage(SRC_LANGUAGE_OPTIONS[0].value));
+  }
   return (
     <div className="LanguageDirectionPicker">
       <div className="LanguageDirection">
