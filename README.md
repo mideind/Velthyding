@@ -1,16 +1,21 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![node](https://img.shields.io/badge/node-19+-brightgreen.svg)
+![Release](https://shields.io/github/v/release/mideind/Velthyding?display_name=tag)
+[![Build](https://github.com/mideind/Velthyding/actions/workflows/eslint.yml/badge.svg)]()
 <img src="src/velthyding_logo.png" align="right" width="224" height="224" style="margin-left:20px;">
 
-# Velthyding.is — Icelandic Machine Translation Website
+# Velthyding.is
+
+### Icelandic Machine Translation Website
 
 ## Introduction
 
-_Velthyding.is_ is a web front end for [Miðeind](https://miðeind.is)'s neural machine
-translation engine, implemented in Javascript and React.
+_Velthyding.is_ is a web application frontend for [Miðeind](https://miðeind.is)'s
+neural machine translation engine, implemented in Javascript and React.
 
-The website allows translation of text and documents between Icelandic and English.
-Both the web and the engine are under rapid development.
+The website translates text and documents between Icelandic and English.
 
-Try Velthyding at [https://velthyding.is](https://velthyding.is)!
+Try Velthyding at [https://velthyding.is](https://velthyding.is).
 
 ## Development
 
@@ -57,15 +62,16 @@ npx eslint 'src/**/*.{js,jsx}' --fix
 - Run `yarn build:prod` to create a production build.
 - Create a new release on GitHub.
 
-## About
+## Acknowledgements
 
-This work is partially funded by the Language Technology Programme of the Icelandic Government, managed by Almannarómur.
+This work was partially funded by the Language Technology Programme
+of the Icelandic Government, managed by Almannarómur.
 
-### Copyright and licensing
+## License
 
 <img src="https://github.com/mideind/GreynirPackage/blob/master/doc/_static/MideindLogoVert100.png?raw=true" align="right" style="margin-left:20px;" alt="Miðeind ehf.">
 
-Velthyding is _copyright © 2022 Miðeind ehf._
+Velthyding is copyright © 2023 [Miðeind ehf.](https://mideind.is)
 
 This software is licensed under the **MIT License**:
 
